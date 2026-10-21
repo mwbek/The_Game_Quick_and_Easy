@@ -1,22 +1,20 @@
 import models.CartaJugador;
 import models.ColorCartaJugador;
-import models.Mazo;
+import models.MazoCartasJugador;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Stack;
-import java.util.stream.Stream;
 
-public class MazoTest {
+public class MazoCartasJugadorTest {
 
     @Test
     @DisplayName("Testeo la creacoin del mazo y todas sus cartas")
     public void crearMazoCompleto_Test()
     {
-        Mazo pilaMazo = new Mazo();
-        Stack<CartaJugador> mazo = pilaMazo.getMazo();
+        MazoCartasJugador pilaMazo = new MazoCartasJugador();
+        List<CartaJugador> mazo = pilaMazo.getMazo();
 
         Assertions.assertEquals(50, mazo.size());
         Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCartaJugador.ROJO)).count());
