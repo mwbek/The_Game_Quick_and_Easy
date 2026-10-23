@@ -196,7 +196,7 @@ public class Juego {
                 respuesta = scanner.nextInt();
 
                 if(respuesta == 1 || respuesta == 2) {
-                    cartaEnJuego = cartas.get(respuesta);
+                    cartaEnJuego = cartas.get(respuesta-1);
                     System.out.println("Elegiste la carta [" + respuesta + "]: " + cartaEnJuego.toString());
                 }
                 //Si el jugador puso al menos una carta, puede pasar. Caso contrario debe elegir una si o si
