@@ -3,11 +3,11 @@ package models;
 
 import java.util.*;
 
-public class MazoCartasJugador {
+public class Mazo {
 
     private final Stack<CartaJugador> pilaMazo;
 
-    public MazoCartasJugador()
+    public Mazo()
     {
         pilaMazo = llenarMazo();
 
@@ -40,6 +40,10 @@ public class MazoCartasJugador {
 
     public List<CartaJugador> getMazo() {
         return pilaMazo.stream().toList();
+    }
+
+    public boolean esMazoVacio(){
+        return pilaMazo.isEmpty();
     }
 
     public CartaJugador tomarCarta(){
