@@ -36,4 +36,9 @@ public class CartaJugador {
         return this.color.equals(cj.color) && cj.valor == this.valor;
 
     }
+
+    @Override
+    public String toString() {
+        return "[" + this.valor + " " + this.color.toString() + "]";
+    }
 }
