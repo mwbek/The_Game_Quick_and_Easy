@@ -1,5 +1,10 @@
-import Controladores.Juego;
+import Controladores.ControladorComenzarPartida;
+import Controladores.ControladorJugarTurno;
+import Controladores.Juego_Eliminar;
+import Vista.Consola.VistaManoJugador;
+import Vista.Consola.VistaMenuPrincipal;
 import models.Jugador;
+import models.Partida;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,20 +13,16 @@ public class Main {
 
     public static void main(String[] args)
     {
-        Jugador j1 = new Jugador("Martin");
-        Jugador j2 = new Jugador("Ludmila");
-        Jugador j3 = new Jugador("Agustin");
-        Jugador j4 = new Jugador("Ignacio");
+        ControladorComenzarPartida controladorComenzarPartida = new ControladorComenzarPartida(new VistaMenuPrincipal());
+        Partida partida = controladorComenzarPartida.comenzarPartida();
 
-        List<Jugador> jugadores = new ArrayList<>();
+        if(partida == null) return;
 
-        jugadores.add(j1);
-        jugadores.add(j2);
-        jugadores.add(j3);
-        jugadores.add(j4);
+        ControladorJugarTurno controladorJugarTurno = new ControladorJugarTurno(partida, new VistaManoJugador());
 
-        Juego juego = new Juego(jugadores);
 
-        juego.comenzarPartida();
+        controladorJugarTurno.jugarMano();
+
+
     }
 }
