@@ -26,6 +26,9 @@ public class PartidaTest {
         jugadores.add(j2);
         nuevaPartida = new Partida(jugadores,mazo);
 
+        nuevaPartida.repartirCartas();
+        nuevaPartida.pasarRonda();
+
     }
 
     @Test
@@ -93,6 +96,28 @@ public class PartidaTest {
         Partida nuevaPartida2 = new Partida(jugadores, mazo);
 
         Assertions.assertTrue(nuevaPartida2.esFinDeJuego());
+    }
+
+    @Test
+    public void jugadorActualTest()
+    {
+
+        Queue<Jugador> colaJugadores = new ArrayDeque<>();
+        colaJugadores.add(j1);
+        colaJugadores.add(j2);
+
+        Partida nuevaPartida3 = new Partida(colaJugadores,mazo);
+
+        Assertions.assertEquals(j1, nuevaPartida3.getJugadorturnoActual());
+
+        nuevaPartida.pasarRonda();
+
+        Assertions.assertEquals(j2, nuevaPartida.getJugadorturnoActual());
+
+        nuevaPartida.pasarRonda();
+        Assertions.assertEquals(j1, nuevaPartida.getJugadorturnoActual());
+
+
     }
 
 
