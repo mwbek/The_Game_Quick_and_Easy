@@ -12,6 +12,7 @@ public class JugadorTest {
     {
         jugador = new Jugador("Martin");
         mazo = new Mazo();
+        mazo.llenarMazo();
 
         Assertions.assertNotNull(jugador);
         Assertions.assertEquals("Martin", jugador.getNombre());

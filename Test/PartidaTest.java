@@ -1,8 +1,5 @@
 import models.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -16,22 +13,25 @@ public class PartidaTest {
     Partida nuevaPartida;
     Mazo mazo;
     Queue<Jugador> jugadores = new ArrayDeque<>();
-    @Test
+
     @BeforeEach
-    public void crearPartidaTest()
+    public void setup()
     {
         j1 = new Jugador("Martin");
         j2 = new Jugador("Ludmila");
         mazo = new Mazo();
-
+        mazo.llenarMazo();
 
         jugadores.add(j1);
         jugadores.add(j2);
-
         nuevaPartida = new Partida(jugadores,mazo);
 
-        Assertions.assertNotNull(nuevaPartida);
+    }
 
+    @Test
+    public void crearPartidaTest()
+    {
+        Assertions.assertNotNull(nuevaPartida);
         Assertions.assertEquals(EstadoDePartida.JUGANDO, nuevaPartida.getEstadoPartida());
         Assertions.assertEquals(2, nuevaPartida.getJugadores().size());
         Assertions.assertEquals(1, nuevaPartida.getRondaActual());

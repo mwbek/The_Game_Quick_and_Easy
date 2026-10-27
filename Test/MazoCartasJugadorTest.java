@@ -11,11 +11,12 @@ import java.util.Stack;
 
 public class MazoCartasJugadorTest {
 
-    Mazo pilaMazo = new Mazo();;
+
     @Test
-    @DisplayName("Testeo la creacoin del mazo y todas sus cartas")
+    @DisplayName("Testeo la creacion del mazo y todas sus cartas")
     public void crearMazoCompletoTest()
     {
+        Mazo pilaMazo = new Mazo();
         Assertions.assertEquals(0, pilaMazo.getMazo().size());
         pilaMazo.llenarMazo();
         List<CartaJugador> mazo = pilaMazo.getMazo();
@@ -32,12 +33,15 @@ public class MazoCartasJugadorTest {
     @Test
     public void tomarCartaMazoTest()
     {
+        Mazo pilaMazo = new Mazo();
+        pilaMazo.llenarMazo();
         Assertions.assertNotNull(pilaMazo.tomarCarta());
     }
 
     @Test
     public void EvitarllenarDosVecesElMazoTest()
     {
+        Mazo pilaMazo = new Mazo();
         Assertions.assertEquals(0, pilaMazo.getMazo().size());
         pilaMazo.llenarMazo();
 
