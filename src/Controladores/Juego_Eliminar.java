@@ -8,7 +8,7 @@ import models.*;
 import java.io.IOException;
 import java.util.*;
 
-public class Juego {
+public class Juego_Eliminar {
 
     //Atributos usados para la interfaz
     private final int anchoMax = 64;
@@ -24,7 +24,7 @@ public class Juego {
     private final PilaEnJuego pilaAscendente;
 
     private static int ronda;
-    public Juego(List<Jugador> jugadores)
+    public Juego_Eliminar(List<Jugador> jugadores)
     {
 
         if(jugadores == null) throw new IllegalArgumentException("La lista de jugadores no puede ser nula");
@@ -95,7 +95,7 @@ public class Juego {
         System.out.println("════════════════════════════════════════════════════════════════");
 
         // ▲ Ascendente (12): [7 R]      ▼ Descendente (9): [3 V]
-        System.out.println("▲ Ascendente:" + pilaAscendente.mostrarUltimaCarta() + "▼ Descendente: " + pilaDescendente.mostrarUltimaCarta());
+        System.out.println("▲ Ascendente:" + pilaAscendente.verUltimaCartaComoTexto() + "▼ Descendente: " + pilaDescendente.verUltimaCartaComoTexto());
 
         System.out.println("────────────────────────────────────────────────────────────────");
         System.out.println("Tu mano:  1) " + carta1.toString() + " | " + "2) " + carta2.toString());
