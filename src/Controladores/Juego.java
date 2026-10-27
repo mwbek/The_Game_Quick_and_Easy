@@ -50,7 +50,7 @@ public class Juego {
         Jugador jugadorSiguiente = null;
 
         //Le doy cartas a todos los jugadores
-        jugadores.forEach(j -> j.tomarCarta(mazo));
+        jugadores.forEach(j -> j.tomarCartas(mazo));
 
 
         Iterator<Jugador> iteradorJugadores = jugadores.iterator();
@@ -107,7 +107,7 @@ public class Juego {
 
             //Luego roba las cartas que le correspondan
             System.out.println("Robas " + cartasJugadas + " cartas");
-            jugador.tomarCarta(mazo);
+            jugador.tomarCartas(mazo);
 
         }
         catch (JugadorPasaTurnoException e) {
@@ -163,7 +163,7 @@ public class Juego {
                 cartaEnJuego = elegirCarta(jugador.getCartas());
                 pilaEnJuego = elegirPila();
 
-                jugadaValida = jugador.jugarCarta(pilaEnJuego, cartaEnJuego);
+                jugador.jugarCarta(pilaEnJuego, cartaEnJuego);
                 //Si la mano no es valida, sumo uno a los intentosFallidos, que indican si el jugador puede o no puede jugar su mano
                 if(!jugadaValida) intentosFallidos++;
                 else {
