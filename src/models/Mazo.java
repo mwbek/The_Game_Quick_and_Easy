@@ -5,11 +5,10 @@ import java.util.*;
 
 public class Mazo {
 
-    private final Stack<CartaJugador> pilaMazo;
+    private Stack<CartaJugador> pilaMazo;
 
-    public Mazo()
-    {
-        pilaMazo = llenarMazo();
+    public Mazo() {
+        pilaMazo = new Stack<>();
 
     }
 
@@ -22,7 +21,10 @@ public class Mazo {
     }
 
     //Genera 50 cartas de forma aleatoria y las agrega a una PILA
-    private Stack<CartaJugador> llenarMazo() {
+    public Stack<CartaJugador> llenarMazo() {
+
+        //Si ya tiene cartas no se puede volver a llenar
+        if(!this.pilaMazo.isEmpty()) return this.pilaMazo;
 
         Stack<CartaJugador> pilaMazo = new Stack<>();
         List<CartaJugador> cartas = new ArrayList<>();
@@ -32,9 +34,12 @@ public class Mazo {
             generarCartasPorColor(colores[i], cartas);
         }
         boolean mazoCreado = pilaMazo.addAll(cartas);
-        if(mazoCreado) return pilaMazo;
-
+        if(mazoCreado) {
+            this.pilaMazo = pilaMazo;
+            return pilaMazo;
+        }
         else throw new EmptyStackException();
+
 
     }
 
@@ -47,6 +52,7 @@ public class Mazo {
     }
 
     public CartaJugador tomarCarta(){
+        if(esMazoVacio()) return null;
         return pilaMazo.pop();
     }
 }
