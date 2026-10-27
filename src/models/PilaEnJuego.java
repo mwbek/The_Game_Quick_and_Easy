@@ -2,7 +2,8 @@ package models;
 
 public interface PilaEnJuego {
 
-    public boolean agregarCarta(CartaJugador cartaNueva);
+    public void agregarCarta(CartaJugador cartaNueva);
     public String mostrarUltimaCarta();
+    public CartaJugador getUltimaCarta();
     public String tipoPila();
 }

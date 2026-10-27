@@ -1,5 +1,7 @@
 package models;
 
+import exceptions.JugadaInvalidaException;
+
 import java.util.Stack;
 
 public class PilaDescendente implements PilaEnJuego {
@@ -12,9 +14,7 @@ public class PilaDescendente implements PilaEnJuego {
     }
 
 
-    public boolean agregarCarta(CartaJugador cartaNueva) {
-
-        boolean cartaAgregada = true;
+    public void agregarCarta(CartaJugador cartaNueva) {
 
         /*
             A la hora de agregar una carta debo revisar algunos casos:
@@ -27,7 +27,6 @@ public class PilaDescendente implements PilaEnJuego {
         //Caso 1
         if(pila.empty()) {
             pila.push(cartaNueva);
-            return cartaAgregada;
         }
 
         //Caso 2
@@ -43,10 +42,14 @@ public class PilaDescendente implements PilaEnJuego {
             pila.push(cartaNueva);
         }
         else {
-            cartaAgregada = false;
+            throw new JugadaInvalidaException("La carta es mayor a:  " + cartaAnterior.toString());
         }
 
-        return cartaAgregada;
+
+    }
+
+    public CartaJugador getUltimaCarta() {
+        return pila.peek();
     }
 
     public String mostrarUltimaCarta(){
