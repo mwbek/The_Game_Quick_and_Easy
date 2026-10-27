@@ -1,5 +1,7 @@
 package models;
 
+import exceptions.JugadaInvalidaException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,14 +9,12 @@ import java.util.List;
 public class Jugador {
 
     private final String nombre;
-    private int cantidadCartas;
     private final int maxCantidadCartas;
 
     List<CartaJugador> cartas;
     public Jugador(String nombre) {
         this.nombre = nombre;
         maxCantidadCartas = 2;
-        cantidadCartas = 0;
 
         cartas = new ArrayList<>();
     }
@@ -25,20 +25,47 @@ public class Jugador {
     }
 
 
-    /// El jugador toma cartas unicamente si necesita, caso contrario retorna las mismas cartas que ya tiene
-    /// @param mazo
-    public void tomarCarta(Mazo mazo)
+    public void tomarCarta(Mazo mazo) {
+        cartas.add(mazo.tomarCarta());
+
+    }
+
+    public void jugarCarta(PilaEnJuego pila, CartaJugador carta) {
+            pila.agregarCarta(carta);
+            cartas.remove(carta);
+    }
+
+    public boolean pasarRonda()
     {
-        for(int i = cantidadCartas; i < maxCantidadCartas; i++){
-            cartas.add(mazo.tomarCarta());
+        if(cartas.size() < 2){
+            return true;
         }
+        return false;
     }
 
     public String verCartas()
     {
         if(cartas.isEmpty()) return "[]";
-        String mensaje = cartas.get(0).toString() + " | " + cartas.get(1).toString();
-        return mensaje;
+        return cartas.get(0).toString() + " | " + cartas.get(1).toString();
+    }
+
+    public List<CartaJugador> getCartas()
+    {
+        return Collections.unmodifiableList(cartas);
+    }
+
+
+
+
+    //Eliminar
+
+    /// El jugador toma cartas unicamente si necesita, caso contrario retorna las mismas cartas que ya tiene
+    /// @param mazo
+    public void tomarCartas(Mazo mazo)
+    {
+        for(int i = cartas.size(); i < maxCantidadCartas; i++){
+            cartas.add(mazo.tomarCarta());
+        }
     }
 
     public CartaJugador getCarta1(){
@@ -47,17 +74,6 @@ public class Jugador {
 
     public CartaJugador getCarta2(){
         return cartas.getLast();
-    }
-
-    public List<CartaJugador> getCartas()
-    {
-        return Collections.unmodifiableList(cartas);
-    }
-
-    public boolean jugarCarta(PilaEnJuego pila, CartaJugador carta) {
-        boolean resultado = pila.agregarCarta(carta);
-        cartas.remove(carta);
-        return resultado;
     }
 
 
