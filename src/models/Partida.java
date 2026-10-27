@@ -4,9 +4,7 @@ import exceptions.JugadaInvalidaException;
 import exceptions.JugadorPasaTurnoException;
 import exceptions.JugadoresPerdieronException;
 
-import java.util.ArrayDeque;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Partida {
 
@@ -39,17 +37,19 @@ public class Partida {
         pilaAscendente = new PilaAscendente();
         pilaDescendente = new PilaDescendente();
 
-        //Reparto cartas a todos los jugadores
+        //Reparto las cartas a cada jugar
         repartirCartas();
 
-        //Comienzo la ronda
-        jugadorActual = pasarRonda();
+        //Actualizo el jugador actual
+        jugadorActual = jugadores.peek();
 
+        //Actualizo el estado de la partida
         estadoPartida = EstadoDePartida.JUGANDO;
 
     }
 
-    private void repartirCartas() {
+
+    public void repartirCartas() {
         //A se entrega una carta a cada jugador y se repite 2 veces
         for(int i = 0; i < 2; i++) {
            jugadores.forEach(j -> j.tomarCarta(mazo));
@@ -93,6 +93,21 @@ public class Partida {
         return rondaActual;
     }
 
+    public PilaEnJuego getPilaAscendente() {
+        return pilaAscendente;
+    }
+
+    public PilaEnJuego getPilaDescendente() {
+        return pilaDescendente;
+    }
+
+    public Optional<CartaJugador> verCartaPilaAscendente(){
+            return pilaAscendente.getUltimaCarta();
+    }
+
+    public Optional<CartaJugador> verCartaPilaDescendente(){
+        return pilaDescendente.getUltimaCarta();
+    }
 
     public boolean esFinDeJuego()
     {
