@@ -1,19 +1,14 @@
 package Modelos;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Jugador {
 
     private final String nombre;
-    private final int maxCantidadCartas;
 
-    private Mano mano;
+    private final Mano mano;
     public Jugador(String nombre) {
         if(nombre.isEmpty()) throw new IllegalArgumentException("El nombre no puede estar vacio");
         this.nombre = nombre;
-        maxCantidadCartas = 2;
         mano = new Mano();
     }
 
@@ -28,8 +23,8 @@ public class Jugador {
     }
 
     ///
-    /// @param pila
-    /// @param carta
+    /// @param pila Pila de indicacion en la que se va a jugar la carta
+    /// @param carta Carta elegida para jugar
     /// @return retorna True si la carta se pudo jugar, caso contrario false
     public boolean jugarCarta(PilaDeIndicacion pila, Carta carta) {
 
@@ -40,10 +35,23 @@ public class Jugador {
         return true;
     }
 
-    //TODO: Mover metodo a la clase juego porque el jugador no puede decidir si puede o no pasar de ronda
-    public boolean puedePasarRonda() {
-        return mano.getMano().length < 2;
+    /// Reviso todas las combinaciones posibles de la mano del jugador.
+    /// @param pilaAsc pila Ascendente en juego
+    /// @param pilaDesc pila Descendente en juego
+    /// @return Retorna true si tiene al menos un movimiento valido, caso contrario retorna false
+    public boolean tieneMovimientosValidos(PilaDeIndicacion pilaAsc, PilaDeIndicacion pilaDesc){
+
+        for(Carta c : mano.getMano()){
+            if(pilaAsc.puedeAgregarCarta(c)) return true;
+        }
+
+        for(Carta c : mano.getMano()){
+            if(pilaDesc.puedeAgregarCarta(c)) return true;
+        }
+
+        return false;
     }
+
 
     public Carta[] getCartas()
     {
