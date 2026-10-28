@@ -17,14 +17,25 @@ public class PilaDeIndicacion {
         cartas = new Stack<>();
     }
 
-    public boolean agregarCarta(Carta carta){
-        if(carta == null) throw new IllegalArgumentException("La carta no puede ser nula");
+    public boolean agregarCarta(Carta carta) {
+        if (carta == null) throw new IllegalArgumentException("La carta no puede ser nula");
+        if(puedeAgregarCarta(carta)){
+            cartas.push(carta);
+            return true;
+        }
+        else return false;
+    }
 
-        boolean seAgregoCarta = true;
+
+
+    public boolean puedeAgregarCarta(Carta carta) {
+
+        if(cartas.contains(carta)) return false;
+
+        boolean sePuedeAgregar = false;
         //Caso 1: Si es la primer carta siendo agregada a la pila. En este caso se puede agregar cualquier carta
         if(cartas.empty()) {
-            cartas.push(carta);
-            return seAgregoCarta;
+            return true;
         }
 
         Carta cartaTope = cartas.peek();
@@ -32,18 +43,17 @@ public class PilaDeIndicacion {
         //Caso 2: No es la primer carta y por lo tanto debo revisar dos condiciones
         //Condicion 1: Son del mismo color, en este caso puede agregar cualquier valor
         if(carta.getColor().equals(cartaTope.getColor())){
-            cartas.push(carta);
+            sePuedeAgregar = true;
         }
         else{
             //Condicion 2: Son de distinto color, en este reviso a que pila se quiere agregar la carta
-            boolean esMovimientoValido = validarMovimiento(cartaTope, carta);
-            if(esMovimientoValido) cartas.push(carta);
-            else seAgregoCarta = false;
+            sePuedeAgregar = validarMovimientoPorPila(cartaTope, carta);
         }
 
-        return seAgregoCarta;
-
+        return sePuedeAgregar;
     }
+
+
 
     /// @Return Retorna el tipo de pila de indicacion
     public CartaDeIndicacion getTipo(){
@@ -52,7 +62,7 @@ public class PilaDeIndicacion {
 
 
 
-    private boolean validarMovimiento(Carta cartaTope, Carta cartaNueva){
+    private boolean validarMovimientoPorPila(Carta cartaTope, Carta cartaNueva){
         boolean esMovimientoValido = false;
         if(indicacion == CartaDeIndicacion.ASCENDENTE){
             if(cartaNueva.getNumero() > cartaTope.getNumero()){
