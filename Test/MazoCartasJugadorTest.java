@@ -1,13 +1,11 @@
-import models.CartaJugador;
-import models.ColorCartaJugador;
-import models.Mazo;
+import Modelos.Carta;
+import Enumerados.ColorCarta;
+import Modelos.Mazo;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Stack;
 
 public class MazoCartasJugadorTest {
 
@@ -19,14 +17,14 @@ public class MazoCartasJugadorTest {
         Mazo pilaMazo = new Mazo();
         Assertions.assertEquals(0, pilaMazo.getMazo().size());
         pilaMazo.llenarMazo();
-        List<CartaJugador> mazo = pilaMazo.getMazo();
+        List<Carta> mazo = pilaMazo.getMazo();
 
         Assertions.assertEquals(50, mazo.size());
-        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCartaJugador.ROJO)).count());
-        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCartaJugador.AMARILLO)).count());
-        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCartaJugador.AZUL)).count());
-        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCartaJugador.GRIS)).count());
-        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCartaJugador.VERDE)).count());
+        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCarta.ROJO)).count());
+        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCarta.AMARILLO)).count());
+        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCarta.AZUL)).count());
+        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCarta.GRIS)).count());
+        Assertions.assertEquals(10, mazo.stream().filter(carta -> carta.getColor().equals(ColorCarta.VERDE)).count());
 
     }
 

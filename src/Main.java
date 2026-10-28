@@ -1,13 +1,8 @@
 import Controladores.ControladorComenzarPartida;
 import Controladores.ControladorJugarTurno;
-import Controladores.Juego_Eliminar;
 import Vista.Consola.VistaManoJugador;
 import Vista.Consola.VistaMenuPrincipal;
-import models.Jugador;
-import models.Partida;
-
-import java.util.ArrayList;
-import java.util.List;
+import Modelos.Partida;
 
 public class Main {
 

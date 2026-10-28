@@ -1,5 +1,6 @@
-package models;
+package Modelos;
 
+import Interfaces.PilaEnJuego;
 import exceptions.JugadaInvalidaException;
 
 import java.util.Optional;
@@ -7,14 +8,14 @@ import java.util.Stack;
 
 public class PilaAscendente implements PilaEnJuego {
 
-    private final Stack<CartaJugador> pila;
+    private final Stack<Carta> pila;
 
     public PilaAscendente() {
 
         pila = new Stack<>();
     }
 
-    public void agregarCarta(CartaJugador cartaNueva) {
+    public void agregarCarta(Carta cartaNueva) {
 
         //Caso 1: Si es la primer carta siendo agregada a la pila. En este caso se puede agregar cualquier carta
         if(pila.empty()) {
@@ -25,12 +26,12 @@ public class PilaAscendente implements PilaEnJuego {
         //       Condicion 1: Son del mismo color, en este caso puede agregar cualquier valor
         //       Condicion 2: Son de distinto color, en este caso el valor debe ser necesariamente MAYOR
 
-        CartaJugador cartaAnterior = pila.peek(); //Miro la ultima carta agrega, pero sin sacarla
+        Carta cartaAnterior = pila.peek(); //Miro la ultima carta agrega, pero sin sacarla
         if(cartaAnterior.getColor().equals(cartaNueva.getColor())) {
             //La carta puede tener cualquier valor
             pila.push(cartaNueva);
         }
-        else if(cartaNueva.getValor() > cartaAnterior.getValor()) {
+        else if(cartaNueva.getNumero() > cartaAnterior.getNumero()) {
             pila.push(cartaNueva);
         }
         else {
@@ -44,7 +45,7 @@ public class PilaAscendente implements PilaEnJuego {
     }
 
     //Estos metodos se repiten en pilaAscendent y Desendente. Podrian ir en una clase heredada (abstracta?)
-    public Optional<CartaJugador> getUltimaCarta() {
+    public Optional<Carta> getUltimaCarta() {
         return Optional.of( pila.peek());
     }
 

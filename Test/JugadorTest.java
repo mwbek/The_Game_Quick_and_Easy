@@ -1,4 +1,4 @@
-import models.*;
+import Modelos.*;
 import org.junit.jupiter.api.*;
 
 public class JugadorTest {

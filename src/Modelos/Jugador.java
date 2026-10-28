@@ -1,6 +1,6 @@
-package models;
+package Modelos;
 
-import exceptions.JugadaInvalidaException;
+import Interfaces.PilaEnJuego;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ public class Jugador {
     private final String nombre;
     private final int maxCantidadCartas;
 
-    List<CartaJugador> cartas;
+    List<Carta> cartas;
     public Jugador(String nombre) {
         this.nombre = nombre;
         maxCantidadCartas = 2;
@@ -30,7 +30,7 @@ public class Jugador {
 
     }
 
-    public void jugarCarta(PilaEnJuego pila, CartaJugador carta) {
+    public void jugarCarta(PilaEnJuego pila, Carta carta) {
             pila.agregarCarta(carta);
             cartas.remove(carta);
     }
@@ -49,7 +49,7 @@ public class Jugador {
         return cartas.get(0).toString() + " | " + cartas.get(1).toString();
     }
 
-    public List<CartaJugador> getCartas()
+    public List<Carta> getCartas()
     {
         return Collections.unmodifiableList(cartas);
     }
@@ -68,11 +68,11 @@ public class Jugador {
         }
     }
 
-    public CartaJugador getCarta1(){
+    public Carta getCarta1(){
         return cartas.getFirst();
     }
 
-    public CartaJugador getCarta2(){
+    public Carta getCarta2(){
         return cartas.getLast();
     }
 

@@ -1,11 +1,13 @@
-package models;
+package Interfaces;
+
+import Modelos.Carta;
 
 import java.util.Optional;
 
 public interface PilaEnJuego {
 
-    public void agregarCarta(CartaJugador cartaNueva);
+    public void agregarCarta(Carta cartaNueva);
     public String verUltimaCartaComoTexto();
-    public Optional<CartaJugador> getUltimaCarta();
+    public Optional<Carta> getUltimaCarta();
     public String tipoPila();
 }

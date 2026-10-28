@@ -1,7 +1,7 @@
 package Controladores;
 
 import Vista.Consola.VistaPasarTurno;
-import models.Partida;
+import Modelos.Partida;
 
 public class ControladorPasarTurno {
 

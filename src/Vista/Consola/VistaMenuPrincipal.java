@@ -1,6 +1,6 @@
 package Vista.Consola;
 
-import models.Jugador;
+import Modelos.Jugador;
 
 import java.util.*;
 

@@ -1,12 +1,10 @@
 package Controladores;
 
-import Vista.Consola.Vista;
 import Vista.Consola.VistaMenuPrincipal;
-import models.Jugador;
-import models.Mazo;
-import models.Partida;
+import Modelos.Jugador;
+import Modelos.Mazo;
+import Modelos.Partida;
 
-import java.util.List;
 import java.util.Queue;
 
 public class ControladorComenzarPartida {

@@ -1,9 +1,9 @@
 package Vista.Consola;
 
-import models.CartaJugador;
-import models.Jugador;
-import models.Partida;
-import models.PilaEnJuego;
+import Modelos.Carta;
+import Modelos.Jugador;
+import Modelos.Partida;
+import Interfaces.PilaEnJuego;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -14,7 +14,7 @@ public class VistaManoJugador extends Vista {
     public void mostrarHUDJugador(Partida partida) {
         Jugador jugadorActual = partida.getJugadorturnoActual();
         int ronda = partida.getRondaActual();
-        List<CartaJugador> cartasEnMano = jugadorActual.getCartas();
+        List<Carta> cartasEnMano = jugadorActual.getCartas();
         PilaEnJuego pilaAscendente = partida.getPilaAscendente();
         PilaEnJuego pilaDescendente = partida.getPilaDescendente();
 

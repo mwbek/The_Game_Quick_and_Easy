@@ -3,7 +3,7 @@ package Controladores;
 import Vista.Consola.VistaManoJugador;
 import exceptions.JugadaInvalidaException;
 import exceptions.JugadorPasaTurnoException;
-import models.*;
+import Modelos.*;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -27,8 +27,8 @@ public class ControladorJugarTurno {
     {
         jugador = partida.getJugadorturnoActual();
 
-        List<CartaJugador> cartasEnMano = jugador.getCartas();
-        CartaJugador cartaEnJuego;
+        List<Carta> cartasEnMano = jugador.getCartas();
+        Carta cartaEnJuego;
 
         vistaManoJugador.mostrarHUDJugador(partida);
 

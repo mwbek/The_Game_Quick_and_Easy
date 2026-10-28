@@ -1,9 +1,10 @@
 package Controladores;
 
+import Interfaces.PilaEnJuego;
 import exceptions.JugadorPasaTurnoException;
 import exceptions.JugadoresGanaronException;
 import exceptions.JugadoresPerdieronException;
-import models.*;
+import Modelos.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -86,8 +87,8 @@ public class Juego_Eliminar {
 
 
     private void mostrarHUDPorJugador(Jugador jugador) {
-        CartaJugador carta1 = jugador.getCarta1();
-        CartaJugador carta2 = jugador.getCarta2();
+        Carta carta1 = jugador.getCarta1();
+        Carta carta2 = jugador.getCarta2();
         int cartasJugadas = 0;
 
         System.out.println("════════════════════════════════════════════════════════════════");
@@ -148,7 +149,7 @@ public class Juego_Eliminar {
         int intentosFallidos = 0;
         int cartasJugadas = 0;
         boolean jugadaValida = false;
-        CartaJugador cartaEnJuego = null;
+        Carta cartaEnJuego = null;
         PilaEnJuego pilaEnJuego = null;
 
         Queue<ManoJugada> manosJugadas = new ArrayDeque<>();
@@ -186,9 +187,9 @@ public class Juego_Eliminar {
         return cartasJugadas;
     }
 
-    private CartaJugador elegirCarta(List<CartaJugador> cartas) {
+    private Carta elegirCarta(List<Carta> cartas) {
         int respuesta = 0;
-        CartaJugador cartaEnJuego = null;
+        Carta cartaEnJuego = null;
         System.out.println("¿Qué carta jugas? (1, 2 o 3 (pasar): ");
         while(respuesta == 0){
             try {

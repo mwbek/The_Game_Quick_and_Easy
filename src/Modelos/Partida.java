@@ -1,8 +1,8 @@
-package models;
+package Modelos;
 
+import Enumerados.EstadoDePartida;
+import Interfaces.PilaEnJuego;
 import exceptions.JugadaInvalidaException;
-import exceptions.JugadorPasaTurnoException;
-import exceptions.JugadoresPerdieronException;
 
 import java.util.*;
 
@@ -56,7 +56,7 @@ public class Partida {
         }
     }
 
-    public void jugarMano(Jugador jugador, CartaJugador cartaEnJuego, PilaEnJuego pilaEnJuego) {
+    public void jugarMano(Jugador jugador, Carta cartaEnJuego, PilaEnJuego pilaEnJuego) {
 
         try{
             jugador.jugarCarta(pilaEnJuego, cartaEnJuego);
@@ -101,11 +101,11 @@ public class Partida {
         return pilaDescendente;
     }
 
-    public Optional<CartaJugador> verCartaPilaAscendente(){
+    public Optional<Carta> verCartaPilaAscendente(){
             return pilaAscendente.getUltimaCarta();
     }
 
-    public Optional<CartaJugador> verCartaPilaDescendente(){
+    public Optional<Carta> verCartaPilaDescendente(){
         return pilaDescendente.getUltimaCarta();
     }
 

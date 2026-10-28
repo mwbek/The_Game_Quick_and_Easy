@@ -1,9 +1,10 @@
-import models.*;
+import Enumerados.ColorCarta;
+import Enumerados.EstadoDePartida;
+import Interfaces.PilaEnJuego;
+import Modelos.*;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 
 public class PartidaTest {
@@ -48,19 +49,19 @@ public class PartidaTest {
 
         //Juega Jugador 1
         Assertions.assertEquals(j1, nuevaPartida.getJugadorturnoActual());
-        nuevaPartida.jugarMano(j1, new CartaJugador(ColorCartaJugador.ROJO, 3), pilaAsc);
+        nuevaPartida.jugarMano(j1, new Carta(ColorCarta.ROJO, 3), pilaAsc);
         Assertions.assertEquals(j2, nuevaPartida.pasarRonda());
 
 
         //Juega Jugador 2
         Assertions.assertEquals(j2, nuevaPartida.getJugadorturnoActual());
-        nuevaPartida.jugarMano(j2, new CartaJugador(ColorCartaJugador.VERDE, 5), pilaAsc);
+        nuevaPartida.jugarMano(j2, new Carta(ColorCarta.VERDE, 5), pilaAsc);
         Assertions.assertEquals(j1, nuevaPartida.pasarRonda());
 
 
         //Vuelve a jugar Jugador 1
         //Juega Jugador 1
-        nuevaPartida.jugarMano(j1, new CartaJugador(ColorCartaJugador.ROJO, 7), pilaAsc);
+        nuevaPartida.jugarMano(j1, new Carta(ColorCarta.ROJO, 7), pilaAsc);
         Assertions.assertEquals(j2, nuevaPartida.pasarRonda());
     }
 
@@ -72,16 +73,16 @@ public class PartidaTest {
         PilaEnJuego pilaAsc = new PilaAscendente();
 
         //Jugador 1 juega su primer mano y pasa de ronda
-        nuevaPartida.jugarMano(j1, new CartaJugador(ColorCartaJugador.ROJO, 10), pilaAsc);
+        nuevaPartida.jugarMano(j1, new Carta(ColorCarta.ROJO, 10), pilaAsc);
         nuevaPartida.pasarRonda();
         Assertions.assertFalse(nuevaPartida.esFinDeJuego());
 
         //Jugador 2 intenta jugar un 9 azul. No puede
-        nuevaPartida.jugarMano(j2, new CartaJugador(ColorCartaJugador.AZUL, 9), pilaAsc);
+        nuevaPartida.jugarMano(j2, new Carta(ColorCarta.AZUL, 9), pilaAsc);
         Assertions.assertFalse(nuevaPartida.esFinDeJuego());
 
         //Jugador 2 intenta jugar su segunda carta, un 8 verde. Tampoco puede
-        nuevaPartida.jugarMano(j2, new CartaJugador(ColorCartaJugador.VERDE, 8), pilaAsc);
+        nuevaPartida.jugarMano(j2, new Carta(ColorCarta.VERDE, 8), pilaAsc);
 
         //El contador de intentos de jugador vale 2, se chequea el fin de juego y es true
         Assertions.assertTrue(nuevaPartida.esFinDeJuego());

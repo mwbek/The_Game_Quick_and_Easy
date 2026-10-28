@@ -1,35 +1,37 @@
-package models;
+package Modelos;
 
+
+import Enumerados.ColorCarta;
 
 import java.util.*;
 
 public class Mazo {
 
-    private Stack<CartaJugador> pilaMazo;
+    private Stack<Carta> pilaMazo;
 
     public Mazo() {
         pilaMazo = new Stack<>();
 
     }
 
-    private void generarCartasPorColor(ColorCartaJugador color, List<CartaJugador> cartas) {
+    private void generarCartasPorColor(ColorCarta color, List<Carta> cartas) {
         for(int i = 1; i < 11; i++){
-            cartas.add(new CartaJugador(color, i));
+            cartas.add(new Carta(color, i));
         }
         //Mezcla las cartas
         Collections.shuffle(cartas);
     }
 
     //Genera 50 cartas de forma aleatoria y las agrega a una PILA
-    public Stack<CartaJugador> llenarMazo() {
+    public Stack<Carta> llenarMazo() {
 
         //Si ya tiene cartas no se puede volver a llenar
         if(!this.pilaMazo.isEmpty()) return this.pilaMazo;
 
-        Stack<CartaJugador> pilaMazo = new Stack<>();
-        List<CartaJugador> cartas = new ArrayList<>();
+        Stack<Carta> pilaMazo = new Stack<>();
+        List<Carta> cartas = new ArrayList<>();
 
-        ColorCartaJugador[] colores = ColorCartaJugador.values();
+        ColorCarta[] colores = ColorCarta.values();
         for(int i = 0; i < 5; i++){
             generarCartasPorColor(colores[i], cartas);
         }
@@ -43,7 +45,7 @@ public class Mazo {
 
     }
 
-    public List<CartaJugador> getMazo() {
+    public List<Carta> getMazo() {
         return pilaMazo.stream().toList();
     }
 
@@ -51,7 +53,7 @@ public class Mazo {
         return pilaMazo.isEmpty();
     }
 
-    public CartaJugador tomarCarta(){
+    public Carta tomarCarta(){
         if(esMazoVacio()) return null;
         return pilaMazo.pop();
     }
