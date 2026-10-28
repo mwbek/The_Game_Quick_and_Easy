@@ -1,15 +1,13 @@
 package Modelos;
 
 import Enumerados.CartaDeIndicacion;
-
-import java.util.Optional;
 import java.util.Stack;
 
 /// Representa las cartas de indicacion (Ascendente y Descendente)
 public class PilaDeIndicacion {
 
     private final CartaDeIndicacion indicacion;
-    private Stack<Carta> cartas;
+    private final Stack<Carta> cartas;
     public PilaDeIndicacion(CartaDeIndicacion indicacion) {
         if(indicacion == null) throw new IllegalArgumentException("La carta de indicacion no puede ser nula");
 
@@ -32,7 +30,7 @@ public class PilaDeIndicacion {
 
         if(cartas.contains(carta)) return false;
 
-        boolean sePuedeAgregar = false;
+        boolean sePuedeAgregar;
         //Caso 1: Si es la primer carta siendo agregada a la pila. En este caso se puede agregar cualquier carta
         if(cartas.empty()) {
             return true;
@@ -55,7 +53,7 @@ public class PilaDeIndicacion {
 
 
 
-    /// @Return Retorna el tipo de pila de indicacion
+    /// @return  Retorna el tipo de pila de indicacion
     public CartaDeIndicacion getTipo(){
         return indicacion;
     }
