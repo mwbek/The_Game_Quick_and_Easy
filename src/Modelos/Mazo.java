@@ -11,22 +11,32 @@ public class Mazo {
 
     public Mazo() {
         pilaMazo = new Stack<>();
-
     }
 
-    private void generarCartasPorColor(ColorCarta color, List<Carta> cartas) {
-        for(int i = 1; i < 11; i++){
-            cartas.add(new Carta(color, i));
-        }
-        //Mezcla las cartas
-        Collections.shuffle(cartas);
+
+    /// @return Retorna una array inmutable de las cartas del mazo
+    public Carta[] getMazo() {
+        Carta[] mazoCartas = new Carta[pilaMazo.size()];
+        return pilaMazo.toArray(mazoCartas);
+    }
+    /// Retorna true si el mazo esta vacio, caso contrario retorna false
+    public boolean esMazoVacio(){
+        return pilaMazo.isEmpty();
     }
 
-    //Genera 50 cartas de forma aleatoria y las agrega a una PILA
-    public Stack<Carta> llenarMazo() {
+    /// Toma la carta que se encuentre en el tope del mazo
+    /// @return Retorna una carta, si el mazo esta vacio retorna Null
+    public Carta tomarCarta(){
+        if(esMazoVacio()) return null;
+        return pilaMazo.pop();
+    }
+
+
+    ///  Mezcla las 50 cartas del juego en forma aleatoria
+    public void mezclarMazo() {
 
         //Si ya tiene cartas no se puede volver a llenar
-        if(!this.pilaMazo.isEmpty()) return this.pilaMazo;
+        if(!this.pilaMazo.isEmpty()) return;
 
         Stack<Carta> pilaMazo = new Stack<>();
         List<Carta> cartas = new ArrayList<>();
@@ -38,23 +48,16 @@ public class Mazo {
         boolean mazoCreado = pilaMazo.addAll(cartas);
         if(mazoCreado) {
             this.pilaMazo = pilaMazo;
-            return pilaMazo;
         }
         else throw new EmptyStackException();
-
-
     }
 
-    public List<Carta> getMazo() {
-        return pilaMazo.stream().toList();
+    private static void generarCartasPorColor(ColorCarta color, List<Carta> cartas) {
+        for(int i = 1; i < 11; i++){
+            cartas.add(new Carta(color, i));
+        }
+        //Mezcla las cartas
+        Collections.shuffle(cartas);
     }
 
-    public boolean esMazoVacio(){
-        return pilaMazo.isEmpty();
-    }
-
-    public Carta tomarCarta(){
-        if(esMazoVacio()) return null;
-        return pilaMazo.pop();
-    }
 }
