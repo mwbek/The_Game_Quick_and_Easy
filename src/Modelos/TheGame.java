@@ -82,6 +82,9 @@ public class TheGame extends Observable {
         return estadoPartida != Eventos.JUGANDO;
     }
 
+    public int getRondaActual(){
+        return rondaActual;
+    }
 
 
     private boolean jugadorPuedePasarRonda() {
