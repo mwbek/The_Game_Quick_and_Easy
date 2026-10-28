@@ -1,5 +1,6 @@
 package Modelos;
 
+import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Mano {
     public void agregarCarta(Mazo mazo)
     {
         if(mazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
-        if(cartas.size() == 2) return;
+        if(cartas.size() == cartasMaximas) return;
         if(mazo.esMazoVacio()) return;
 
         cartas.add(mazo.tomarCarta());
@@ -31,9 +32,24 @@ public class Mano {
     /// Elimina la carta de la mano y retorna true.
     /// Si la carta no se encuentra en la mano retorna false
     /// @param carta
-    /// @return True si la carta existia en la mano, caso contrario false
-    public boolean quitarCarta(Carta carta) {
-            return cartas.remove(carta);
+    /// @return True si la carta existia en la mano, caso contrario lanza una excepcion
+    /// @throws CartaNoExisteException Si la carta que se intento remover no existe, lanza una excepcion
+    public void quitarCarta(Carta carta)
+    {
+        if(!cartas.remove(carta)) throw new CartaNoExisteException("La carta que se quiso remover no existe");
+        cartas.remove(carta);
+    }
+
+    public Carta[] getMano(){
+        Carta[] mano = new Carta[cartas.size()];
+        mano = cartas.toArray(mano);
+        return mano;
+
+    }
+
+    public boolean esCartaValida(Carta carta){
+        if(carta == null) return false;
+        return  cartas.contains(carta);
     }
 
 }
