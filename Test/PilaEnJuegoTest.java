@@ -1,7 +1,5 @@
 import Enumerados.CartaDeIndicacion;
 import Enumerados.ColorCarta;
-import Interfaces.PilaEnJuego;
-import exceptions.JugadaInvalidaException;
 import Modelos.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

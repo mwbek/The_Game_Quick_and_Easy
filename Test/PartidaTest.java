@@ -1,6 +1,6 @@
+import Enumerados.CartaDeIndicacion;
 import Enumerados.ColorCarta;
 import Enumerados.EstadoDePartida;
-import Interfaces.PilaEnJuego;
 import Modelos.*;
 import org.junit.jupiter.api.*;
 
@@ -21,7 +21,7 @@ public class PartidaTest {
         j1 = new Jugador("Martin");
         j2 = new Jugador("Ludmila");
         mazo = new Mazo();
-        mazo.llenarMazo();
+        mazo.mezclarMazo();
 
         jugadores.add(j1);
         jugadores.add(j2);
@@ -45,7 +45,7 @@ public class PartidaTest {
     @DisplayName("Testeo el pasaje de turnos entre jugadores")
     public void JugarManoYPasarTurno(){
 
-        PilaAscendente pilaAsc = new PilaAscendente();
+        PilaDeIndicacion pilaAsc = new PilaDeIndicacion(CartaDeIndicacion.ASCENDENTE);
 
         //Juega Jugador 1
         Assertions.assertEquals(j1, nuevaPartida.getJugadorturnoActual());
@@ -70,7 +70,7 @@ public class PartidaTest {
 
     public void jugadoresPierdenTest()
     {
-        PilaEnJuego pilaAsc = new PilaAscendente();
+        PilaDeIndicacion pilaAsc = new PilaDeIndicacion(CartaDeIndicacion.ASCENDENTE);
 
         //Jugador 1 juega su primer mano y pasa de ronda
         nuevaPartida.jugarMano(j1, new Carta(ColorCarta.ROJO, 10), pilaAsc);

@@ -1,3 +1,4 @@
+import Enumerados.CartaDeIndicacion;
 import Modelos.*;
 import org.junit.jupiter.api.*;
 
@@ -12,7 +13,7 @@ public class JugadorTest {
     {
         jugador = new Jugador("Martin");
         mazo = new Mazo();
-        mazo.llenarMazo();
+        mazo.mezclarMazo();
 
         Assertions.assertNotNull(jugador);
         Assertions.assertEquals("Martin", jugador.getNombre());
@@ -22,7 +23,7 @@ public class JugadorTest {
     public void tomarCartaTest()
     {
         jugador.tomarCarta(mazo);
-        Assertions.assertEquals(49,mazo.getMazo().size());
+        Assertions.assertEquals(49,mazo.getMazo().length);
     }
 
     @Test
@@ -34,9 +35,9 @@ public class JugadorTest {
         jugador.tomarCarta(mazo);
 
 
-        Assertions.assertFalse(jugador.pasarRonda());
-        jugador.jugarCarta(new PilaDescendente(), jugador.getCartas().getFirst());
-        Assertions.assertTrue(jugador.pasarRonda());
+        Assertions.assertFalse(jugador.puedePasarRonda());
+        Assertions.assertTrue(jugador.jugarCarta(new PilaDeIndicacion(CartaDeIndicacion.DESCENDENTE), jugador.getCartas()[0]));
+        Assertions.assertTrue(jugador.puedePasarRonda());
 
 
     }
