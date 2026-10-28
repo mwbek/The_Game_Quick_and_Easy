@@ -1,7 +1,5 @@
 package Modelos;
 
-import Interfaces.PilaEnJuego;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,12 +9,12 @@ public class Jugador {
     private final String nombre;
     private final int maxCantidadCartas;
 
-    List<Carta> cartas;
+    private Mano mano;
     public Jugador(String nombre) {
+        if(nombre.isEmpty()) throw new IllegalArgumentException("El nombre no puede estar vacio");
         this.nombre = nombre;
         maxCantidadCartas = 2;
-
-        cartas = new ArrayList<>();
+        mano = new Mano();
     }
 
 
@@ -26,56 +24,31 @@ public class Jugador {
 
 
     public void tomarCarta(Mazo mazo) {
-        cartas.add(mazo.tomarCarta());
-
+        mano.agregarCarta(mazo);
     }
 
-    public void jugarCarta(PilaEnJuego pila, Carta carta) {
-            pila.agregarCarta(carta);
-            cartas.remove(carta);
+    ///
+    /// @param pila
+    /// @param carta
+    /// @return retorna True si la carta se pudo jugar, caso contrario false
+    public boolean jugarCarta(PilaDeIndicacion pila, Carta carta) {
+
+        if(!mano.esCartaValida(carta)) return true;
+        if(!pila.agregarCarta((carta))) return true;
+
+        mano.quitarCarta(carta);
+        return true;
     }
 
-    public boolean pasarRonda()
+    //TODO: Mover metodo a la clase juego porque el jugador no puede decidir si puede o no pasar de ronda
+    public boolean puedePasarRonda() {
+        return mano.getMano().length < 2;
+    }
+
+    public Carta[] getCartas()
     {
-        if(cartas.size() < 2){
-            return true;
-        }
-        return false;
+        return mano.getMano();
     }
-
-    public String verCartas()
-    {
-        if(cartas.isEmpty()) return "[]";
-        return cartas.get(0).toString() + " | " + cartas.get(1).toString();
-    }
-
-    public List<Carta> getCartas()
-    {
-        return Collections.unmodifiableList(cartas);
-    }
-
-
-
-
-    //Eliminar
-
-    /// El jugador toma cartas unicamente si necesita, caso contrario retorna las mismas cartas que ya tiene
-    /// @param mazo
-    public void tomarCartas(Mazo mazo)
-    {
-        for(int i = cartas.size(); i < maxCantidadCartas; i++){
-            cartas.add(mazo.tomarCarta());
-        }
-    }
-
-    public Carta getCarta1(){
-        return cartas.getFirst();
-    }
-
-    public Carta getCarta2(){
-        return cartas.getLast();
-    }
-
 
 
 }
