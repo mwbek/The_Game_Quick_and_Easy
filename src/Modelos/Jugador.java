@@ -1,25 +1,28 @@
 package Modelos;
+import Interfaces.IMazo;
 
 
 public class Jugador {
 
     private final String nombre;
-
     private final Mano mano;
+
     public Jugador(String nombre) {
         if(nombre.isEmpty()) throw new IllegalArgumentException("El nombre no puede estar vacio");
         this.nombre = nombre;
         mano = new Mano();
     }
 
-
     public String getNombre() {
         return nombre;
     }
 
+    public int getCantidadCartasEnMano(){
+        return mano.getCantidadCartas();
+    }
 
-    public void tomarCarta(Mazo mazo) {
-        mano.agregarCarta(mazo);
+    public void tomarCarta(IMazo iMazo) {
+        mano.agregarCarta(iMazo);
     }
 
     ///
@@ -28,7 +31,7 @@ public class Jugador {
     /// @return retorna True si la carta se pudo jugar, caso contrario false
     public boolean jugarCarta(PilaDeIndicacion pila, Carta carta) {
 
-        if(!mano.esCartaValida(carta)) return true;
+        if(!mano.contiene(carta)) return true;
         if(!pila.agregarCarta((carta))) return true;
 
         mano.quitarCarta(carta);
@@ -39,8 +42,12 @@ public class Jugador {
     /// @param pilaAsc pila Ascendente en juego
     /// @param pilaDesc pila Descendente en juego
     /// @return Retorna true si tiene al menos un movimiento valido, caso contrario retorna false
-    public boolean tieneMovimientosValidos(PilaDeIndicacion pilaAsc, PilaDeIndicacion pilaDesc){
+    public boolean hayMovimientosValidos(PilaDeIndicacion pilaAsc, PilaDeIndicacion pilaDesc){
 
+        //Si el jugador no tiene cartas es porque o no agarro o el mazo esta vacio
+        if(getCantidadCartasEnMano() == 0) return true;
+
+        //TODO : Fusionar ambos bucles en uno solo con un OR
         for(Carta c : mano.getMano()){
             if(pilaAsc.puedeAgregarCarta(c)) return true;
         }
@@ -48,13 +55,11 @@ public class Jugador {
         for(Carta c : mano.getMano()){
             if(pilaDesc.puedeAgregarCarta(c)) return true;
         }
-
         return false;
     }
 
 
-    public Carta[] getCartas()
-    {
+    public Carta[] getCartas() {
         return mano.getMano();
     }
 
