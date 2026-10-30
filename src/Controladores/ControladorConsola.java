@@ -6,7 +6,7 @@ import Observer.IObservable;
 import Observer.IObservador;
 import Interfaces.IVista;
 
-public class ControladorConsola implements IObservador {
+public class ControladorConsola<IJugador> implements IObservador {
 
     private IVista vista;
     private final TheGame juego;
@@ -27,11 +27,19 @@ public class ControladorConsola implements IObservador {
 
         int respuesta;
         respuesta= vista.mostrarMenuPrincipal();
-        if(respuesta == 1){
+        if(respuesta == 2){
+            return;
+        }
 
+        while(juego.esFinDeJuego()){
+            vista.mostrarHUDJugador();
         }
 
     }
+
+
+
+
 
     @Override
     public void actualizar(IObservable o, Object e) {
@@ -41,8 +49,8 @@ public class ControladorConsola implements IObservador {
             case INICIO_PARTIDA:
                 this.vista.mostrarMenuPrincipal();
                 break;
-            case CAMBIO_LISTA_USUARIOS:
-                this.vista.mostrarListaUsuario(this.chat.getUsuarios());
+            case NUEVO_JUGADOR:
+                //this.vista.mostrarListaUsuario(this.chat.getUsuarios());
                 break;
         }
     }

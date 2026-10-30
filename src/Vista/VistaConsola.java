@@ -120,7 +120,7 @@ public class VistaConsola implements IVista {
                 nombre = sc.next();
             }
 
-            controlador.solicitarJugador(nombre);
+            //controlador.solicitarJugador(nombre);
             nombre = "";
         }
     }
