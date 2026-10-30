@@ -1,8 +1,9 @@
 package Modelos;
+import Interfaces.IJugador;
 import Interfaces.IMazo;
 
 
-public class Jugador {
+public class Jugador implements IJugador {
 
     private final String nombre;
     private final Mano mano;
@@ -13,6 +14,7 @@ public class Jugador {
         mano = new Mano();
     }
 
+    @Override
     public String getNombre() {
         return nombre;
     }
