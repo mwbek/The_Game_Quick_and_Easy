@@ -13,7 +13,7 @@ import java.util.Queue;
 public class TheGame extends Observable {
 
     private Eventos estadoPartida;
-    private Queue<Jugador> jugadores;
+    private final Queue<Jugador> jugadores;
     private Jugador jugadorActual = null;
     private final IMazo mazo;
 
@@ -40,12 +40,14 @@ public class TheGame extends Observable {
         notificarObservadores(Eventos.NUEVO_JUGADOR);
     }
 
-    public void inicializarPartida()
-    {
+    public void inicializarPartida() {
         if(jugadores.size() < 2) throw new IllegalArgumentException("Se necesitan al menos 2 jugadores para iniciar la partida");
         mazo.mezclarMazo();
         rondaActual = 1;
         pasarJugador(); //Agarro el primer jugador en la cola jugadores
+
+
+        notificarObservadores(Eventos.INICIO_PARTIDA);
 
     }
 
@@ -86,8 +88,7 @@ public class TheGame extends Observable {
         return jugadorActual;
     }
 
-    public Jugador[] getJugadores()
-    {
+    public Jugador[] getJugadores() {
         Jugador[] arrayJugadores = new Jugador[jugadores.size()];
         arrayJugadores = jugadores.toArray(arrayJugadores);
         return arrayJugadores;
@@ -104,7 +105,15 @@ public class TheGame extends Observable {
 
 
     public boolean esFinDeJuego() {
+
+        Eventos estadoAnterior = estadoPartida;
         chequearEstadoPartida();
+
+        //Si hubo un cambio de estado notifico al controlador
+        if(estadoAnterior != estadoPartida){
+            notificarObservadores(estadoPartida);
+        }
+
         return estadoPartida != Eventos.JUGANDO;
     }
 
@@ -124,8 +133,6 @@ public class TheGame extends Observable {
 
     private void chequearEstadoPartida()
     {
-        Eventos estadoAnterior = estadoPartida;
-
         if(mazo.esVacio() && jugadoresNoTienenMasCartas()) {
             estadoPartida = Eventos.GANARON;
         }
@@ -136,10 +143,6 @@ public class TheGame extends Observable {
             estadoPartida = Eventos.JUGANDO;
         }
 
-        //Si hubo un cambio de estado notifico al controlador
-        if(estadoAnterior != estadoPartida){
-            notificarObservadores(estadoPartida);
-        }
     }
 
 
