@@ -1,19 +1,23 @@
 package Vista;
 
+import Controladores.ControladorConsola;
+import Interfaces.IVista;
 import Modelos.Carta;
 import Modelos.Jugador;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class VistaConsola {
+public class VistaConsola implements IVista {
 
-    public final Controlador controlador;
+    public final ControladorConsola controlador;
 
     private final Scanner sc;
 
-    public VistaConsola(Controlador controlador) {
-        //Aplicar controlador defensiva. Verificar que controlador no sea nulo
+    public VistaConsola(ControladorConsola controlador) {
+
+        //Programacion defensiva
+        if(controlador == null) throw new IllegalArgumentException("El controlador no puede ser nulo");
 
         this.controlador = controlador;
         this.controlador.setVista(this);
@@ -22,6 +26,7 @@ public class VistaConsola {
     }
 
 
+    /// @return retorna un 1 cuando el usuario quiere iniciar una nueva partida o un 0 cuando quiere salir
     public int mostrarMenuPrincipal()
     {
         int opcion = 0;
@@ -102,7 +107,7 @@ public class VistaConsola {
     }
 
 
-    public void solicitarJugadores()
+    private void solicitarJugadores()
     {
 
         int cantidadJugadores = solicitarNumeroDeJugadores();
@@ -120,7 +125,7 @@ public class VistaConsola {
         }
     }
 
-    public int solicitarCartaAJugar() {
+    private int solicitarCartaAJugar() {
 
         int respuesta = 0;
         Scanner sc = new Scanner(System.in);
