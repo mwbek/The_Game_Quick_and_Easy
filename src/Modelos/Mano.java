@@ -1,7 +1,7 @@
 package Modelos;
 
+import Interfaces.IMazo;
 import exceptions.CartaNoExisteException;
-import exceptions.MovimientoInvalidoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +18,15 @@ public class Mano {
 
     /// Agrega una carta al mazo. Si la mano ya tiene 2 cartas no agrega ninguna.
     /// Si el mazo es vacio deja la mano original
-    /// @param mazo
+    /// @param iMazo
     /// @throws IllegalArgumentException cuando Mazo es nulo
-    public void agregarCarta(Mazo mazo)
+    public void agregarCarta(IMazo iMazo)
     {
-        if(mazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
+        if(iMazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
         if(cartas.size() == cartasMaximas) return;
-        if(mazo.esMazoVacio()) return;
+        if(iMazo.esVacio()) return;
 
-        cartas.add(mazo.tomarCarta());
+        cartas.add(iMazo.tomarCarta());
     }
 
     /// Elimina la carta de la mano y retorna true.
@@ -47,9 +47,14 @@ public class Mano {
 
     }
 
-    public boolean esCartaValida(Carta carta){
+    public boolean contiene(Carta carta){
         if(carta == null) return false;
         return  cartas.contains(carta);
     }
+
+    public int getCantidadCartas(){
+        return cartas.size();
+    }
+
 
 }
