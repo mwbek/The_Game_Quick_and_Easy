@@ -7,5 +7,7 @@ public enum Eventos {
     GANARON,
     PERDIERON,
     JUGANDO,
+    INICIO_PARTIDA,
+    SALIR,
 
 }
