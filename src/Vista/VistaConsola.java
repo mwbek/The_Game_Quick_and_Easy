@@ -1,6 +1,7 @@
 package Vista;
 
 import Controladores.ControladorConsola;
+import Interfaces.IJugador;
 import Interfaces.IVista;
 import Modelos.Carta;
 import Modelos.Jugador;
@@ -52,22 +53,23 @@ public class VistaConsola implements IVista {
     }
 
 
-    public void mostrarHUDJugador(Jugador jugador) {
+    public void mostrarHUDJugador() {
         //int ronda = partida.getRondaActual();
+        IJugador jugadorActual = controlador.getJugadorActual();
         int ronda = 1;
-        Carta[] cartasEnMano = jugador.getCartas();
+        //Carta[] cartasEnMano = jugador.getCartas();
 //        PilaDeIndicacion pilaAscendente = partida.getPilaAscendente();
 //        PilaDeIndicacion pilaDescendente = partida.getPilaDescendente();
 
 
         System.out.println("================================================================");
-        System.out.println("RONDA " + ronda + " ·  Turno de " + jugador.getNombre());
+        System.out.println("RONDA " + ronda + " ·  Turno de " + jugadorActual.getNombre());
         System.out.println("================================================================");
 
         // ▲ Ascendente (12): [7 R]      ▼ Descendente (9): [3 V]
         System.out.println("▲ Ascendente:" + "[]" + " ▼ Descendente: " + "[]");
         System.out.println("----------------------------------------------------------------");
-        System.out.println("Tu mano:  1) " + cartasEnMano[0] + " | " + "2) " + cartasEnMano[1]);
+        //System.out.println("Tu mano:  1) " + cartasEnMano[0] + " | " + "2) " + cartasEnMano[1]);
 
     }
 
@@ -120,7 +122,7 @@ public class VistaConsola implements IVista {
                 nombre = sc.next();
             }
 
-            controlador.solicitarJugador(nombre);
+            controlador.agregarJugador(nombre);
             nombre = "";
         }
     }

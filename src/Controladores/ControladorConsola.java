@@ -1,6 +1,7 @@
 package Controladores;
 
 import Enumerados.Eventos;
+import Interfaces.IJugador;
 import Modelos.TheGame;
 import Observer.IObservable;
 import Observer.IObservador;
@@ -23,15 +24,14 @@ public class ControladorConsola implements IObservador {
         this.vista = vista;
     }
 
-    public void iniciarPartida(){
-
-        int respuesta;
-        respuesta= vista.mostrarMenuPrincipal();
-        if(respuesta == 1){
-
-        }
-
+    public IJugador getJugadorActual(){
+        return juego.getJugadorActual();
     }
+
+    public void agregarJugador(String nombre){
+        juego.agregarJugador(nombre);
+    }
+
 
     @Override
     public void actualizar(IObservable o, Object e) {
@@ -41,11 +41,19 @@ public class ControladorConsola implements IObservador {
             case INICIO_PARTIDA:
                 this.vista.mostrarMenuPrincipal();
                 break;
-            case CAMBIO_LISTA_USUARIOS:
-                this.vista.mostrarListaUsuario(this.chat.getUsuarios());
+            case NUEVO_JUGADOR:
                 break;
         }
     }
+
+
+    public void iniciar() {
+        this.vista.mostrarMenuPrincipal();
+        while(true){
+            this.vista.mostrarHUDJugador();
+        }
+    }
+
 
     //    public void jugarMano()
 //    {
