@@ -1,3 +1,4 @@
+import Interfaces.IMazo;
 import Modelos.Carta;
 import Enumerados.ColorCarta;
 import Modelos.Mazo;
@@ -14,10 +15,10 @@ public class MazoCartasJugadorTest {
     @DisplayName("Testeo la creacion del mazo y todas sus cartas")
     public void crearMazoCompletoTest()
     {
-        Mazo pilaMazo = new Mazo();
-        Assertions.assertEquals(0, pilaMazo.getMazo().length);
-        pilaMazo.mezclarMazo();
-        Carta[] mazo = pilaMazo.getMazo();
+        IMazo pilaIMazo = new Mazo();
+        Assertions.assertEquals(0, pilaIMazo.getMazo().length);
+        pilaIMazo.mezclarMazo();
+        Carta[] mazo = pilaIMazo.getMazo();
 
         Assertions.assertEquals(50, mazo.length);
         Assertions.assertEquals(10, Arrays.stream(mazo).filter(carta -> carta.getColor().equals(ColorCarta.ROJO)).count());
@@ -31,27 +32,27 @@ public class MazoCartasJugadorTest {
     @Test
     public void tomarCartaMazoTest()
     {
-        Mazo pilaMazo = new Mazo();
-        pilaMazo.mezclarMazo();
-        Assertions.assertNotNull(pilaMazo.tomarCarta());
+        IMazo pilaIMazo = new Mazo();
+        pilaIMazo.mezclarMazo();
+        Assertions.assertNotNull(pilaIMazo.tomarCarta());
     }
 
     @Test
     public void EvitarllenarDosVecesElMazoTest()
     {
-        Mazo pilaMazo = new Mazo();
-        Assertions.assertEquals(0, pilaMazo.getMazo().length);
-        pilaMazo.mezclarMazo();
+        IMazo pilaIMazo = new Mazo();
+        Assertions.assertEquals(0, pilaIMazo.getMazo().length);
+        pilaIMazo.mezclarMazo();
 
-        Assertions.assertEquals(50, pilaMazo.getMazo().length);
+        Assertions.assertEquals(50, pilaIMazo.getMazo().length);
 
-        pilaMazo.tomarCarta();
-        pilaMazo.tomarCarta();
-        Assertions.assertEquals(48, pilaMazo.getMazo().length);
+        pilaIMazo.tomarCarta();
+        pilaIMazo.tomarCarta();
+        Assertions.assertEquals(48, pilaIMazo.getMazo().length);
 
-        pilaMazo.mezclarMazo();
+        pilaIMazo.mezclarMazo();
 
-        Assertions.assertEquals(48, pilaMazo.getMazo().length);
+        Assertions.assertEquals(48, pilaIMazo.getMazo().length);
 
 
 
