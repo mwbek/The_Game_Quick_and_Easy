@@ -2,10 +2,12 @@ package Modelos;
 
 
 import Enumerados.ColorCarta;
+import Interfaces.IMazo;
+import exceptions.CartaDuplicadaException;
 
 import java.util.*;
 
-public class Mazo {
+public class Mazo implements IMazo {
 
     private Stack<Carta> pilaMazo;
 
@@ -15,24 +17,36 @@ public class Mazo {
 
 
     /// @return Retorna una array inmutable de las cartas del mazo
+    @Override
     public Carta[] getMazo() {
         Carta[] mazoCartas = new Carta[pilaMazo.size()];
         return pilaMazo.toArray(mazoCartas);
     }
     /// Retorna true si el mazo esta vacio, caso contrario retorna false
-    public boolean esMazoVacio(){
+    @Override
+    public boolean esVacio(){
         return pilaMazo.isEmpty();
     }
 
     /// Toma la carta que se encuentre en el tope del mazo
     /// @return Retorna una carta, si el mazo esta vacio retorna Null
+    @Override
     public Carta tomarCarta(){
-        if(esMazoVacio()) return null;
+        if(esVacio()) return null;
         return pilaMazo.pop();
+    }
+
+    public void agregarCarta(Carta carta)
+    {
+        if(carta == null) return;
+        if(pilaMazo.contains(carta)) throw new CartaDuplicadaException("La carta ya existe en el mazo");
+        pilaMazo.push(carta);
+
     }
 
 
     ///  Mezcla las 50 cartas del juego en forma aleatoria
+    @Override
     public void mezclarMazo() {
 
         //Si ya tiene cartas no se puede volver a llenar
