@@ -15,7 +15,7 @@ public class TheGame extends Observable {
     private Eventos estadoPartida;
     private final Queue<Jugador> jugadores;
     private Jugador jugadorActual = null;
-    private final IMazo mazo;
+    private IMazo mazo;
 
     //Con las pilas aplico polimorfismo usando la intefaz 'PilaDeIndicacion'
     private final PilaDeIndicacion pilaDescendente;
@@ -28,7 +28,6 @@ public class TheGame extends Observable {
         pilaDescendente = new PilaDeIndicacion(CartaDeIndicacion.DESCENDENTE);
         pilaAscendente = new PilaDeIndicacion(CartaDeIndicacion.ASCENDENTE);
         jugadores = new ArrayDeque<>();
-        mazo = new Mazo();
     }
 
     public void agregarJugador(String nombre){
@@ -40,12 +39,12 @@ public class TheGame extends Observable {
         notificarObservadores(Eventos.NUEVO_JUGADOR);
     }
 
-    public void inicializarPartida() {
+    public void inicializarPartida(IMazo mazo) {
         if(jugadores.size() < 2) throw new IllegalArgumentException("Se necesitan al menos 2 jugadores para iniciar la partida");
-        mazo.mezclarMazo();
+        if(mazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
+        this.mazo = mazo;
         rondaActual = 1;
         pasarJugador(); //Agarro el primer jugador en la cola jugadores
-
 
         notificarObservadores(Eventos.INICIO_PARTIDA);
 

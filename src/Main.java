@@ -10,7 +10,7 @@ public class Main {
 
         TheGame juego = new TheGame();
 
-        ControladorConsola controladorMartin = new ControladorConsola(juego, );
+        ControladorConsola controladorMartin = new ControladorConsola(juego);
         ControladorConsola controladorLudmila = new ControladorConsola(juego);
 
         VistaConsola vistaMartin = new VistaConsola(controladorMartin);
@@ -18,7 +18,7 @@ public class Main {
 
 
         juego.agregarObservador((controladorMartin));
-        controladorMartin.iniciarPartida();
+        //controladorMartin.iniciarPartida();
 
     }
 }

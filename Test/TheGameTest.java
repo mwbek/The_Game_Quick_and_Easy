@@ -11,10 +11,12 @@ public class TheGameTest {
     @BeforeEach
     public void setup()
     {
+        mazo = new Mazo();
+        mazo.mezclarMazo();
         nuevaPartida = new TheGame();
         nuevaPartida.agregarJugador("Martin");
         nuevaPartida.agregarJugador("Ludmila");
-        nuevaPartida.inicializarPartida();
+        nuevaPartida.inicializarPartida(mazo);
     }
 
     @Test
@@ -105,24 +107,25 @@ public class TheGameTest {
     public void jugadoresGananTest()
     {
         TheGame nuevaPartida2 = new TheGame();
-
         nuevaPartida2.agregarJugador("Martin");
         nuevaPartida2.agregarJugador("Ludmila");
+        Mazo mazo2 = new Mazo();
+        nuevaPartida2.inicializarPartida(mazo2);
 
-        Mazo mazo = new Mazo();
         //Los jugadores inicializados tienen cartas y el mazo es 0
         Assertions.assertTrue(nuevaPartida2.esFinDeJuego());
 
-        nuevaPartida2.inicializarPartida();
+        mazo2.agregarCarta(new Carta(ColorCarta.ROJO, 3));
+        mazo2.agregarCarta(new Carta(ColorCarta.VERDE, 3));
 
+        nuevaPartida2.inicializarPartida(mazo2);
         //Los jugadores no tienen cartas pero el mazo tiene al menos 1 carta
         Assertions.assertFalse(nuevaPartida2.esFinDeJuego());
 
         Jugador jugadorActual = nuevaPartida2.getJugadorActual();
 
-        mazo.agregarCarta(new Carta(ColorCarta.ROJO, 3));
-        mazo.agregarCarta(new Carta(ColorCarta.VERDE, 3));
-        jugadorActual.tomarCarta(mazo);
+
+        jugadorActual.tomarCarta(mazo2);
 
         //Al menos un jugador tiene cartas y el mazo tiene al menos 1 carta
         Assertions.assertFalse(nuevaPartida2.esFinDeJuego());
