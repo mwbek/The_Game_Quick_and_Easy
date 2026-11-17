@@ -1,8 +1,10 @@
 package Controladores;
 
+import Enumerados.CartaDeIndicacion;
 import Enumerados.Eventos;
 import Interfaces.IJugador;
-import Modelos.TheGame;
+import Interfaces.IMazo;
+import Modelos.*;
 import Observer.IObservable;
 import Observer.IObservador;
 import Interfaces.IVista;
@@ -11,12 +13,20 @@ public class ControladorConsola implements IObservador {
 
     private IVista vista;
     private final TheGame juego;
+    private  Jugador jugador;
 
     public ControladorConsola(TheGame juego){
         if(juego == null) throw new IllegalArgumentException("El juego no puede ser nulo");
         this.juego = juego;
+    }
 
+    public void registrarJugador(String nombre){
+        if(nombre == null) throw new IllegalArgumentException("El nombre del jugador no puede ser nulo");
+        this.jugador = juego.agregarJugador(nombre);
+    }
 
+    public Jugador getJugador(){
+        return this.jugador;
     }
 
     public void setVista(IVista vista) {
@@ -28,10 +38,46 @@ public class ControladorConsola implements IObservador {
         return juego.getJugadorActual();
     }
 
-    public void agregarJugador(String nombre){
-        juego.agregarJugador(nombre);
+
+    public int getRondaActual(){
+        return juego.getRondaActual();
     }
 
+    public Carta[] getCartas(){
+        return jugador.getCartas();
+    }
+
+    public String getCartaPilaAscendente(){
+
+         Carta carta = juego.getPilaAscendente().getUltimaCarta();
+         if(carta == null) return "[]";
+         return carta.toString();
+    }
+
+    public String getCartaPilaDescendente(){
+        Carta carta = juego.getPilaDescendente().getUltimaCarta();
+        if(carta == null) return "[]";
+        return carta.toString();
+    }
+
+
+    public void jugarCarta(int indiceCarta, int indicePila){
+
+        PilaDeIndicacion pilaAJugar = null;
+        CartaDeIndicacion tipoDePila;
+        boolean manoJugada = false;
+        if(indicePila == 1) manoJugada = juego.jugarMano(jugador.getCartas()[indiceCarta], CartaDeIndicacion.ASCENDENTE);
+        else manoJugada = juego.jugarMano(jugador.getCartas()[indiceCarta], CartaDeIndicacion.DESCENDENTE);
+
+    }
+
+
+    public void iniciarPartida(){
+        IMazo mazo = new Mazo();
+        mazo.mezclarMazo();
+        juego.inicializarPartida(mazo);
+
+    }
 
     @Override
     public void actualizar(IObservable o, Object e) {
@@ -39,20 +85,28 @@ public class ControladorConsola implements IObservador {
         switch (evento)
         {
             case INICIO_PARTIDA:
-                this.vista.mostrarMenuPrincipal();
+                vista.mostrarHUDJugador();
+                if(juego.getJugadorActual() == jugador){
+                    vista.mostrarMenuTurno();
+                }
+                else{
+                    vista.mostrarMensaje("Esperando turno de: " + getJugadorActual().getNombre());
+                }
                 break;
             case NUEVO_JUGADOR:
+                vista.mostrarMensaje("Se agrego un nuevo jugador");
                 break;
+            case CAMBIO_DE_RONDA:
+                if(juego.getJugadorActual() == jugador){
+                    vista.mostrarMenuTurno();
+                }
+                else{
+                    vista.mostrarMensaje("Esperando turno de: " + getJugadorActual().getNombre());
+                }
         }
     }
 
 
-    public void iniciar() {
-        this.vista.mostrarMenuPrincipal();
-        while(true){
-            this.vista.mostrarHUDJugador();
-        }
-    }
 
 
     //    public void jugarMano()

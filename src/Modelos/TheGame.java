@@ -30,13 +30,17 @@ public class TheGame extends Observable {
         jugadores = new ArrayDeque<>();
     }
 
-    public void agregarJugador(String nombre){
+    public Jugador agregarJugador(String nombre){
         if(nombre.isEmpty()) throw new IllegalArgumentException("El nombre no puede estar vacio");
         if(jugadores.size() > 5) throw new IllegalArgumentException("No puede haber mas de 5 jugadores en la partida");
 
         Jugador jugador = new Jugador(nombre);
+        if(jugadorActual == null) jugadorActual = jugador;
+
         jugadores.add(jugador);
         notificarObservadores(Eventos.NUEVO_JUGADOR);
+
+        return jugador;
     }
 
     public void inicializarPartida(IMazo mazo) {
@@ -44,8 +48,7 @@ public class TheGame extends Observable {
         if(mazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
         this.mazo = mazo;
         rondaActual = 1;
-        pasarJugador(); //Agarro el primer jugador en la cola jugadores
-
+        repartirCartas();
         notificarObservadores(Eventos.INICIO_PARTIDA);
 
     }
@@ -102,6 +105,13 @@ public class TheGame extends Observable {
 
     }
 
+    public PilaDeIndicacion getPilaAscendente(){
+        return pilaAscendente;
+    }
+
+    public PilaDeIndicacion getPilaDescendente(){
+        return pilaDescendente;
+    }
 
     public boolean esFinDeJuego() {
 

@@ -5,6 +5,8 @@ import Interfaces.IJugador;
 import Interfaces.IVista;
 import Modelos.Carta;
 import Modelos.Jugador;
+import Modelos.PilaDeIndicacion;
+import Modelos.TheGame;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -27,6 +29,8 @@ public class VistaConsola implements IVista {
     }
 
 
+
+
     /// @return retorna un 1 cuando el usuario quiere iniciar una nueva partida o un 0 cuando quiere salir
     public int mostrarMenuPrincipal()
     {
@@ -35,7 +39,7 @@ public class VistaConsola implements IVista {
         System.out.println("==================================================");
         System.out.println("          THE GAME (Quick and Easy)");
         System.out.println("==================================================");
-        System.out.println("\n1) Iniciar nueva partida");
+        System.out.println("\n1) Unirse");
         System.out.println("2) Salir\n");
         System.out.println("==================================================");
 
@@ -54,29 +58,37 @@ public class VistaConsola implements IVista {
 
 
     public void mostrarHUDJugador() {
-        //int ronda = partida.getRondaActual();
-        IJugador jugadorActual = controlador.getJugadorActual();
-        int ronda = 1;
-        //Carta[] cartasEnMano = jugador.getCartas();
-//        PilaDeIndicacion pilaAscendente = partida.getPilaAscendente();
-//        PilaDeIndicacion pilaDescendente = partida.getPilaDescendente();
+        int ronda = controlador.getRondaActual();
+        IJugador jugadorActual = controlador.getJugador();
 
+         Carta[] cartasEnMano = controlador.getCartas();
 
         System.out.println("================================================================");
         System.out.println("RONDA " + ronda + " ·  Turno de " + jugadorActual.getNombre());
         System.out.println("================================================================");
 
         // ▲ Ascendente (12): [7 R]      ▼ Descendente (9): [3 V]
-        System.out.println("▲ Ascendente:" + "[]" + " ▼ Descendente: " + "[]");
+        System.out.println("▲ Ascendente:" + controlador.getCartaPilaAscendente() + " ▼ Descendente: " +  controlador.getCartaPilaDescendente());
         System.out.println("----------------------------------------------------------------");
-        //System.out.println("Tu mano:  1) " + cartasEnMano[0] + " | " + "2) " + cartasEnMano[1]);
+        System.out.println("Tu mano:  1) " + cartasEnMano[0] + " | " + "2) " + cartasEnMano[1]);
 
     }
 
 
+    public void mostrarMenuTurno(){
+        int indiceCarta = solicitarCartaAJugar() - 1;
+        int indicePila =  solicitarPilaAJugar();
+
+        controlador.jugarCarta(indiceCarta,indicePila);
+
+    }
 
 
-
+    public void mostrarMensaje(String mensaje){
+        if(mensaje != null){
+            System.out.println(mensaje);
+        }
+    }
 
     //=======================
     //SOLICITUD DE DATOS
@@ -109,30 +121,37 @@ public class VistaConsola implements IVista {
     }
 
 
-    private void solicitarJugadores()
-    {
-
-        int cantidadJugadores = solicitarNumeroDeJugadores();
-
-        for(int i = 1; i < cantidadJugadores + 1; i++)
-        {
-            String nombre = "";
-            while(nombre.isEmpty()){
-                System.out.print("[JUGADOR " + i + "]" + "- Ingrese su nombre> ");
-                nombre = sc.next();
-            }
-
-            controlador.agregarJugador(nombre);
-            nombre = "";
-        }
-    }
-
     private int solicitarCartaAJugar() {
 
         int respuesta = 0;
         Scanner sc = new Scanner(System.in);
 
         System.out.println("¿Qué carta jugas? (1, 2 o 3 (pasar): ");
+        while (respuesta == 0) {
+            try {
+                System.out.print("> ");
+                respuesta = sc.nextInt();
+
+                if (respuesta > 0 && respuesta < 4) {
+                    return respuesta;
+                } else {
+                    System.out.println("La opcion seleccionada no es valida. Por favor ingrese alguna de las opciones mostradas");
+                }
+            } catch (InputMismatchException e) {
+                sc.nextLine(); //Limpio el scanner
+                respuesta = 0;
+                System.out.println("El valor ingresado no corresponde a un numero");
+            }
+        }
+
+        return respuesta ;
+    }
+
+    private int solicitarPilaAJugar(){
+        int respuesta = 0;
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("¿En que pila jugas Ascendente o Descendente? (1 o 2");
         while (respuesta == 0) {
             try {
                 System.out.print("> ");
