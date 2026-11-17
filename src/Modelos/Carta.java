@@ -2,6 +2,8 @@ package Modelos;
 
 import Enumerados.ColorCarta;
 
+import java.util.Objects;
+
 public class Carta {
 
     //Atributos
@@ -10,14 +12,20 @@ public class Carta {
     private final ColorCarta color;
     private final int valor;
 
-    public Carta(ColorCarta color, int valor)
-    {
+    public Carta(ColorCarta color, int valor) {
         this.color = color;
         this.valor = valor;
     }
 
     public ColorCarta getColor(){ return color;}
     public int getNumero() {return valor;}
+
+    //Sobreescribo la clase hashSet
+    @Override
+    public int hashCode(){
+        return Objects.hash(color, valor);
+    }
+
 
     //Sobreescribo la clase Equals
     @Override
