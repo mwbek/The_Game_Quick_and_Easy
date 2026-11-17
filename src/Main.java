@@ -1,5 +1,6 @@
 import Controladores.ControladorConsola;
 import Interfaces.IMazo;
+import Interfaces.IVista;
 import Modelos.Jugador;
 import Modelos.Mazo;
 import Modelos.TheGame;
@@ -12,18 +13,13 @@ public class Main {
         TheGame juego = new TheGame();
 
         ControladorConsola controladorMartin = new ControladorConsola(juego);
-        VistaConsola vistaMartin = new VistaConsola(controladorMartin);
-
         ControladorConsola controladorLudmila = new ControladorConsola(juego);
-        VistaConsola vistaLudmila = new VistaConsola(controladorLudmila);
 
-        juego.agregarObservador(controladorMartin);
-        juego.agregarObservador(controladorLudmila);
+        IVista vistaMartin = new VistaConsola(controladorMartin);
+        IVista vistaLudmila = new VistaConsola(controladorLudmila);
 
-
-        controladorMartin.registrarJugador("Martin");
-        controladorLudmila.registrarJugador("Ludmila");
-        controladorMartin.iniciarPartida();
+        vistaMartin.iniciar();
+        vistaLudmila.iniciar();
 
 
 
