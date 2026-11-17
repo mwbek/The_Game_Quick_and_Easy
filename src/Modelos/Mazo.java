@@ -36,6 +36,12 @@ public class Mazo implements IMazo {
         return pilaMazo.pop();
     }
 
+    @Override
+    public int getCantidad(){
+        return pilaMazo.size();
+    }
+
+    //TODO: Se uso para los Test. Revisar o eliminar
     public void agregarCarta(Carta carta)
     {
         if(carta == null) return;

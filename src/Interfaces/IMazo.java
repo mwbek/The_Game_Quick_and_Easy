@@ -10,4 +10,5 @@ public interface IMazo {
     Carta tomarCarta();
 
     void mezclarMazo();
+    int getCantidad();
 }
