@@ -9,7 +9,7 @@ import java.util.List;
 public class Mano {
 
     private List<Carta> cartas;
-    private final int cartasMaximas = 2;
+    private static final int CARTAS_MAXIMAS = 2; //Se hizo static para que cada instancia tenga el mismo limite sin duplicar el atributo por instancia
 
 
     public Mano() {
@@ -23,7 +23,7 @@ public class Mano {
     public void agregarCarta(IMazo iMazo)
     {
         if(iMazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
-        if(cartas.size() == cartasMaximas) return;
+        if(cartas.size() == CARTAS_MAXIMAS) return;
         if(iMazo.esVacio()) return;
 
         cartas.add(iMazo.tomarCarta());
@@ -34,10 +34,8 @@ public class Mano {
     /// @param carta
     /// @return True si la carta existia en la mano, caso contrario lanza una excepcion
     /// @throws CartaNoExisteException Si la carta que se intento remover no existe, lanza una excepcion
-    public void quitarCarta(Carta carta)
-    {
+    public void quitarCarta(Carta carta) {
         if(!cartas.remove(carta)) throw new CartaNoExisteException("La carta que se quiso remover no existe");
-        cartas.remove(carta);
     }
 
     public Carta[] getMano(){
@@ -49,12 +47,13 @@ public class Mano {
 
     public boolean contiene(Carta carta){
         if(carta == null) return false;
-        return  cartas.contains(carta);
+        return cartas.contains(carta);
     }
 
     public int getCantidadCartas(){
+        if(cartas.isEmpty()) return 0;
         return cartas.size();
     }
 
-
+    public static int getCartasMaximas(){ return CARTAS_MAXIMAS;}
 }
