@@ -59,12 +59,12 @@ public class TheGame extends Observable {
     /// @param mazo Es el mazo que se utilizara en la partida
     /// @throws IllegalStateException Se lanza al intentar inicializar una partida ya comenzada
     /// @throws IllegalArgumentException Se lanza cuando el mazo es nulo
-    /// @throws IllegalArgumentException Se lanza cuando la cantidad de jugadores es menor a 2
+    /// @throws CantidadJugadoresException Se lanza cuando la cantidad de jugadores es menor a 2
     public void inicializarPartida(IMazo mazo) {
 
         if(estadoPartida == Eventos.JUGANDO) throw new IllegalStateException("La partida ya fue inicializada");
         if(mazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
-        if(jugadores.size() < 2) throw new IllegalArgumentException("Se necesitan al menos 2 jugadores para iniciar la partida");
+        if(jugadores.size() < 2) throw new CantidadJugadoresException("Se necesitan al menos 2 jugadores para iniciar la partida");
 
         this.mazo = mazo;
         rondaActual = 1;
@@ -80,7 +80,7 @@ public class TheGame extends Observable {
     /// @throws IllegalArgumentException El jugador no puede ser null
     /// @throws MovimientoInvalidoException Se lanza cuando la partida no esta inicializada o cuando no se esta jugando.
     /// @throws MovimientoInvalidoException Se lanza cuando el jugador no puede pasar de ronda
-    public void pasarDeRonda(Jugador jugador) {
+    public void pasarDeRonda(IJugador jugador) {
 
         //Validaciones / programacion defensiva
         if(estadoPartida == Eventos.SIN_INICIAR) throw new MovimientoInvalidoException("La partida no inicio");
@@ -120,9 +120,13 @@ public class TheGame extends Observable {
         return arrayJugadores;
     }
 
+    /// @throws  MovimientoInvalidoException Cuando la partida ya finalizo por algun motivo
+    /// @throws PartidaIniciadaException La partida no inicio
+    /// @throws CartaNoExisteException Si la carta no esta en la mano
+    /// @throws MovimientoInvalidoException No fue posible agregar la carta a la pila
     public void jugarCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) {
 
-        if(estadoPartida == Eventos.SIN_INICIAR) throw new MovimientoInvalidoException("La partida no inicio");
+        if(estadoPartida == Eventos.SIN_INICIAR) throw new PartidaIniciadaException("La partida no inicio");
         if(estadoPartida != Eventos.JUGANDO) throw new MovimientoInvalidoException("Partida finalizada");
 
         Carta carta = getCarta(jugador, tipoPila, indiceCarta);
@@ -188,7 +192,7 @@ public class TheGame extends Observable {
         return manoCartas[indiceCarta];
     }
 
-    private boolean jugadorPuedePasarRonda(Jugador jugador) {
+    private boolean jugadorPuedePasarRonda(IJugador jugador) {
         return jugador.getCantidadCartasEnMano() < CARTAS_MAXIMAS;
     }
 
