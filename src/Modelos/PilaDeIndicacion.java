@@ -24,8 +24,7 @@ public class PilaDeIndicacion {
         else return false;
     }
 
-
-
+    //TODO HACER PRIVATE. SACAR DE LA CLASE JUGADOR
     public boolean puedeAgregarCarta(Carta carta) {
 
         if(cartas.contains(carta)) return false;
