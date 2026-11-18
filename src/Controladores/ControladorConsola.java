@@ -39,9 +39,13 @@ public class ControladorConsola implements IObservador {
                 if(juego.getJugadorActual() != jugador){
                     vista.mostrarMensaje("Se agrego un nuevo jugador");
                 }
-
                 break;
-
+            case GANARON:
+                //Hacer algo
+                break;
+            case PERDIERON:
+                //Hacer algo
+                break;
 
 
         }
