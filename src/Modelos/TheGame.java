@@ -120,6 +120,8 @@ public class TheGame extends Observable {
         return arrayJugadores;
     }
 
+    public Eventos getEstadoPartida(){ return estadoPartida;}
+
     /// @throws  MovimientoInvalidoException Cuando la partida ya finalizo por algun motivo
     /// @throws PartidaIniciadaException La partida no inicio
     /// @throws CartaNoExisteException Si la carta no esta en la mano
