@@ -72,6 +72,12 @@ public class ControladorConsola implements IObservador {
         return juego.getJugadorActual();
     }
 
+    public boolean partidaPuedeComenzar(){
+        if(juego.getJugadores().length > 1){
+            return true;
+        }
+        return false;
+    }
 
     public int getRondaActual(){
         return juego.getRondaActual();
