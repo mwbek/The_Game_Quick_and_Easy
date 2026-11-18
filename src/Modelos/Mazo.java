@@ -41,14 +41,7 @@ public class Mazo implements IMazo {
         return pilaMazo.size();
     }
 
-    //TODO: Se uso para los Test. Revisar o eliminar
-    public void agregarCarta(Carta carta)
-    {
-        if(carta == null) return;
-        if(pilaMazo.contains(carta)) throw new CartaDuplicadaException("La carta ya existe en el mazo");
-        pilaMazo.push(carta);
 
-    }
 
 
     ///  Mezcla las 50 cartas del juego en forma aleatoria
