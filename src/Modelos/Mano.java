@@ -1,12 +1,14 @@
 package Modelos;
 
+import Interfaces.IMano;
 import Interfaces.IMazo;
 import exceptions.CartaNoExisteException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mano {
+public class Mano implements IMano, Serializable {
 
     private List<Carta> cartas;
     private static final int CARTAS_MAXIMAS = 2; //Se hizo static para que cada instancia tenga el mismo limite sin duplicar el atributo por instancia
@@ -20,6 +22,7 @@ public class Mano {
     /// Si el mazo es vacio deja la mano original
     /// @param iMazo
     /// @throws IllegalArgumentException cuando Mazo es nulo
+    @Override
     public void agregarCarta(IMazo iMazo)
     {
         if(iMazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
@@ -34,22 +37,23 @@ public class Mano {
     /// @param carta
     /// @return True si la carta existia en la mano, caso contrario lanza una excepcion
     /// @throws CartaNoExisteException Si la carta que se intento remover no existe, lanza una excepcion
+    @Override
     public void quitarCarta(Carta carta) {
         if(!cartas.remove(carta)) throw new CartaNoExisteException("La carta que se quiso remover no existe");
     }
-
+    @Override
     public Carta[] getMano(){
         Carta[] mano = new Carta[cartas.size()];
         mano = cartas.toArray(mano);
         return mano;
 
     }
-
+    @Override
     public boolean contiene(Carta carta){
         if(carta == null) return false;
         return cartas.contains(carta);
     }
-
+    @Override
     public int getCantidadCartas(){
         if(cartas.isEmpty()) return 0;
         return cartas.size();

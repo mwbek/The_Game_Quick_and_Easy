@@ -5,9 +5,10 @@ import Enumerados.ColorCarta;
 import Interfaces.IMazo;
 import exceptions.CartaDuplicadaException;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Mazo implements IMazo {
+public class Mazo implements IMazo, Serializable {
 
     private Stack<Carta> pilaMazo;
 

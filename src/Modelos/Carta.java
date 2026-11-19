@@ -1,10 +1,12 @@
 package Modelos;
 
 import Enumerados.ColorCarta;
+import Interfaces.ICarta;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Carta {
+public class Carta implements ICarta,Serializable {
 
     //Atributos
 

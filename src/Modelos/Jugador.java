@@ -5,8 +5,10 @@ import Interfaces.IMazo;
 import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 
+import java.io.Serializable;
 
-public class Jugador implements IJugador {
+
+public class Jugador implements IJugador, Serializable {
 
     private final String nombre;
     private final Mano mano;
@@ -24,10 +26,12 @@ public class Jugador implements IJugador {
         return nombre;
     }
 
+    @Override
     public int getCantidadCartasEnMano(){
         return mano.getCantidadCartas();
     }
 
+    @Override
     public void tomarCarta(IMazo iMazo) {
         mano.agregarCarta(iMazo);
     }
@@ -36,13 +40,14 @@ public class Jugador implements IJugador {
     /// @param carta Carta elegida para jugar
     /// @exception CartaNoExisteException Si la carta no esta en la mano
     /// @exception MovimientoInvalidoException Si no es posible agregar la carta a la pila seleccionada
+    @Override
     public void jugarCarta(PilaDeIndicacion pila, Carta carta) {
 
         if(!mano.contiene(carta)) throw new CartaNoExisteException("La carta no esta en la mano");
         if(!pila.agregarCarta((carta)))  throw new MovimientoInvalidoException("No se puede agregar la carta en la pila");
         mano.quitarCarta(carta);
     }
-
+    @Override
     public Carta[] getCartas() {
         return mano.getMano();
     }
