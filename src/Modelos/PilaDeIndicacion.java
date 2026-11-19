@@ -1,10 +1,13 @@
 package Modelos;
 
 import Enumerados.CartaDeIndicacion;
+import Interfaces.IPilaDeIndicacion;
+
+import java.io.Serializable;
 import java.util.Stack;
 
 /// Representa las cartas de indicacion (Ascendente y Descendente)
-public class PilaDeIndicacion {
+public class PilaDeIndicacion implements IPilaDeIndicacion, Serializable {
 
     private final CartaDeIndicacion indicacion;
     private final Stack<Carta> cartas;
@@ -15,6 +18,7 @@ public class PilaDeIndicacion {
         cartas = new Stack<>();
     }
 
+    @Override
     public boolean agregarCarta(Carta carta) {
         if (carta == null) throw new IllegalArgumentException("La carta no puede ser nula");
         if(puedeAgregarCarta(carta)){
@@ -23,8 +27,7 @@ public class PilaDeIndicacion {
         }
         else return false;
     }
-
-    //TODO HACER PRIVATE. SACAR DE LA CLASE JUGADOR
+    @Override
     public boolean puedeAgregarCarta(Carta carta) {
 
         if(cartas.contains(carta)) return false;
@@ -53,6 +56,7 @@ public class PilaDeIndicacion {
 
 
     /// @return  Retorna el tipo de pila de indicacion
+    @Override
     public CartaDeIndicacion getTipo(){
         return indicacion;
     }
@@ -75,6 +79,7 @@ public class PilaDeIndicacion {
     }
 
     //Estos metodos se repiten en pilaAscendent y Desendente. Podrian ir en una clase heredada (abstracta?)
+    @Override
     public Carta getUltimaCarta() {
         if(cartas.isEmpty()) return null;
         return cartas.peek();
