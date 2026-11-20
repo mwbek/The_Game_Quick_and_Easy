@@ -1,6 +1,7 @@
 import Enumerados.CartaDeIndicacion;
 import Enumerados.ColorCarta;
 import Enumerados.Eventos;
+import Interfaces.IJugador;
 import Modelos.*;
 import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
@@ -11,7 +12,7 @@ import java.rmi.RemoteException;
 public class TheGameTest {
 
     TheGame juego;
-    Jugador martin, ludmila;
+    IJugador martin, ludmila;
     MazoMock mazo;
 
     @BeforeEach
