@@ -1,8 +1,7 @@
 package Vista.VistaGrafica;
 
-import Controladores.ControladorConsola;
+import Controladores.Controlador;
 import Interfaces.IVista;
-import Modelos.TheGame;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,16 +13,16 @@ import java.io.UncheckedIOException;
 public class VistaGrafica implements IVista {
 
     private final Stage stage;
-    private final ControladorConsola controlador;
+    private final Controlador controlador;
 
-    public VistaGrafica(Stage stage, ControladorConsola controlador){
+    public VistaGrafica(Stage stage, Controlador controlador){
         this.controlador = controlador;
         this.stage = stage;
         stage.setTitle("The Game");
 
     }
 
-
+    //TODO: CUANDO IMPLEMENTE LAS DEMAS FUNCIONES USAR 'Platform.runLater(() -> {Instrucciones});
     @Override
     public void mostrarHUDJugador() {
 
@@ -43,6 +42,11 @@ public class VistaGrafica implements IVista {
     public void iniciar() {
         MenuPrincipalController controller = cargar("/Vista/VistaGrafica/GUI/menuPrincipal.fxml");
         controller.setControlador(controlador);
+    }
+
+    @Override
+    public void actualizarVista() {
+
     }
 
 
