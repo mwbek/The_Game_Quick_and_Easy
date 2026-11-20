@@ -4,6 +4,7 @@ import Controladores.Controlador;
 import Interfaces.IJugador;
 import Interfaces.IVista;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import exceptions.CantidadJugadoresException;
 
 
@@ -65,12 +66,17 @@ public class VistaConsola implements IVista {
     }
 
     @Override
+    public void salir(){
+        this.ejecutando = false;
+    }
+
+    @Override
     public void iniciar() {
 
         this.ejecutando = true;
         boolean mensajeEsperando = false;
         System.out.println("===============================");
-        System.out.println("-- THE GAME QUICK AND EASY --");
+        System.out.println("--- THE GAME QUICK AND EASY ---");
         System.out.println("===============================");
 
 
@@ -79,20 +85,12 @@ public class VistaConsola implements IVista {
 
         //2) Bucle iterativo de comandos
         while (ejecutando) {
-            boolean puedeComenzar = controlador.partidaPuedeComenzar();
 
-            if (!puedeComenzar) {
-                if(!mensajeEsperando) {
-                    System.out.println("Esperando mas jugadores...");
-                    mensajeEsperando = true;
-                }
+            if(!controlador.seInicioLaPartida() && controlador.esAnfitrion()) mostrarMenuAnfitrion();
 
-            } else {
-                mostrarMenu();
-            }
-
-
-
+//            if(controlador.seInicioLaPartida() && controlador.esTurno()) {
+//                mostrarMenuJugador();
+//            }
 
         }
     }
@@ -102,8 +100,10 @@ public class VistaConsola implements IVista {
 
     }
 
-    private void mostrarMenu(){
-        System.out.println("1) Jugar carta  2) Pasar turno  3) Iniciar partida  0) Salir");
+    @Override
+    public void mostrarMenuJugador(){
+
+        System.out.println("1) Jugar carta  2) Pasar turno   0) Salir");
         int opcion = pedirInput("Ingresa una de las opciones: ");
         try {
             if (opcion == 1) {
@@ -120,10 +120,28 @@ public class VistaConsola implements IVista {
                     return;
                 }
                 controlador.pasarTurno();
-            } else if (opcion == 3) {
+            } else if (opcion == 0) {
+                salir();
+                //TODO Agregar metodo que permita salir del juego y del servidor
+            } else {
+                mostrarError("Opción inválida");
+            }
+        } catch (CantidadJugadoresException e) {
+            mostrarError("Faltan jugadores para empezar la partida");
+        }
+
+    }
+
+    private void mostrarMenuAnfitrion(){
+        mostrarMensaje("ES EL ANFITRION DE LA SALA.");
+        System.out.println("1) Iniciar partida  0) Salir");
+        int opcion = pedirInput("Ingresa una de las opciones: ");
+        try {
+            if (opcion == 1) {
                 controlador.iniciarPartida();
             } else if (opcion == 0) {
                 ejecutando = false;
+                //TODO Agregar metodo que permita salir del juego y del servidor. A su vez que actualizar el anfitrion
             } else {
                 mostrarError("Opción inválida");
             }
@@ -131,6 +149,9 @@ public class VistaConsola implements IVista {
             mostrarError("Faltan jugadores para empezar la partida");
         }
     }
+
+
+
 
     public void mostrarError(String mensajeError) {
         System.out.println(" [!] ERROR - " + mensajeError);
