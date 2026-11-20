@@ -16,6 +16,7 @@ public class VistaConsola implements IVista {
 
     private final Scanner sc;
     private boolean ejecutando;
+    private boolean menuPendiente;
 
     public VistaConsola(Controlador controlador) {
 
@@ -86,23 +87,34 @@ public class VistaConsola implements IVista {
         //2) Bucle iterativo de comandos
         while (ejecutando) {
 
-            if(!controlador.seInicioLaPartida() && controlador.esAnfitrion()) mostrarMenuAnfitrion();
+            if(!controlador.seInicioLaPartida() && controlador.esAnfitrion()) {
+                mostrarMenuAnfitrion();
+            }else if (menuPendiente){
+                menuPendiente = false;
+                mostrarMenuJugador();
+            }
 
-//            if(controlador.seInicioLaPartida() && controlador.esTurno()) {
-//                mostrarMenuJugador();
-//            }
 
         }
     }
 
-    @Override
-    public void actualizarVista() {
 
+    @Override
+    public void turnoDelJugador(){
+        menuPendiente = true;
     }
 
     @Override
-    public void mostrarMenuJugador(){
+    public void jugadoresGanaron() {
+        mostrarMensaje("[PARTIDA FINALIZADA] - GANAN LOS JUGADORES!!!");
+    }
 
+    @Override
+    public void jugadoresPerdieron() {
+        mostrarMensaje("[PARTIDA FINALIZADA] - LOS JUGADORES PERDIERON");
+    }
+
+    private void mostrarMenuJugador(){
         System.out.println("1) Jugar carta  2) Pasar turno   0) Salir");
         int opcion = pedirInput("Ingresa una de las opciones: ");
         try {
@@ -129,7 +141,6 @@ public class VistaConsola implements IVista {
         } catch (CantidadJugadoresException e) {
             mostrarError("Faltan jugadores para empezar la partida");
         }
-
     }
 
     private void mostrarMenuAnfitrion(){

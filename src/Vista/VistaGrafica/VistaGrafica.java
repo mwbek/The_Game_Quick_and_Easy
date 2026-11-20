@@ -45,17 +45,22 @@ public class VistaGrafica implements IVista {
     }
 
     @Override
-    public void actualizarVista() {
-
-    }
-
-    @Override
     public void salir() {
 
     }
 
     @Override
-    public void mostrarMenuJugador() {
+    public void turnoDelJugador() {
+
+    }
+
+    @Override
+    public void jugadoresGanaron() {
+
+    }
+
+    @Override
+    public void jugadoresPerdieron() {
 
     }
 
