@@ -1,6 +1,6 @@
 package Vista.VistaGrafica;
 
-import Controladores.ControladorConsola;
+import Controladores.Controlador;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,11 +16,11 @@ public class MenuPrincipalController {
     @FXML
     private TextField nombreJugador;
 
-    private ControladorConsola controlador;
+    private Controlador controlador;
     String nombre;
 
 
-    public void setControlador(ControladorConsola controlador){
+    public void setControlador(Controlador controlador){
         if(controlador == null) throw new IllegalArgumentException("El controlador no puede ser nulo");
         this.controlador = controlador;
     }

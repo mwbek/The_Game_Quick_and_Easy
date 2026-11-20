@@ -1,15 +1,8 @@
-import Controladores.ControladorConsola;
-import Interfaces.IVista;
+import Controladores.Controlador;
 import Modelos.TheGame;
-import Vista.VistaConsola;
 
-import Vista.VistaGrafica.MenuPrincipalController;
 import Vista.VistaGrafica.VistaGrafica;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,13 +12,13 @@ import static javafx.application.Application.launch;
 public class Main extends Application {
 
     TheGame juego;
-    ControladorConsola controlador;
+    Controlador controlador;
 
     @Override
     public void start(Stage stage) throws IOException {
 
         juego = new TheGame();
-        controlador = new ControladorConsola(juego);
+        controlador = new Controlador();
 
         //controlador.registrarJugador("Ludmila");
 
