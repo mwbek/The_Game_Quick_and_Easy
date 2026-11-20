@@ -2,19 +2,24 @@ package Modelos;
 
 import Enumerados.CartaDeIndicacion;
 import Enumerados.Eventos;
+import Interfaces.ICarta;
 import Interfaces.IJugador;
 import Interfaces.IMazo;
+import Interfaces.ITheGame;
 import Observer.Observable;
+import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import exceptions.CantidadJugadoresException;
 import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
 
+import java.rmi.RemoteException;
 import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.UUID;
 
 /// Clase que representa el juego con todas sus reglas y acciones posibles
-public class TheGame extends Observable {
+public class TheGame extends ObservableRemoto implements ITheGame {
 
     private Eventos estadoPartida;
     private final Queue<Jugador> jugadores;
@@ -41,7 +46,8 @@ public class TheGame extends Observable {
     /// @return La instancia del jugador agregado
     /// @throws PartidaIniciadaException Agregar un jugador con la partida iniciada
     /// @throws IllegalArgumentException Intentar agregar mas de 5 jugadores
-    public Jugador agregarJugador(String nombre){
+    @Override
+    public Jugador agregarJugador(String nombre) throws RemoteException {
 
         if(estadoPartida == Eventos.JUGANDO) throw new PartidaIniciadaException("No se pueden agregar jugadores cuando la partida ya comenzo");
 
@@ -50,7 +56,7 @@ public class TheGame extends Observable {
         Jugador jugador = new Jugador(nombre);
         jugadores.add(jugador);
         notificarObservadores(Eventos.NUEVO_JUGADOR);
-
+        System.out.printf("[DEBUG] - JUGADOR AGREGADO: " + nombre);
         return jugador;
     }
 
@@ -60,7 +66,9 @@ public class TheGame extends Observable {
     /// @throws IllegalStateException Se lanza al intentar inicializar una partida ya comenzada
     /// @throws IllegalArgumentException Se lanza cuando el mazo es nulo
     /// @throws CantidadJugadoresException Se lanza cuando la cantidad de jugadores es menor a 2
-    public void inicializarPartida(IMazo mazo) {
+    ///
+    @Override
+    public void inicializarPartida(IMazo mazo) throws RemoteException{
 
         if(estadoPartida == Eventos.JUGANDO) throw new IllegalStateException("La partida ya fue inicializada");
         if(mazo == null) throw new IllegalArgumentException("El mazo no puede ser nulo");
@@ -70,7 +78,11 @@ public class TheGame extends Observable {
         rondaActual = 1;
         estadoPartida = Eventos.JUGANDO;
         jugadorActual = jugadores.peek();
-        repartirCartas();
+        //repartirCartas();
+
+        for(int i = 0; i < CARTAS_MAXIMAS; i++) {
+            jugadores.forEach(j -> j.tomarCarta(mazo));
+        }
 
         notificarObservadores(Eventos.INICIO_PARTIDA);
     }
@@ -80,7 +92,8 @@ public class TheGame extends Observable {
     /// @throws IllegalArgumentException El jugador no puede ser null
     /// @throws MovimientoInvalidoException Se lanza cuando la partida no esta inicializada o cuando no se esta jugando.
     /// @throws MovimientoInvalidoException Se lanza cuando el jugador no puede pasar de ronda
-    public void pasarDeRonda(IJugador jugador) {
+    @Override
+    public void pasarDeRonda(IJugador jugador) throws RemoteException {
 
         //Validaciones / programacion defensiva
         if(estadoPartida == Eventos.SIN_INICIAR) throw new MovimientoInvalidoException("La partida no inicio");
@@ -110,28 +123,32 @@ public class TheGame extends Observable {
     }
 
 
-    public IJugador getJugadorActual(){
+    @Override
+    public IJugador getJugadorActual() throws RemoteException{
         return jugadorActual;
     }
 
-    public IJugador[] getJugadores() {
+    @Override
+    public IJugador[] getJugadores() throws RemoteException{
         IJugador[] arrayJugadores = new IJugador[jugadores.size()];
         arrayJugadores = jugadores.toArray(arrayJugadores);
         return arrayJugadores;
     }
 
-    public Eventos getEstadoPartida(){ return estadoPartida;}
+    @Override
+    public Eventos getEstadoPartida() throws RemoteException{ return estadoPartida;}
 
     /// @throws  MovimientoInvalidoException Cuando la partida ya finalizo por algun motivo
     /// @throws PartidaIniciadaException La partida no inicio
     /// @throws CartaNoExisteException Si la carta no esta en la mano
     /// @throws MovimientoInvalidoException No fue posible agregar la carta a la pila
-    public void jugarCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) {
+    @Override
+    public void jugarCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) throws RemoteException{
 
         if(estadoPartida == Eventos.SIN_INICIAR) throw new PartidaIniciadaException("La partida no inicio");
         if(estadoPartida != Eventos.JUGANDO) throw new MovimientoInvalidoException("Partida finalizada");
 
-        Carta carta = getCarta(jugador, tipoPila, indiceCarta);
+        ICarta carta = getCarta(jugador, tipoPila, indiceCarta);
 
         //Tomo pila. No controlo las excepciones con un Catch para que las reciba un metodo superior
         if(tipoPila == CartaDeIndicacion.ASCENDENTE) jugador.jugarCarta(pilaAscendente,carta);
@@ -140,23 +157,51 @@ public class TheGame extends Observable {
         notificarObservadores(Eventos.CARTA_JUGADA);
     }
 
-    public int getRondaActual(){
+    @Override
+    public int getRondaActual()throws RemoteException{
         return rondaActual;
     }
 
-    public int getCantidadCartasMazo() {
+    @Override
+    public int getCantidadCartasMazo()throws RemoteException {
         if(mazo == null) return 0;
         return mazo.getCantidad();
     }
 
-    public Carta getUltimaCartaAscendente(){
+    @Override
+    public ICarta getUltimaCartaAscendente()throws RemoteException{
         return pilaAscendente.getUltimaCarta();
     }
 
-    public Carta getUltimaCartaDescendente(){
+    @Override
+    public ICarta getUltimaCartaDescendente()throws RemoteException{
         return pilaDescendente.getUltimaCarta();
     }
 
+    @Override
+    public void chequearEstadoPartida() throws RemoteException
+    {
+        if(mazo.esVacio() && jugadoresNoTienenMasCartas()) {
+            estadoPartida = Eventos.GANARON;
+        }
+        else if(!elJugadorTieneAlgunMovimientoValido()) {
+            estadoPartida = Eventos.PERDIERON;
+        }
+
+        //Si hubo un cambio de estado notifico al controlador
+        if (estadoPartida != Eventos.JUGANDO){
+            notificarObservadores(estadoPartida);
+        }
+
+    }
+
+    @Override
+    public Jugador getJugador(UUID id) throws RemoteException {
+        for (Jugador j : jugadores) {
+            if (j.getId().equals(id)) return j;
+        }
+        return null;
+    }
 
 //  METODOS PRIVADOS
 
@@ -165,7 +210,8 @@ public class TheGame extends Observable {
         for(int i = 0; i < CARTAS_MAXIMAS; i++) {
             jugadores.forEach(j -> j.tomarCarta(mazo));
         }
-        notificarObservadores(Eventos.SE_REPARTIERON_CARTAS);
+
+        //notificarObservadores(Eventos.SE_REPARTIERON_CARTAS);
     }
 
 
@@ -182,10 +228,10 @@ public class TheGame extends Observable {
 }
 
 
-    private Carta getCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) {
+    private ICarta getCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) {
         if(jugador != jugadorActual) throw new MovimientoInvalidoException("[Jugada invalida] - Es turno del jugador " + jugadorActual.getNombre());
 
-        Carta[] manoCartas = jugador.getCartas();
+        ICarta[] manoCartas = jugador.getCartas();
 
         if(manoCartas.length == 0) throw new CartaNoExisteException("La mano de cartas esta vacia");
         if(indiceCarta < 0 || indiceCarta >= manoCartas.length) throw new MovimientoInvalidoException("No es posible jugar la carta seleccionada");
@@ -198,21 +244,7 @@ public class TheGame extends Observable {
         return jugador.getCantidadCartasEnMano() < CARTAS_MAXIMAS;
     }
 
-    private void chequearEstadoPartida()
-    {
-        if(mazo.esVacio() && jugadoresNoTienenMasCartas()) {
-            estadoPartida = Eventos.GANARON;
-        }
-        else if(!elJugadorTieneAlgunMovimientoValido()) {
-            estadoPartida = Eventos.PERDIERON;
-        }
 
-        //Si hubo un cambio de estado notifico al controlador
-        if (estadoPartida != Eventos.JUGANDO){
-            notificarObservadores(estadoPartida);
-        }
-
-    }
 
     private boolean jugadoresNoTienenMasCartas(){
         //Reviso que cada jugador se haya quedado sin cartas para poder dar la condicion de partida ganada
@@ -225,7 +257,7 @@ public class TheGame extends Observable {
     /// Reviso todas las combinaciones posibles de la mano del jugador.
     /// @return Retorna true si tiene al menos un movimiento valido, caso contrario retorna false
     private boolean elJugadorTieneAlgunMovimientoValido(){
-        for (Carta c : jugadorActual.getCartas()) {
+        for (ICarta c : jugadorActual.getCartas()) {
             if (pilaAscendente.puedeAgregarCarta(c) || pilaDescendente.puedeAgregarCarta(c)) return true;
         }
         //Si no se cumple nada, no tiene movimiento valido
