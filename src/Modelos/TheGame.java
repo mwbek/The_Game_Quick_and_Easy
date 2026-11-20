@@ -14,9 +14,7 @@ import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
 
 import java.rmi.RemoteException;
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.UUID;
+import java.util.*;
 
 /// Clase que representa el juego con todas sus reglas y acciones posibles
 public class TheGame extends ObservableRemoto implements ITheGame {
@@ -27,6 +25,8 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     private IMazo mazo;
     private static final int CARTAS_MAXIMAS = Mano.getCartasMaximas();
     private IJugador anfitrion;
+    private IJugador ultimoQueSalio;
+    private final int MINIMO_JUGADORES = 2;
 
     //Con las pilas aplico polimorfismo usando la intefaz 'PilaDeIndicacion'
     private final PilaDeIndicacion pilaDescendente;
@@ -65,18 +65,29 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     }
 
 
-    public void removerJugador(IObservadorRemoto controlador, IJugador jugador) throws RemoteException{
-        if(jugadores.remove(jugador)){
-            removerObservador(controlador);
-            notificarObservadores(Eventos.JUGADOR_SALIO);
-            ICarta[] cartas = jugador.getCartas();
-            for(ICarta c : cartas){
-                mazo.devolverCartaAlMazo((Carta) c);
-            }
+    public void cerrar(IObservadorRemoto controlador, IJugador jugador) throws RemoteException {
+        removerObservador(controlador);
+        if (!jugadores.contains(jugador)) return;
 
+        boolean eraSuTurno = jugador.equals(jugadorActual);
+
+        mazo.devolverCartas(Arrays.stream(jugador.getCartas()).toList());
+        jugadores.remove(jugador);
+        ultimoQueSalio = jugador;
+
+        if (jugadores.size() < MINIMO_JUGADORES) {
+            estadoPartida = Eventos.PERDIERON;
+            notificarObservadores(estadoPartida);
+            return;
         }
 
+        if (eraSuTurno) {
+            jugadorActual = jugadores.element();
+            if (jugadorActual.getCantidadCartasEnMano() == 0) pasarJugador();
+        }
 
+        notificarObservadores(Eventos.JUGADOR_SALIO);
+        if (eraSuTurno) notificarObservadores(Eventos.CAMBIO_DE_RONDA);
     }
 
 
@@ -107,8 +118,13 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     }
 
     @Override
-    public IJugador ultimoJugadorAgregado() throws RemoteException{
+    public IJugador getUltimoJugadorAgregado() throws RemoteException{
         return jugadores.stream().toList().getLast();
+    }
+
+    @Override
+    public IJugador getUltimoJugadorQueSalio() throws RemoteException{
+        return ultimoQueSalio;
     }
 
     @Override
