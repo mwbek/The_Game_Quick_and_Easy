@@ -2,6 +2,7 @@ package Modelos;
 
 
 import Enumerados.ColorCarta;
+import Interfaces.ICarta;
 import Interfaces.IMazo;
 import exceptions.CartaDuplicadaException;
 
@@ -42,7 +43,18 @@ public class Mazo implements IMazo, Serializable {
         return pilaMazo.size();
     }
 
+    @Override
+    public void devolverCartaAlMazo(Carta carta) {
+        if(carta != null && !pilaMazo.contains(carta)){
+            pilaMazo.push(carta);
+            //Paso la pila de cartas a una lista, la mezclo
+            List<Carta> cartas = new ArrayList<>(pilaMazo.stream().toList());
+            Collections.shuffle(cartas);
+            //Y la devuelvo al mazo
+            pilaMazo.addAll(cartas);
+        }
 
+    }
 
 
     ///  Mezcla las 50 cartas del juego en forma aleatoria
