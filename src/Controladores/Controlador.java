@@ -11,7 +11,9 @@ import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 import static Enumerados.Eventos.JUGANDO;
 import static Enumerados.Eventos.SIN_INICIAR;
@@ -20,7 +22,7 @@ public class Controlador implements IControladorRemoto {
 
     private IVista vista;
     private ITheGame juego;
-    private  Jugador jugador;
+    private  IJugador jugador;
 
     public Controlador(){
     }
@@ -34,46 +36,62 @@ public class Controlador implements IControladorRemoto {
     @Override
     public void actualizar(IObservableRemoto iObservableRemoto, Object o) {
 
+
         if (o instanceof Eventos ev && juego != null && vista != null) {
+            try{
+                if(jugador == null) this.jugador = juego.ultimoJugadorAgregado();
+                else this.jugador = juego.getJugador(jugador.getId());
+            } catch (RemoteException e) {
+                vista.mostrarError("No se pudo actualizar el jugador: " + e.getMessage() );
+            }
+
             switch (ev)
             {
-                case INICIO_PARTIDA, CAMBIO_DE_RONDA,CARTA_JUGADA:
+                case INICIO_PARTIDA:
                     try {
-
                         if(!partidaPuedeComenzar()){
                             vista.mostrarMensaje("Esperando jugadores para comenzar partida...");
+                            vista.mostrarMensaje("(" + juego.getJugadores().length + "/ 5)");
                         }
                         else{
                             if(juego.getEstadoPartida() == JUGANDO){
-                                vista.mostrarHUDJugador();
-                                if(juego.getJugadorActual() == jugador) vista.mostrarMensaje("Es tu turno...\n");
-                                else vista.mostrarMensaje("Esperando turno de: " + getJugadorActual().getNombre() + "\n");
+
+                                if(juego.getJugadorActual().equals(jugador)) {
+                                    vista.mostrarHUDJugador();
+                                }
+                                else vista.mostrarMensaje("Esperando turno de [" + getJugadorActual().getNombre() + "]");
                             }
 
                         }
 
                     } catch (RemoteException e) {
+                        vista.mostrarError("Error al iniciar partida: " + e.getMessage());
+                    }
+                    break;
+
+                case CARTA_JUGADA:
+                        //Actualizo el HUD a todos los jugadores
+                        vista.mostrarHUDJugador();
+                        if(jugador.equals(getJugadorActual()))  vista.mostrarMenuJugador();
+                    break;
+
+                case CAMBIO_DE_RONDA:
+                    try{
+                        if(juego.getEstadoPartida() == JUGANDO){
+                            vista.mostrarHUDJugador();
+                            vista.mostrarMenuJugador();
+                        }
+                    }catch (RemoteException e){
                         vista.mostrarError("Error en la jugada: " + e.getMessage());
                     }
                     break;
-                case NUEVO_JUGADOR:
 
+                case CAMBIO_LISTA_JUGADORES:
                     try {
-
-                        if(!partidaPuedeComenzar()){
-                            vista.mostrarMensaje("Esperando jugadores para comenzar partida...");
+                        //Si el jugador no es el anfitrion
+                        if(!jugador.equals(juego.getAnfitrion())){
+                            vista.mostrarMensaje("Esperando a que el anfitrion (" + juego.getAnfitrion().getNombre() + ") inicie la partida...");
                         }
-                        else{
-                            if(juego.getEstadoPartida() == JUGANDO){
-                                vista.mostrarHUDJugador();
-                                if(juego.getJugadorActual() != jugador){
-                                    vista.mostrarMensaje(jugador.getNombre());
-                                }
-                            }
-
-                        }
-
-
                     } catch (RemoteException e) {
                         vista.mostrarError("Error al agregar nuevo jugador: " + e.getMessage());
                     }
@@ -92,6 +110,18 @@ public class Controlador implements IControladorRemoto {
 
     }
 
+    public int getCantidadJugadores(){
+        try {
+            return juego.getJugadores().length;
+        } catch (RemoteException e) {
+            vista.mostrarError("Error al conectar con el servidor: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    public boolean esTurno(){
+        return jugador.equals(getJugadorActual());
+    }
 
     public void setVista(IVista vista) {
         //Programacion defensiva
@@ -103,12 +133,21 @@ public class Controlador implements IControladorRemoto {
         try {
             if (nombre == null) throw new IllegalArgumentException("El nombre del jugador no puede ser nulo");
             this.jugador = juego.agregarJugador(nombre);
+            int cantidadJugadores = juego.getJugadores().length;
+            vista.mostrarMensaje("[" + juego.getJugadores()[cantidadJugadores-1].getNombre() + "] se unio a la partida:  (" + cantidadJugadores + "/ 5)");
+
+
         } catch (RemoteException e) {
             vista.mostrarError("Error al registrar nuevo jugador: " + e.getMessage());
         }
+        catch (CantidadJugadoresException e){
+            vista.mostrarMensaje(e.getMessage());
+            vista.mostrarMensaje("Saliendo de la partida...");
+            vista.salir();
+        }
     }
 
-    public Jugador getJugador(){
+    public IJugador getJugador(){
         return this.jugador;
     }
 
@@ -158,16 +197,12 @@ public class Controlador implements IControladorRemoto {
 
     public String[] getCartas(){
         String[] cartasTexto = {"[]", "[]"};
-        try {
-            Jugador jugadorVista = juego.getJugador(jugador.getId());
-            if (jugadorVista != null) {
-                ICarta[] cartas = jugadorVista.getCartas();
-                for (int i = 0; i < cartas.length && i < cartasTexto.length; i++) {
-                    cartasTexto[i] = cartas[i].toString();
-                }
+        // IJugador jugadorVista = juego.getJugador(jugador.getId());
+        if (jugador != null) {
+            ICarta[] cartas = jugador.getCartas();
+            for (int i = 0; i < cartas.length && i < cartasTexto.length; i++) {
+                cartasTexto[i] = cartas[i].toString();
             }
-        } catch (RemoteException e) {
-            vista.mostrarError("Error al obtener la mano del jugador : " +  e.getMessage());
         }
         return cartasTexto;
     }
@@ -219,12 +254,41 @@ public class Controlador implements IControladorRemoto {
 
     }
 
+    public boolean esAnfitrion(){
+        try{
+            return jugador.equals(juego.getAnfitrion());
+        } catch (RemoteException e) {
+            vista.mostrarError("Hubo un error de conexion con el servidor: " + e.getMessage());
+            return false;
+        }
+
+    }
+
+    public IJugador getAnfitrion(){
+        try{
+            return juego.getAnfitrion();
+        }catch (RemoteException e) {
+            vista.mostrarError("Hubo un error de conexion con el servidor: " + e.getMessage());
+            return null;
+        }
+
+
+    }
+
 
     public void iniciarPartida(){
         try{
-            IMazo mazo = new Mazo();
-            mazo.mezclarMazo();
-            juego.inicializarPartida(mazo);
+
+            if(jugador.equals(juego.getAnfitrion())){
+                IMazo mazo = new Mazo();
+                mazo.mezclarMazo();
+                juego.inicializarPartida(mazo);
+            }
+            else{
+                vista.mostrarError("Solo el anfitrion (" + juego.getAnfitrion().getNombre() + ") " + "puede comenzar la partida");
+            }
+
+
         }
         catch (CantidadJugadoresException e){
             vista.mostrarError("Esperando mas jugadores para comenzar la partida...");
