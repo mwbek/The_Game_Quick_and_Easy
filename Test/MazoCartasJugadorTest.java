@@ -1,3 +1,4 @@
+import Interfaces.ICarta;
 import Interfaces.IMazo;
 import Modelos.Carta;
 import Enumerados.ColorCarta;
@@ -18,7 +19,7 @@ public class MazoCartasJugadorTest {
         IMazo pilaIMazo = new Mazo();
         Assertions.assertEquals(0, pilaIMazo.getMazo().length);
         pilaIMazo.mezclarMazo();
-        Carta[] mazo = pilaIMazo.getMazo();
+        ICarta[] mazo = pilaIMazo.getMazo();
 
         Assertions.assertEquals(50, mazo.length);
         Assertions.assertEquals(10, Arrays.stream(mazo).filter(carta -> carta.getColor().equals(ColorCarta.ROJO)).count());
