@@ -68,7 +68,9 @@ public class VistaConsola implements IVista {
 
     @Override
     public void salir(){
+        controlador.cerrarApp();
         this.ejecutando = false;
+
     }
 
     @Override
@@ -152,6 +154,7 @@ public class VistaConsola implements IVista {
                 controlador.iniciarPartida();
             } else if (opcion == 0) {
                 ejecutando = false;
+                salir();
                 //TODO Agregar metodo que permita salir del juego y del servidor. A su vez que actualizar el anfitrion
             } else {
                 mostrarError("Opción inválida");
