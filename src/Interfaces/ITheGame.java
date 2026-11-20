@@ -8,6 +8,7 @@ import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.UUID;
 
 public interface ITheGame extends IObservableRemoto {
 
@@ -20,7 +21,8 @@ public interface ITheGame extends IObservableRemoto {
     public void jugarCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) throws RemoteException;
     public int getRondaActual() throws RemoteException;
     public int getCantidadCartasMazo() throws RemoteException;
-    public Carta getUltimaCartaAscendente() throws RemoteException;
-    public Carta getUltimaCartaDescendente() throws RemoteException;
+    public ICarta getUltimaCartaAscendente() throws RemoteException;
+    public ICarta getUltimaCartaDescendente() throws RemoteException;
     public void chequearEstadoPartida() throws RemoteException;
+    public Jugador getJugador(UUID id) throws RemoteException;
 }

@@ -6,6 +6,8 @@ import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
 import org.junit.jupiter.api.*;
 
+import java.rmi.RemoteException;
+
 public class TheGameTest {
 
     TheGame juego;
@@ -13,15 +15,14 @@ public class TheGameTest {
     MazoMock mazo;
 
     @BeforeEach
-    public void setup()
-    {
+    public void setup() throws RemoteException {
         juego = new TheGame();
         mazo = new MazoMock();
         martin = juego.agregarJugador("Martin");
         ludmila = juego.agregarJugador("Ludmila");
     }
 
-    private void iniciarMazo(){
+    private void iniciarMazo() throws RemoteException {
         //Restante en el mazo
         mazo.agregarCarta(new Carta(ColorCarta.ROJO, 1));
         mazo.agregarCarta(new Carta(ColorCarta.ROJO, 2));
@@ -45,7 +46,7 @@ public class TheGameTest {
     }
 
     @Test
-    void iniciarPartidaRepartirYDejaElEstadoInicialTest() {
+    void iniciarPartidaRepartirYDejaElEstadoInicialTest() throws RemoteException {
 
         iniciarMazo();
 
@@ -63,7 +64,7 @@ public class TheGameTest {
     }
 
     @Test
-    void jugarFueraDeTurnoNoCambiaNadaTest() {
+    void jugarFueraDeTurnoNoCambiaNadaTest() throws RemoteException {
 
         iniciarMazo();
 
@@ -74,7 +75,7 @@ public class TheGameTest {
     }
 
     @Test
-    void pasarSinJugarNoCambiaElTurnoTest() {
+    void pasarSinJugarNoCambiaElTurnoTest() throws RemoteException {
         iniciarMazo();
 
         Assertions.assertThrows(MovimientoInvalidoException.class, () -> juego.pasarDeRonda(martin));
@@ -91,7 +92,7 @@ public class TheGameTest {
     }
 
     @Test
-    void turnoCompletoReponeCartasYPasaElTurno() {
+    void turnoCompletoReponeCartasYPasaElTurno() throws RemoteException {
         iniciarMazo();
 
         juego.jugarCarta(martin, CartaDeIndicacion.ASCENDENTE, 0);   // juega el 6
@@ -109,7 +110,7 @@ public class TheGameTest {
     }
 
     @Test
-    void partidaGanada() {
+    void partidaGanada() throws RemoteException {
 
         //Cartas de ludmila
         mazo.agregarCarta(new Carta(ColorCarta.ROJO, 6));
@@ -143,7 +144,7 @@ public class TheGameTest {
     }
 
     @Test
-    void partidaPerdidaCuandoElSiguienteNoTieneJugadas() {
+    void partidaPerdidaCuandoElSiguienteNoTieneJugadas() throws RemoteException {
         //Cartas de mazo
         mazo.agregarCarta(new Carta(ColorCarta.ROJO, 4));
         mazo.agregarCarta(new Carta(ColorCarta.ROJO, 7));
@@ -173,7 +174,7 @@ public class TheGameTest {
     }
 
     @Test
-    void terminadaLaPartidaSeRechazaCualquierAccion() {
+    void terminadaLaPartidaSeRechazaCualquierAccion() throws RemoteException {
 
         //Cartas de mazo
         mazo.agregarCarta(new Carta(ColorCarta.ROJO, 4));

@@ -1,5 +1,6 @@
 package Modelos;
 
+import Interfaces.ICarta;
 import Interfaces.IMano;
 import Interfaces.IMazo;
 import exceptions.CartaNoExisteException;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class Mano implements IMano, Serializable {
 
-    private List<Carta> cartas;
+    private List<ICarta> cartas;
     private static final int CARTAS_MAXIMAS = 2; //Se hizo static para que cada instancia tenga el mismo limite sin duplicar el atributo por instancia
 
 
@@ -38,7 +39,7 @@ public class Mano implements IMano, Serializable {
     /// @return True si la carta existia en la mano, caso contrario lanza una excepcion
     /// @throws CartaNoExisteException Si la carta que se intento remover no existe, lanza una excepcion
     @Override
-    public void quitarCarta(Carta carta) {
+    public void quitarCarta(ICarta carta) {
         if(!cartas.remove(carta)) throw new CartaNoExisteException("La carta que se quiso remover no existe");
     }
     @Override
@@ -49,7 +50,7 @@ public class Mano implements IMano, Serializable {
 
     }
     @Override
-    public boolean contiene(Carta carta){
+    public boolean contiene(ICarta carta){
         if(carta == null) return false;
         return cartas.contains(carta);
     }

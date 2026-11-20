@@ -1,6 +1,7 @@
 package Modelos;
 
 import Enumerados.CartaDeIndicacion;
+import Interfaces.ICarta;
 import Interfaces.IPilaDeIndicacion;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.util.Stack;
 public class PilaDeIndicacion implements IPilaDeIndicacion, Serializable {
 
     private final CartaDeIndicacion indicacion;
-    private final Stack<Carta> cartas;
+    private final Stack<ICarta> cartas;
     public PilaDeIndicacion(CartaDeIndicacion indicacion) {
         if(indicacion == null) throw new IllegalArgumentException("La carta de indicacion no puede ser nula");
 
@@ -19,7 +20,7 @@ public class PilaDeIndicacion implements IPilaDeIndicacion, Serializable {
     }
 
     @Override
-    public boolean agregarCarta(Carta carta) {
+    public boolean agregarCarta(ICarta carta) {
         if (carta == null) throw new IllegalArgumentException("La carta no puede ser nula");
         if(puedeAgregarCarta(carta)){
             cartas.push(carta);
@@ -28,7 +29,7 @@ public class PilaDeIndicacion implements IPilaDeIndicacion, Serializable {
         else return false;
     }
     @Override
-    public boolean puedeAgregarCarta(Carta carta) {
+    public boolean puedeAgregarCarta(ICarta carta) {
 
         if(cartas.contains(carta)) return false;
 
@@ -38,7 +39,7 @@ public class PilaDeIndicacion implements IPilaDeIndicacion, Serializable {
             return true;
         }
 
-        Carta cartaTope = cartas.peek();
+        ICarta cartaTope = cartas.peek();
 
         //Caso 2: No es la primer carta y por lo tanto debo revisar dos condiciones
         //Condicion 1: Son del mismo color, en este caso puede agregar cualquier valor
@@ -63,7 +64,7 @@ public class PilaDeIndicacion implements IPilaDeIndicacion, Serializable {
 
 
 
-    private boolean validarMovimientoPorPila(Carta cartaTope, Carta cartaNueva){
+    private boolean validarMovimientoPorPila(ICarta cartaTope, ICarta cartaNueva){
         boolean esMovimientoValido = false;
         if(indicacion == CartaDeIndicacion.ASCENDENTE){
             if(cartaNueva.getNumero() > cartaTope.getNumero()){
@@ -80,7 +81,7 @@ public class PilaDeIndicacion implements IPilaDeIndicacion, Serializable {
 
     //Estos metodos se repiten en pilaAscendent y Desendente. Podrian ir en una clase heredada (abstracta?)
     @Override
-    public Carta getUltimaCarta() {
+    public ICarta getUltimaCarta() {
         if(cartas.isEmpty()) return null;
         return cartas.peek();
     }

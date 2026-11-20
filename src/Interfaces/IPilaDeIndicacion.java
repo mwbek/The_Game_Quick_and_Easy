@@ -5,9 +5,9 @@ import Modelos.Carta;
 
 public interface IPilaDeIndicacion {
 
-    public boolean agregarCarta(Carta carta);
-    public boolean puedeAgregarCarta(Carta carta);
+    public boolean agregarCarta(ICarta carta);
+    public boolean puedeAgregarCarta(ICarta carta);
     public CartaDeIndicacion getTipo();
-    public Carta getUltimaCarta();
+    public ICarta getUltimaCarta();
 
 }

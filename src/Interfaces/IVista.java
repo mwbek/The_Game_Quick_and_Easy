@@ -7,4 +7,5 @@ public interface IVista {
     public void mostrarMensaje(String mensaje);
     public void mostrarError(String mensajeError);
     public void iniciar();
+    public void actualizarVista();
 }
