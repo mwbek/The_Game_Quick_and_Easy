@@ -23,9 +23,10 @@ public class TheGame extends ObservableRemoto implements ITheGame {
 
     private Eventos estadoPartida;
     private final Queue<Jugador> jugadores;
-    private Jugador jugadorActual = null;
+    private IJugador jugadorActual = null;
     private IMazo mazo;
     private static final int CARTAS_MAXIMAS = Mano.getCartasMaximas();
+    private IJugador anfitrion;
 
     //Con las pilas aplico polimorfismo usando la intefaz 'PilaDeIndicacion'
     private final PilaDeIndicacion pilaDescendente;
@@ -47,16 +48,19 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     /// @throws PartidaIniciadaException Agregar un jugador con la partida iniciada
     /// @throws IllegalArgumentException Intentar agregar mas de 5 jugadores
     @Override
-    public Jugador agregarJugador(String nombre) throws RemoteException {
+    public IJugador agregarJugador(String nombre) throws RemoteException {
 
         if(estadoPartida == Eventos.JUGANDO) throw new PartidaIniciadaException("No se pueden agregar jugadores cuando la partida ya comenzo");
-
-        if(jugadores.size() >= 5) throw new IllegalArgumentException("No puede haber mas de 5 jugadores en la partida");
+        if(jugadores.size() >= 5) throw new CantidadJugadoresException("No puede haber mas de 5 jugadores en la partida");
 
         Jugador jugador = new Jugador(nombre);
+
+        if(anfitrion == null){
+            anfitrion = jugador; //El jugador 1 siempre va a ser el anfitrion
+        }
         jugadores.add(jugador);
-        notificarObservadores(Eventos.NUEVO_JUGADOR);
-        System.out.printf("[DEBUG] - JUGADOR AGREGADO: " + nombre);
+
+        notificarObservadores(Eventos.CAMBIO_LISTA_JUGADORES);
         return jugador;
     }
 
@@ -78,8 +82,8 @@ public class TheGame extends ObservableRemoto implements ITheGame {
         rondaActual = 1;
         estadoPartida = Eventos.JUGANDO;
         jugadorActual = jugadores.peek();
-        //repartirCartas();
 
+        //repartir cartas a cada jugador
         for(int i = 0; i < CARTAS_MAXIMAS; i++) {
             jugadores.forEach(j -> j.tomarCarta(mazo));
         }
@@ -87,18 +91,28 @@ public class TheGame extends ObservableRemoto implements ITheGame {
         notificarObservadores(Eventos.INICIO_PARTIDA);
     }
 
+    @Override
+    public IJugador ultimoJugadorAgregado() throws RemoteException{
+        return jugadores.stream().toList().getLast();
+    }
+
+    @Override
+    public IJugador getAnfitrion() throws RemoteException{
+        return anfitrion;
+    }
     /// Cambia el turno y cambia el jugador
     /// @throws MovimientoInvalidoException El jugador no puede pasar de ronda
     /// @throws IllegalArgumentException El jugador no puede ser null
     /// @throws MovimientoInvalidoException Se lanza cuando la partida no esta inicializada o cuando no se esta jugando.
     /// @throws MovimientoInvalidoException Se lanza cuando el jugador no puede pasar de ronda
     @Override
-    public void pasarDeRonda(IJugador jugador) throws RemoteException {
+    public void pasarDeRonda(IJugador jugadorVista) throws RemoteException {
 
         //Validaciones / programacion defensiva
         if(estadoPartida == Eventos.SIN_INICIAR) throw new MovimientoInvalidoException("La partida no inicio");
         if(estadoPartida != Eventos.JUGANDO) throw new MovimientoInvalidoException("Partida finalizada");
 
+        IJugador jugador = getJugador(jugadorVista.getId());
         if(jugador == null) throw new IllegalArgumentException("Jugador no puede ser nulo");
         if(jugador != jugadorActual) throw new MovimientoInvalidoException("No puede pasar de ronda actualmente");
         if(!jugadorPuedePasarRonda(jugador)) throw new MovimientoInvalidoException("Para pasar de ronda debe jugar al menos una carta");
@@ -143,10 +157,14 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     /// @throws CartaNoExisteException Si la carta no esta en la mano
     /// @throws MovimientoInvalidoException No fue posible agregar la carta a la pila
     @Override
-    public void jugarCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) throws RemoteException{
+    public void jugarCarta(IJugador jugadorVista, CartaDeIndicacion tipoPila, int indiceCarta) throws RemoteException{
 
         if(estadoPartida == Eventos.SIN_INICIAR) throw new PartidaIniciadaException("La partida no inicio");
         if(estadoPartida != Eventos.JUGANDO) throw new MovimientoInvalidoException("Partida finalizada");
+
+        IJugador jugador = getJugador(jugadorVista.getId());
+        if(!jugador.equals(jugadorActual)) throw new MovimientoInvalidoException("[Jugada invalida] - Es turno del jugador " + jugadorActual.getNombre());
+
 
         ICarta carta = getCarta(jugador, tipoPila, indiceCarta);
 
@@ -228,8 +246,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
 }
 
 
-    private ICarta getCarta(Jugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) {
-        if(jugador != jugadorActual) throw new MovimientoInvalidoException("[Jugada invalida] - Es turno del jugador " + jugadorActual.getNombre());
+    private ICarta getCarta(IJugador jugador, CartaDeIndicacion tipoPila, int indiceCarta) {
 
         ICarta[] manoCartas = jugador.getCartas();
 
