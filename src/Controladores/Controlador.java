@@ -11,9 +11,7 @@ import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 
 import static Enumerados.Eventos.JUGANDO;
 import static Enumerados.Eventos.SIN_INICIAR;
@@ -39,7 +37,7 @@ public class Controlador implements IControladorRemoto {
 
         if (o instanceof Eventos ev && juego != null && vista != null) {
             try{
-                if(jugador == null) this.jugador = juego.ultimoJugadorAgregado();
+                if(jugador == null) this.jugador = juego.getUltimoJugadorAgregado();
                 else this.jugador = juego.getJugador(jugador.getId());
             } catch (RemoteException e) {
                 vista.mostrarError("No se pudo actualizar el jugador: " + e.getMessage() );
@@ -49,21 +47,11 @@ public class Controlador implements IControladorRemoto {
             {
                 case INICIO_PARTIDA:
                     try {
-                        if(!partidaPuedeComenzar()){
-                            vista.mostrarMensaje("Esperando jugadores para comenzar partida...");
-                            vista.mostrarMensaje("(" + juego.getJugadores().length + "/ 5)");
-                        }
-                        else{
                             if(juego.getEstadoPartida() == JUGANDO){
-
-                                if(juego.getJugadorActual().equals(jugador)) {
-                                    vista.mostrarHUDJugador();
-                                }
+                                vista.mostrarHUDJugador();
+                                if(esTurno()) vista.turnoDelJugador();
                                 else vista.mostrarMensaje("Esperando turno de [" + getJugadorActual().getNombre() + "]");
                             }
-
-                        }
-
                     } catch (RemoteException e) {
                         vista.mostrarError("Error al iniciar partida: " + e.getMessage());
                     }
@@ -72,21 +60,21 @@ public class Controlador implements IControladorRemoto {
                 case CARTA_JUGADA:
                         //Actualizo el HUD a todos los jugadores
                         vista.mostrarHUDJugador();
-                        if(jugador.equals(getJugadorActual()))  vista.mostrarMenuJugador();
+                        if(esTurno()) vista.turnoDelJugador();
                     break;
 
                 case CAMBIO_DE_RONDA:
                     try{
                         if(juego.getEstadoPartida() == JUGANDO){
                             vista.mostrarHUDJugador();
-                            vista.mostrarMenuJugador();
+                            if(esTurno()) vista.turnoDelJugador();
                         }
                     }catch (RemoteException e){
                         vista.mostrarError("Error en la jugada: " + e.getMessage());
                     }
                     break;
 
-                case CAMBIO_LISTA_JUGADORES:
+                case NUEVO_JUGADOR:
                     try {
                         //Si el jugador no es el anfitrion
                         if(!jugador.equals(juego.getAnfitrion())){
@@ -97,11 +85,24 @@ public class Controlador implements IControladorRemoto {
                     }
 
                     break;
+                case JUGADOR_SALIO:
+                    try {
+                        IJugador jugadorQueSalio = juego.getUltimoJugadorQueSalio();
+                        if (jugadorQueSalio != null && !jugadorQueSalio.equals(jugador)) {
+                            vista.mostrarMensaje("- [" + jugadorQueSalio.getNombre() + "] salió de la partida");
+                        }
+
+
+
+                    } catch (RemoteException e) {
+                        vista.mostrarError("Error al remover jugador: " + e.getMessage());
+                    }
+                    break;
                 case GANARON:
-                    //Hacer algo
+                    vista.jugadoresGanaron();
                     break;
                 case PERDIERON:
-                    //Hacer algo
+                    vista.jugadoresPerdieron();
                     break;
 
 
@@ -120,6 +121,7 @@ public class Controlador implements IControladorRemoto {
     }
 
     public boolean esTurno(){
+        if(jugador == null ) return false;
         return jugador.equals(getJugadorActual());
     }
 
@@ -128,6 +130,22 @@ public class Controlador implements IControladorRemoto {
         if(vista == null) throw new IllegalArgumentException("La vista no puede ser null");
         this.vista = vista;
     }
+
+
+    public void cerrarApp() {
+        if (juego != null) {
+            try {
+                if (jugador != null) {
+                    juego.cerrar(this, jugador);
+                } else {
+                    juego.removerObservador(this);
+                }
+            } catch (RemoteException e) {
+                // Si el servidor cerró o falló la red, ignoramos para poder terminar
+            }
+        }
+    }
+
 
     public void registrarJugador(String nombre){
         try {
@@ -240,6 +258,7 @@ public class Controlador implements IControladorRemoto {
         }
         catch (CartaNoExisteException | MovimientoInvalidoException | PartidaIniciadaException | RemoteException e){
             vista.mostrarError(e.getMessage());
+            vista.turnoDelJugador(); //Si hay un error, por movimiento invalido u otro tipo, vuelve a pedirle un input al jugador
         }
     }
 
@@ -250,6 +269,7 @@ public class Controlador implements IControladorRemoto {
         }
         catch (MovimientoInvalidoException | IllegalArgumentException | RemoteException e){
             vista.mostrarError(e.getMessage());
+            vista.turnoDelJugador();
         }
 
     }
