@@ -1,7 +1,6 @@
 package Vista;
 
-import Controladores.ControladorConsola;
-import Enumerados.CartaDeIndicacion;
+import Controladores.Controlador;
 import Interfaces.IJugador;
 import Interfaces.IVista;
 
@@ -12,12 +11,12 @@ import java.util.Scanner;
 
 public class VistaConsola implements IVista {
 
-    public final ControladorConsola controlador;
+    public final Controlador controlador;
 
     private final Scanner sc;
     private boolean ejecutando;
 
-    public VistaConsola(ControladorConsola controlador) {
+    public VistaConsola(Controlador controlador) {
 
         //Programacion defensiva
         if (controlador == null) throw new IllegalArgumentException("El controlador no puede ser nulo");
@@ -28,8 +27,10 @@ public class VistaConsola implements IVista {
         sc = new Scanner(System.in);
     }
 
-
+    @Override
     public void mostrarHUDJugador() {
+
+
         int ronda = controlador.getRondaActual();
         IJugador jugadorActual = controlador.getJugadorActual();
         String[] cartasEnMano = controlador.getCartas();
@@ -44,7 +45,7 @@ public class VistaConsola implements IVista {
         System.out.println("Tu mano:  1) " + cartasEnMano[0] + " | " + "2) " + cartasEnMano[1]);
 
     }
-
+    @Override
     public void mostrarMensaje(String mensaje) {
         if (mensaje != null) {
             System.out.println(mensaje);
@@ -63,11 +64,11 @@ public class VistaConsola implements IVista {
         }
     }
 
-
+    @Override
     public void iniciar() {
 
         this.ejecutando = true;
-
+        boolean mensajeEsperando = false;
         System.out.println("===============================");
         System.out.println("-- THE GAME QUICK AND EASY --");
         System.out.println("===============================");
@@ -76,31 +77,59 @@ public class VistaConsola implements IVista {
         //1) Obligo a los jugadores a registrarse
         registrarse();
 
-        try {
+        //2) Bucle iterativo de comandos
+        while (ejecutando) {
+            boolean puedeComenzar = controlador.partidaPuedeComenzar();
 
-            //2) Bucle iterativo de comandos
-            while (ejecutando) {
-                System.out.println("1) Jugar carta  2) Pasar turno  3) Iniciar partida  0) Salir");
-                int opcion = pedirInput("Ingresa una de las opciones: ");
-                if (opcion == 1) {
-                    int indiceCarta = pedirInput("¿Qué carta jugas? (1 o 2): ");
-                    int indicePila = pedirInput("¿En que pila jugas?\n 1) Ascendente\n2)Descendente\nIngresa la pila: ");
-                    controlador.jugarCarta(indiceCarta, indicePila);
-
-                } else if (opcion == 2) {
-                    controlador.pasarTurno();
-                } else if (opcion == 3) {
-                    controlador.iniciarPartida();
-                } else if (opcion == 0) {
-                    ejecutando = false;
-                } else {
-                    mostrarError("Opcion invalida");
+            if (!puedeComenzar) {
+                if(!mensajeEsperando) {
+                    System.out.println("Esperando mas jugadores...");
+                    mensajeEsperando = true;
                 }
+
+            } else {
+                mostrarMenu();
+            }
+
+
+
+
+        }
+    }
+
+    @Override
+    public void actualizarVista() {
+
+    }
+
+    private void mostrarMenu(){
+        System.out.println("1) Jugar carta  2) Pasar turno  3) Iniciar partida  0) Salir");
+        int opcion = pedirInput("Ingresa una de las opciones: ");
+        try {
+            if (opcion == 1) {
+                if(!controlador.seInicioLaPartida()) {
+                    System.out.println("La partida no fue iniciada");
+                    return;
+                }
+                int indiceCarta = pedirInput("¿Qué carta jugás? (1 o 2): ");
+                int indicePila = pedirInput("¿En qué pila jugás?\n 1) Ascendente\n2) Descendente\n");
+                controlador.jugarCarta(indiceCarta, indicePila);
+            } else if (opcion == 2) {
+                if(!controlador.seInicioLaPartida()) {
+                    System.out.println("La partida no fue iniciada");
+                    return;
+                }
+                controlador.pasarTurno();
+            } else if (opcion == 3) {
+                controlador.iniciarPartida();
+            } else if (opcion == 0) {
+                ejecutando = false;
+            } else {
+                mostrarError("Opción inválida");
             }
         } catch (CantidadJugadoresException e) {
             mostrarError("Faltan jugadores para empezar la partida");
         }
-
     }
 
     public void mostrarError(String mensajeError) {
