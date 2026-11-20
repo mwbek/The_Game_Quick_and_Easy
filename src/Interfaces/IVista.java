@@ -8,4 +8,6 @@ public interface IVista {
     public void mostrarError(String mensajeError);
     public void iniciar();
     public void actualizarVista();
+    public void salir();
+    void mostrarMenuJugador();
 }

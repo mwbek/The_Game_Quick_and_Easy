@@ -49,6 +49,16 @@ public class VistaGrafica implements IVista {
 
     }
 
+    @Override
+    public void salir() {
+
+    }
+
+    @Override
+    public void mostrarMenuJugador() {
+
+    }
+
 
     private <T> T cargar(String rutaFxml) {
         try {
