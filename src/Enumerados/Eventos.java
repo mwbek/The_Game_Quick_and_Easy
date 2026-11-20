@@ -1,7 +1,7 @@
 package Enumerados;
 
 public enum Eventos {
-    NUEVO_JUGADOR,
+    CAMBIO_LISTA_JUGADORES,
     CARTA_JUGADA,
     CAMBIO_DE_RONDA,
     GANARON,
