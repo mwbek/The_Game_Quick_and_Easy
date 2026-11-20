@@ -6,7 +6,7 @@ import Interfaces.ICarta;
 import Interfaces.IJugador;
 import Interfaces.IMazo;
 import Interfaces.ITheGame;
-import Observer.Observable;
+import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import exceptions.CantidadJugadoresException;
 import exceptions.CartaNoExisteException;
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class TheGame extends ObservableRemoto implements ITheGame {
 
     private Eventos estadoPartida;
-    private final Queue<Jugador> jugadores;
+    private final Queue<IJugador> jugadores;
     private IJugador jugadorActual = null;
     private IMazo mazo;
     private static final int CARTAS_MAXIMAS = Mano.getCartasMaximas();
@@ -60,8 +60,23 @@ public class TheGame extends ObservableRemoto implements ITheGame {
         }
         jugadores.add(jugador);
 
-        notificarObservadores(Eventos.CAMBIO_LISTA_JUGADORES);
+        notificarObservadores(Eventos.NUEVO_JUGADOR);
         return jugador;
+    }
+
+
+    public void removerJugador(IObservadorRemoto controlador, IJugador jugador) throws RemoteException{
+        if(jugadores.remove(jugador)){
+            removerObservador(controlador);
+            notificarObservadores(Eventos.JUGADOR_SALIO);
+            ICarta[] cartas = jugador.getCartas();
+            for(ICarta c : cartas){
+                mazo.devolverCartaAlMazo((Carta) c);
+            }
+
+        }
+
+
     }
 
 
@@ -214,8 +229,8 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     }
 
     @Override
-    public Jugador getJugador(UUID id) throws RemoteException {
-        for (Jugador j : jugadores) {
+    public IJugador getJugador(UUID id) throws RemoteException {
+        for (IJugador j : jugadores) {
             if (j.getId().equals(id)) return j;
         }
         return null;
@@ -265,7 +280,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
 
     private boolean jugadoresNoTienenMasCartas(){
         //Reviso que cada jugador se haya quedado sin cartas para poder dar la condicion de partida ganada
-        for(Jugador j : jugadores){
+        for(IJugador j : jugadores){
             if(j.getCantidadCartasEnMano() > 0) return false;
         }
         return true;
