@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Mazo implements IMazo, Serializable {
 
-    private Stack<Carta> pilaMazo;
+    private Stack<ICarta> pilaMazo;
 
     public Mazo() {
         pilaMazo = new Stack<>();
@@ -20,8 +20,8 @@ public class Mazo implements IMazo, Serializable {
 
     /// @return Retorna una array inmutable de las cartas del mazo
     @Override
-    public Carta[] getMazo() {
-        Carta[] mazoCartas = new Carta[pilaMazo.size()];
+    public ICarta[] getMazo() {
+        ICarta[] mazoCartas = new Carta[pilaMazo.size()];
         return pilaMazo.toArray(mazoCartas);
     }
     /// Retorna true si el mazo esta vacio, caso contrario retorna false
@@ -33,7 +33,7 @@ public class Mazo implements IMazo, Serializable {
     /// Toma la carta que se encuentre en el tope del mazo
     /// @return Retorna una carta, si el mazo esta vacio retorna Null
     @Override
-    public Carta tomarCarta(){
+    public ICarta tomarCarta(){
         if(esVacio()) return null;
         return pilaMazo.pop();
     }
@@ -44,16 +44,14 @@ public class Mazo implements IMazo, Serializable {
     }
 
     @Override
-    public void devolverCartaAlMazo(Carta carta) {
-        if(carta != null && !pilaMazo.contains(carta)){
-            pilaMazo.push(carta);
-            //Paso la pila de cartas a una lista, la mezclo
-            List<Carta> cartas = new ArrayList<>(pilaMazo.stream().toList());
-            Collections.shuffle(cartas);
-            //Y la devuelvo al mazo
-            pilaMazo.addAll(cartas);
+    public void devolverCartas(List<ICarta> cartas) {
+        for (ICarta c : cartas) {
+            if (c != null && !pilaMazo.contains(c)) pilaMazo.push(c);
         }
-
+        List<ICarta> todas = new ArrayList<>(pilaMazo);
+        Collections.shuffle(todas);
+        pilaMazo.clear();            // esto era lo que faltaba
+        pilaMazo.addAll(todas);
     }
 
 
@@ -64,8 +62,8 @@ public class Mazo implements IMazo, Serializable {
         //Si ya tiene cartas no se puede volver a llenar
         if(!this.pilaMazo.isEmpty()) return;
 
-        Stack<Carta> pilaMazo = new Stack<>();
-        List<Carta> cartas = new ArrayList<>();
+        Stack<ICarta> pilaMazo = new Stack<>();
+        List<ICarta> cartas = new ArrayList<>();
 
         ColorCarta[] colores = ColorCarta.values();
         for(int i = 0; i < 5; i++){
@@ -78,7 +76,7 @@ public class Mazo implements IMazo, Serializable {
         else throw new EmptyStackException();
     }
 
-    private static void generarCartasPorColor(ColorCarta color, List<Carta> cartas) {
+    private static void generarCartasPorColor(ColorCarta color, List<ICarta> cartas) {
         for(int i = 1; i < 11; i++){
             cartas.add(new Carta(color, i));
         }

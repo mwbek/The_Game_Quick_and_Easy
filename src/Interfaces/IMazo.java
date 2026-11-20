@@ -2,15 +2,17 @@ package Interfaces;
 
 import Modelos.Carta;
 
+import java.util.List;
+
 public interface IMazo {
-    Carta[] getMazo();
+    ICarta[] getMazo();
 
     boolean esVacio();
 
-    Carta tomarCarta();
+    ICarta tomarCarta();
 
     void mezclarMazo();
     int getCantidad();
 
-    void devolverCartaAlMazo(Carta carta);
+    public void devolverCartas(List<ICarta> cartas);
 }
