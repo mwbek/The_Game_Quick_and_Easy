@@ -80,7 +80,6 @@ public class Controlador implements IControladorRemoto {
 
                 case NUEVO_JUGADOR:
                     try {
-                        System.out.println("[DEBUG] anfitrion = " + juego.getAnfitrion().getNombre());
                         vista.actualizarListaJugadores();
 
                         //Si el jugador no es el anfitrion
@@ -112,6 +111,10 @@ public class Controlador implements IControladorRemoto {
                     break;
                 case PERDIERON:
                     vista.jugadoresPerdieron();
+                    break;
+
+                case JUGADORES_INSUFICIENTES:
+                    vista.jugadoresInsuficientes();
                     break;
 
 
@@ -149,6 +152,11 @@ public class Controlador implements IControladorRemoto {
                 } else {
                     juego.removerObservador(this);
                 }
+
+                if(juego.getJugadores().length < 2){
+                    resetearPartida();
+                }
+
             } catch (RemoteException e) {
                 // Si el servidor cerró o falló la red, ignoramos para poder terminar
             }
@@ -325,12 +333,18 @@ public class Controlador implements IControladorRemoto {
         }
     }
 
-    public void reiniciarPartida(){
+    private void resetearPartida(){
         try{
             juego.resetarPartida();
-        }catch (RemoteException e) {
-            vista.mostrarError("Hubo un error de conexion con el servidor: " + e.getMessage());
+        } catch (RemoteException e) {
+            vista.mostrarError("Error al conectar con el servidor: " + e.getMessage());
         }
+    }
+
+    public void volverAJugar(){
+        resetearPartida();
+        jugador = null;
+        vista.iniciar();
     }
 
 
