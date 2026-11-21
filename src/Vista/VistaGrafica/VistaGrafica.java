@@ -18,13 +18,13 @@ public class VistaGrafica implements IVista {
     private final Controlador controlador;
     MenuPrincipalController menuPrincipalController;
     PartidaController partidaController;
+    MenuFinDePartidaController menuFinDePartidaController;
 
     public VistaGrafica(Stage stage, Controlador controlador){
         this.controlador = controlador;
         this.stage = stage;
     }
 
-    //TODO: CUANDO IMPLEMENTE LAS DEMAS FUNCIONES USAR 'Platform.runLater(() -> {Instrucciones});
     @Override
     public void mostrarHUDJugador() {
 
@@ -82,13 +82,33 @@ public class VistaGrafica implements IVista {
 
     @Override
     public void jugadoresGanaron() {
+        Platform.runLater(() ->{
+            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/partida.fxml");
+            menuFinDePartidaController.setControlador(controlador);
+            menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: LOS JUGADORES GANARON");
+        });
 
     }
 
     @Override
     public void jugadoresPerdieron() {
+        Platform.runLater(() ->{
+            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/partida.fxml");
+            menuFinDePartidaController.setControlador(controlador);
+            menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: LOS JUGADORES PERDIERON");
+        });
 
     }
+
+    @Override
+    public void jugadoresInsuficientes() {
+        Platform.runLater(() ->{
+            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
+            menuFinDePartidaController.setControlador(controlador);
+            menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: Cantidad de jugadores insuficiente");
+        });
+    }
+
 
     @Override
     public void actualizarListaJugadores() {
