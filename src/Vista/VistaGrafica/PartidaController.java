@@ -2,16 +2,13 @@ package Vista.VistaGrafica;
 import Controladores.Controlador;
 import Interfaces.IJugador;
 import javafx.fxml.FXML;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class PartidaController {
+public class PartidaController  extends ControladorGrafico {
 
 
     @FXML
@@ -22,13 +19,11 @@ public class PartidaController {
     @FXML
     private Label lbCantidadJugadores,lbCartasRestantes;
 
-    private Controlador controlador;
 
+
+    @Override
     public void setControlador(Controlador controlador){
-        if(controlador == null) throw new IllegalArgumentException("El controlador no puede ser nulo");
-        this.controlador = controlador;
-
-        //Inicializo el estado de los elementos que necesitan del controlador
+        super.setControlador(controlador);
         inicializar();
     }
 

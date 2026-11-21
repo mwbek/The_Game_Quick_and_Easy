@@ -1,14 +1,12 @@
 package Vista.VistaGrafica;
 
-import Controladores.Controlador;
-import Interfaces.IJugador;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-public class MenuPrincipalController {
+public class MenuPrincipalController extends ControladorGrafico {
 
 
     @FXML
@@ -21,14 +19,10 @@ public class MenuPrincipalController {
     @FXML
     private ListView<String> jugadoresEnSala;
 
-    private Controlador controlador;
     String nombre;
 
 
-    public void setControlador(Controlador controlador){
-        if(controlador == null) throw new IllegalArgumentException("El controlador no puede ser nulo");
-        this.controlador = controlador;
-    }
+
 
     @FXML
     private void initialize() {
