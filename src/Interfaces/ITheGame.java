@@ -27,4 +27,5 @@ public interface ITheGame extends IObservableRemoto {
     public IJugador getUltimoJugadorAgregado() throws RemoteException;
     public void cerrar(IObservadorRemoto controlador, IJugador jugador) throws RemoteException;
     public IJugador getUltimoJugadorQueSalio() throws RemoteException;
+    public void resetarPartida() throws RemoteException;
 }

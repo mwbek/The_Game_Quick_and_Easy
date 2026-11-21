@@ -13,6 +13,7 @@ import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -20,7 +21,7 @@ import java.util.*;
 public class TheGame extends ObservableRemoto implements ITheGame {
 
     private Eventos estadoPartida;
-    private final Queue<IJugador> jugadores;
+    private Queue<IJugador> jugadores;
     private IJugador jugadorActual = null;
     private IMazo mazo;
     private static final int CARTAS_MAXIMAS = Mano.getCartasMaximas();
@@ -29,8 +30,8 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     private final int MINIMO_JUGADORES = 2;
 
     //Con las pilas aplico polimorfismo usando la intefaz 'PilaDeIndicacion'
-    private final PilaDeIndicacion pilaDescendente;
-    private final PilaDeIndicacion pilaAscendente;
+    private PilaDeIndicacion pilaDescendente;
+    private PilaDeIndicacion pilaAscendente;
 
     private int rondaActual;
 
@@ -70,12 +71,27 @@ public class TheGame extends ObservableRemoto implements ITheGame {
         if (!jugadores.contains(jugador)) return;
 
         boolean eraSuTurno = jugador.equals(jugadorActual);
+        if(mazo != null){
+            mazo.devolverCartas(Arrays.stream(jugador.getCartas()).toList());
+        }
 
-        mazo.devolverCartas(Arrays.stream(jugador.getCartas()).toList());
         jugadores.remove(jugador);
         ultimoQueSalio = jugador;
 
-        if (jugadores.size() < MINIMO_JUGADORES) {
+        if (jugador.equals(anfitrion)) {
+
+            if(jugadores.isEmpty()) anfitrion = null;
+            else anfitrion = jugadores.peek();
+        }
+        if(anfitrion == null) System.out.println("[DEBUG] anfitrion nulo");
+        else{
+            System.out.println("[DEBUG] jugador anfitrion = " + anfitrion.getNombre());
+        }
+
+        System.out.println("[DEBUG] cantidad jugadores = " + jugadores.size());
+
+
+        if (estadoPartida == Eventos.JUGANDO && jugadores.size() < MINIMO_JUGADORES) {
             estadoPartida = Eventos.PERDIERON;
             notificarObservadores(estadoPartida);
             return;
@@ -85,6 +101,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
             jugadorActual = jugadores.element();
             if (jugadorActual.getCantidadCartasEnMano() == 0) pasarJugador();
         }
+
 
         notificarObservadores(Eventos.JUGADOR_SALIO);
         if (eraSuTurno) notificarObservadores(Eventos.CAMBIO_DE_RONDA);
@@ -252,17 +269,15 @@ public class TheGame extends ObservableRemoto implements ITheGame {
         return null;
     }
 
-//  METODOS PRIVADOS
-
-    private void repartirCartas() {
-        //A se entrega una carta a cada jugador y se repite 2 veces
-        for(int i = 0; i < CARTAS_MAXIMAS; i++) {
-            jugadores.forEach(j -> j.tomarCarta(mazo));
-        }
-
-        //notificarObservadores(Eventos.SE_REPARTIERON_CARTAS);
+    @Override
+    public void resetarPartida() throws RemoteException {
+        pilaDescendente = new PilaDeIndicacion(CartaDeIndicacion.DESCENDENTE);
+        pilaAscendente = new PilaDeIndicacion(CartaDeIndicacion.ASCENDENTE);
+        jugadores = new ArrayDeque<>();
+        estadoPartida = Eventos.SIN_INICIAR;
     }
 
+//  METODOS PRIVADOS
 
     private void pasarJugador(){
     if (jugadores.isEmpty()) throw new CantidadJugadoresException("No hay suficientes jugadores");
