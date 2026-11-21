@@ -267,6 +267,10 @@ public class TheGame extends ObservableRemoto implements ITheGame {
         pilaDescendente = new PilaDeIndicacion(CartaDeIndicacion.DESCENDENTE);
         pilaAscendente = new PilaDeIndicacion(CartaDeIndicacion.ASCENDENTE);
         jugadores = new ArrayDeque<>();
+        anfitrion = null;
+        mazo = null;
+        jugadorActual = null;
+        ultimoQueSalio = null;
         estadoPartida = Eventos.SIN_INICIAR;
     }
 
