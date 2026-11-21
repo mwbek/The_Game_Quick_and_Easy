@@ -92,7 +92,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
 
 
         if (estadoPartida == Eventos.JUGANDO && jugadores.size() < MINIMO_JUGADORES) {
-            estadoPartida = Eventos.PERDIERON;
+            estadoPartida = Eventos.JUGADORES_INSUFICIENTES;
             notificarObservadores(estadoPartida);
             return;
         }

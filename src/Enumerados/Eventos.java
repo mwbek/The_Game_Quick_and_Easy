@@ -7,6 +7,7 @@ public enum Eventos {
     GANARON,
     PERDIERON,
     JUGANDO,
+    JUGADORES_INSUFICIENTES,
     INICIO_PARTIDA,
     SIN_INICIAR,
     JUGADOR_SALIO,
