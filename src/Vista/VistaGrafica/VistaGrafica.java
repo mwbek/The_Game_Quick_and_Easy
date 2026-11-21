@@ -28,20 +28,28 @@ public class VistaGrafica implements IVista {
     @Override
     public void mostrarHUDJugador() {
 
-        Platform.runLater(() ->{
-            partidaController = cargar("/Vista/VistaGrafica/GUI/partida.fxml");
-            partidaController.setControlador(controlador);
+        Platform.runLater(() -> {
+            //Cargo la vista una sola vez, despues voy actualizando
+            if (partidaController == null) {
+                partidaController = cargar("/Vista/VistaGrafica/GUI/partida.fxml");
+                partidaController.setControlador(controlador);
+                stage.setTitle("THE GAME");
+            }
 
-            stage.setTitle("THE GAME");
+            partidaController.actualizarListaDeJugadores();
+            partidaController.actualizarCartasMano();
+            partidaController.actualizarCartasPila();
+            partidaController.actualizarTurno();
         });
-
-
     }
 
     @Override
     public void mostrarMensaje(String mensaje) {
-
+        Platform.runLater(() -> {
+            if(partidaController != null)  partidaController.imprimirMensaje(mensaje);
+        });
     }
+
 
     @Override
     public void mostrarError(String mensajeError) {
@@ -76,14 +84,9 @@ public class VistaGrafica implements IVista {
     }
 
     @Override
-    public void turnoDelJugador() {
-
-    }
-
-    @Override
     public void jugadoresGanaron() {
         Platform.runLater(() ->{
-            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/partida.fxml");
+            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
             menuFinDePartidaController.setControlador(controlador);
             menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: LOS JUGADORES GANARON");
         });
@@ -93,7 +96,7 @@ public class VistaGrafica implements IVista {
     @Override
     public void jugadoresPerdieron() {
         Platform.runLater(() ->{
-            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/partida.fxml");
+            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
             menuFinDePartidaController.setControlador(controlador);
             menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: LOS JUGADORES PERDIERON");
         });
