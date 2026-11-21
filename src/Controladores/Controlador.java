@@ -53,8 +53,7 @@ public class Controlador implements IControladorRemoto {
                     try {
                             if(juego.getEstadoPartida() == JUGANDO){
                                 vista.mostrarHUDJugador();
-                                if(esTurno()) vista.turnoDelJugador();
-                                else vista.mostrarMensaje("Esperando turno de [" + getJugadorActual().getNombre() + "]");
+                                if(!esTurno()) vista.mostrarMensaje("Esperando turno de [" + getJugadorActual().getNombre() + "]");
                             }
                     } catch (RemoteException e) {
                         vista.mostrarError("Error al iniciar partida: " + e.getMessage());
@@ -64,14 +63,12 @@ public class Controlador implements IControladorRemoto {
                 case CARTA_JUGADA:
                         //Actualizo el HUD a todos los jugadores
                         vista.mostrarHUDJugador();
-                        if(esTurno()) vista.turnoDelJugador();
                     break;
 
                 case CAMBIO_DE_RONDA:
                     try{
                         if(juego.getEstadoPartida() == JUGANDO){
                             vista.mostrarHUDJugador();
-                            if(esTurno()) vista.turnoDelJugador();
                         }
                     }catch (RemoteException e){
                         vista.mostrarError("Error en la jugada: " + e.getMessage());
@@ -256,26 +253,22 @@ public class Controlador implements IControladorRemoto {
         return cartasTexto;
     }
 
-    public String getCartaPilaAscendente(){
+    public ICarta getCartaPilaAscendente(){
         try{
-            ICarta carta = juego.getUltimaCartaAscendente();
-            if(carta == null) return "[]";
-            return carta.toString();
+            return juego.getUltimaCartaAscendente();
         } catch (RemoteException e) {
             vista.mostrarError("Error al obtener ultima carta ascendente: " + e.getMessage());
-            return "[]";
+            return null;
         }
 
     }
 
-    public String getCartaPilaDescendente(){
+    public ICarta getCartaPilaDescendente(){
         try{
-            ICarta carta = juego.getUltimaCartaDescendente();
-            if(carta == null) return "[]";
-            return carta.toString();
+            return juego.getUltimaCartaDescendente();
         } catch (RemoteException e) {
             vista.mostrarError("Error al obtener ultima carta descendente: " + e.getMessage());
-            return "[]";
+            return null;
         }
     }
 
@@ -289,7 +282,6 @@ public class Controlador implements IControladorRemoto {
         }
         catch (CartaNoExisteException | MovimientoInvalidoException | PartidaIniciadaException | RemoteException e){
             vista.mostrarError(e.getMessage());
-            vista.turnoDelJugador(); //Si hay un error, por movimiento invalido u otro tipo, vuelve a pedirle un input al jugador
         }
     }
 
@@ -300,7 +292,6 @@ public class Controlador implements IControladorRemoto {
         }
         catch (MovimientoInvalidoException | IllegalArgumentException | RemoteException e){
             vista.mostrarError(e.getMessage());
-            vista.turnoDelJugador();
         }
 
     }
