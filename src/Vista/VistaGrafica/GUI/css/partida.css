@@ -26,6 +26,11 @@
     -fx-padding: 18px 12px 18px 12px;
 }
 
+#jugadoresContainer .jugador.turnoJugador {
+    -fx-background-color: #ac9815;
+    -fx-border-color: #fafafa;
+}
+
 #jugadoresContainer .jugador .nombre-jugador {
     -fx-text-fill: white;
     -fx-font-size: 22px;
