@@ -10,8 +10,12 @@ import exceptions.CantidadJugadoresException;
 import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.List;
 
 import static Enumerados.Eventos.JUGANDO;
 import static Enumerados.Eventos.SIN_INICIAR;
@@ -76,6 +80,9 @@ public class Controlador implements IControladorRemoto {
 
                 case NUEVO_JUGADOR:
                     try {
+                        System.out.println("[DEBUG] anfitrion = " + juego.getAnfitrion().getNombre());
+                        vista.actualizarListaJugadores();
+
                         //Si el jugador no es el anfitrion
                         if(!jugador.equals(juego.getAnfitrion())){
                             vista.mostrarMensaje("Esperando a que el anfitrion (" + juego.getAnfitrion().getNombre() + ") inicie la partida...");
@@ -92,7 +99,9 @@ public class Controlador implements IControladorRemoto {
                             vista.mostrarMensaje("- [" + jugadorQueSalio.getNombre() + "] salió de la partida");
                         }
 
-
+                        //Para la interfaz grafica
+                        vista.actualizarJugadorSalio();
+                        vista.actualizarListaJugadores();
 
                     } catch (RemoteException e) {
                         vista.mostrarError("Error al remover jugador: " + e.getMessage());
@@ -144,6 +153,20 @@ public class Controlador implements IControladorRemoto {
                 // Si el servidor cerró o falló la red, ignoramos para poder terminar
             }
         }
+        System.exit(0);
+    }
+
+    public ObservableList<IJugador> getListaJugadores(){
+        try{
+            List<IJugador> jugadores = Arrays.stream(juego.getJugadores()).toList();
+            ObservableList<IJugador> listaJugadores = FXCollections.observableList(jugadores);
+            return  listaJugadores;
+
+        } catch (RemoteException e) {
+            vista.mostrarError("No se pudo obtener la lista de jugadores: " + e.getMessage());
+            return null;
+        }
+
     }
 
 
@@ -158,7 +181,7 @@ public class Controlador implements IControladorRemoto {
         } catch (RemoteException e) {
             vista.mostrarError("Error al registrar nuevo jugador: " + e.getMessage());
         }
-        catch (CantidadJugadoresException e){
+        catch (CantidadJugadoresException | PartidaIniciadaException e){
             vista.mostrarMensaje(e.getMessage());
             vista.mostrarMensaje("Saliendo de la partida...");
             vista.salir();
@@ -284,6 +307,15 @@ public class Controlador implements IControladorRemoto {
 
     }
 
+    public int getCantidadRestanteMazo(){
+        try{
+            return juego.getCantidadCartasMazo();
+        } catch (RemoteException e) {
+            vista.mostrarError("Hubo un error de conexion con el servidor: " + e.getMessage());
+            return 0;
+        }
+    }
+
     public IJugador getAnfitrion(){
         try{
             return juego.getAnfitrion();
@@ -291,8 +323,14 @@ public class Controlador implements IControladorRemoto {
             vista.mostrarError("Hubo un error de conexion con el servidor: " + e.getMessage());
             return null;
         }
+    }
 
-
+    public void reiniciarPartida(){
+        try{
+            juego.resetarPartida();
+        }catch (RemoteException e) {
+            vista.mostrarError("Hubo un error de conexion con el servidor: " + e.getMessage());
+        }
     }
 
 
