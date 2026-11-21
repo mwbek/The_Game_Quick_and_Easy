@@ -9,4 +9,6 @@ public interface IVista {
     void turnoDelJugador();
     void jugadoresGanaron();
     void jugadoresPerdieron();
+    void actualizarListaJugadores();
+    void actualizarJugadorSalio();
 }
