@@ -33,18 +33,17 @@ public class VistaConsola implements IVista {
     @Override
     public void mostrarHUDJugador() {
 
-
         int ronda = controlador.getRondaActual();
         IJugador jugadorActual = controlador.getJugadorActual();
         String[] cartasEnMano = controlador.getCartas();
 
-        String cartaPilaAscendente, cartaPilaDescendente = null;
+        String cartaPilaAscendente, cartaPilaDescendente;
 
         if(controlador.getCartaPilaAscendente() != null) cartaPilaAscendente = controlador.getCartaPilaAscendente().toString();
         else cartaPilaAscendente = "[]";
 
         if(controlador.getCartaPilaDescendente() != null) cartaPilaDescendente = controlador.getCartaPilaDescendente().toString();
-        else cartaPilaAscendente = "[]";
+        else cartaPilaDescendente = "[]";
 
         System.out.println("================================================================");
         System.out.println("RONDA " + ronda + " ·  Turno de " + jugadorActual.getNombre());
@@ -54,6 +53,8 @@ public class VistaConsola implements IVista {
         System.out.println("▲ Ascendente:" + cartaPilaAscendente + " ▼ Descendente: " + cartaPilaDescendente);
         System.out.println("----------------------------------------------------------------");
         System.out.println("Tu mano:  1) " + cartasEnMano[0] + " | " + "2) " + cartasEnMano[1]);
+
+        menuPendiente = controlador.esTurno(); //Reviso si es mi turno
 
     }
     @Override
@@ -110,10 +111,6 @@ public class VistaConsola implements IVista {
     }
 
 
-    @Override
-    public void turnoDelJugador(){
-        menuPendiente = true;
-    }
 
     @Override
     public void jugadoresGanaron() {
@@ -153,20 +150,24 @@ public class VistaConsola implements IVista {
                 int indiceCarta = pedirInput("¿Qué carta jugás? (1 o 2): ");
                 int indicePila = pedirInput("¿En qué pila jugás?\n 1) Ascendente\n2) Descendente\n");
                 controlador.jugarCarta(indiceCarta, indicePila);
+                if(controlador.esTurno()) menuPendiente = true; //Si sigue siendo mi turno, vuelvo a mostrar el menu de opciones
             } else if (opcion == 2) {
                 if(!controlador.seInicioLaPartida()) {
                     System.out.println("La partida no fue iniciada");
                     return;
                 }
                 controlador.pasarTurno();
+                if(controlador.esTurno()) menuPendiente = true; //Si sigue siendo mi turno, vuelvo a mostrar el menu de opciones
             } else if (opcion == 0) {
                 salir();
                 //TODO Agregar metodo que permita salir del juego y del servidor
             } else {
                 mostrarError("Opción inválida");
+                menuPendiente = true;
             }
         } catch (CantidadJugadoresException e) {
             mostrarError("Faltan jugadores para empezar la partida");
+            menuPendiente = true;
         }
     }
 

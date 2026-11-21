@@ -6,7 +6,6 @@ public interface IVista {
     public void mostrarError(String mensajeError);
     public void iniciar();
     public void salir();
-    void turnoDelJugador();
     void jugadoresGanaron();
     void jugadoresPerdieron();
     void actualizarListaJugadores();
