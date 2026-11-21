@@ -47,8 +47,8 @@ public class AppCliente extends Application {
         }
 
         Controlador controlador = new Controlador();
-        //VistaGrafica vista = new VistaGrafica(stage, controlador);
-        IVista vista = new VistaConsola(controlador);
+        IVista vista = new VistaGrafica(stage, controlador);
+        //IVista vista = new VistaConsola(controlador);
         controlador.setVista(vista);
 
         try {
