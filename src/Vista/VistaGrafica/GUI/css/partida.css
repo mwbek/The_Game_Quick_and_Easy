@@ -36,3 +36,29 @@
     -fx-text-fill: white;
     -fx-font-size: 14px;
 }
+
+#btnPasarTurno, #btnSalirDelJuego, #btnVerReglas {
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1.5px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+#btnPasarTurno {
+    -fx-background-color: #0284c7;
+    -fx-border-color: #38bdf8;
+}
+
+#btnVerReglas {
+    -fx-background-color: #15803d;
+    -fx-border-color: #4ade80;
+}
+
+#btnSalirDelJuego {
+    -fx-background-color: #dc2626;
+    -fx-border-color: #f87171;
+}
