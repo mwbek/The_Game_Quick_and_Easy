@@ -116,6 +116,17 @@ public class VistaConsola implements IVista {
         mostrarMensaje("[PARTIDA FINALIZADA] - LOS JUGADORES PERDIERON");
     }
 
+    @Override
+    public void actualizarListaJugadores() {
+        //En la consola no se utiliza porque el Scanner bloquea el hilo de ejecucion y no me permite
+        //mostrar dinamicamente los jugadores que se conectan a la vez que decidir cuando comenzar la partida
+    }
+
+    @Override
+    public void actualizarJugadorSalio() {
+
+    }
+
     private void mostrarMenuJugador(){
         System.out.println("1) Jugar carta  2) Pasar turno   0) Salir");
         int opcion = pedirInput("Ingresa una de las opciones: ");
