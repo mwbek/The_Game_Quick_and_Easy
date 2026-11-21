@@ -7,35 +7,50 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="745.0" styleClass="backgroundPrincipal" stylesheets="@css/partida.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="1061.0" styleClass="backgroundPrincipal" stylesheets="@css/partida.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vista.VistaGrafica.PartidaController">
    <top>
-      <HBox styleClass="cartelSuperior" BorderPane.alignment="CENTER">
+      <HBox alignment="TOP_CENTER" styleClass="cartelSuperior" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Jugadores: 1">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="8.0" />
-               </HBox.margin>
-            </Label>
-            <Label text="Objetivo: ">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-            </Label>
-            <Label text="Colocar todas las cartas del mazo en las pilas">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Label>
+            <HBox alignment="CENTER_LEFT" fillHeight="false" prefHeight="100.0" prefWidth="328.0">
+               <children>
+                  <Label fx:id="lbCantidadJugadores" text="Jugadores: 1" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="8.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="lbCartasRestantes" alignment="CENTER" text="Mazo: 50 Cartas" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="25.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="592.0">
+               <children>
+                  <Label text="Objetivo: ">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label text="Colocar todas las cartas del mazo en las pilas" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
          </children>
          <BorderPane.margin>
             <Insets bottom="15.0" left="5.0" right="5.0" top="8.0" />
@@ -43,21 +58,9 @@
       </HBox>
    </top>
    <left>
-      <VBox id="jugadoresContainer" fx:id="containerJugadores" prefHeight="350.0" prefWidth="192.0" BorderPane.alignment="CENTER">
+      <VBox id="jugadoresContainer" fx:id="contenedorPadreJugadores" prefHeight="350.0" prefWidth="192.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" prefHeight="25.0" prefWidth="176.0" styleClass="jugador">
-               <children>
-                  <Label alignment="TOP_CENTER" text="Martin" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="26.0" />
-                     </font>
-                  </Label>
-                  <Label text="Cartas: 2" textFill="WHITE">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-               </children>
+            <VBox fx:id="contenedorJugador" alignment="TOP_CENTER" prefHeight="25.0" prefWidth="176.0" styleClass="jugador">
                <VBox.margin>
                   <Insets left="8.0" right="8.0" />
                </VBox.margin>
