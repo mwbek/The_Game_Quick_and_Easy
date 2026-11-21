@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -9,28 +11,43 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="1061.0" styleClass="backgroundPrincipal" stylesheets="@css/partida.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vista.VistaGrafica.PartidaController">
    <top>
-      <HBox alignment="TOP_CENTER" styleClass="cartelSuperior" BorderPane.alignment="CENTER">
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="cartelSuperior" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_LEFT" fillHeight="false" prefHeight="100.0" prefWidth="328.0">
+            <VBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308">
                <children>
-                  <Label fx:id="lbCantidadJugadores" text="Jugadores: 1" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER_LEFT" fillHeight="false" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="lbCantidadJugadores" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Jugadores: 1" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="8.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="lbCartasRestantes" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Mazo: 50 Cartas" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="25.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Label fx:id="lbEstadoTurno" text="TURNO DE: ">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="8.0" />
-                     </HBox.margin>
-                  </Label>
-                  <Label fx:id="lbCartasRestantes" alignment="CENTER" text="Mazo: 50 Cartas" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="25.0" />
-                     </HBox.margin>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
                   </Label>
                </children>
-            </HBox>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="592.0">
                <children>
                   <Label text="Objetivo: ">
@@ -68,4 +85,86 @@
          </children>
       </VBox>
    </left>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="736.0" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <HBox alignment="TOP_CENTER" spacing="90.0">
+               <children>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <Label text="Pila Ascendente" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Label>
+                        <Button fx:id="btnPilaAscendente" mnemonicParsing="false" onAction="#onPilaSeleccionada" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="Pila Descendente" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Label>
+                        <Button fx:id="btnPilaDescendente" mnemonicParsing="false" onAction="#onPilaSeleccionada" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox spacing="30.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Tus cartas" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Label>
+                        <HBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="35.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="btnCarta1" mnemonicParsing="false" onAction="#onCartaSeleccionada" />
+                              <Button fx:id="btnCarta2" mnemonicParsing="false" onAction="#onCartaSeleccionada" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <right>
+      <VBox alignment="BOTTOM_CENTER" prefHeight="382.0" prefWidth="157.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnPasarTurno" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onPasarTurno" text="Pasar turno">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnVerReglas" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Reglas">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnSalirDelJuego" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSalir" text="Salir">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="100.0" right="15.0" />
+         </BorderPane.margin>
+      </VBox>
+   </right>
+   <bottom>
+      <TextArea fx:id="textAreaLogs" prefHeight="64.0" prefWidth="920.0" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>
