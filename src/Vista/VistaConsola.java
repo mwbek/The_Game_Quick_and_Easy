@@ -8,6 +8,7 @@ import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import exceptions.CantidadJugadoresException;
 
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class VistaConsola implements IVista {
@@ -37,12 +38,20 @@ public class VistaConsola implements IVista {
         IJugador jugadorActual = controlador.getJugadorActual();
         String[] cartasEnMano = controlador.getCartas();
 
+        String cartaPilaAscendente, cartaPilaDescendente = null;
+
+        if(controlador.getCartaPilaAscendente() != null) cartaPilaAscendente = controlador.getCartaPilaAscendente().toString();
+        else cartaPilaAscendente = "[]";
+
+        if(controlador.getCartaPilaDescendente() != null) cartaPilaDescendente = controlador.getCartaPilaDescendente().toString();
+        else cartaPilaAscendente = "[]";
+
         System.out.println("================================================================");
         System.out.println("RONDA " + ronda + " ·  Turno de " + jugadorActual.getNombre());
         System.out.println("================================================================");
 
         // ▲ Ascendente (12): [7 R]      ▼ Descendente (9): [3 V]
-        System.out.println("▲ Ascendente:" + controlador.getCartaPilaAscendente() + " ▼ Descendente: " + controlador.getCartaPilaDescendente());
+        System.out.println("▲ Ascendente:" + cartaPilaAscendente + " ▼ Descendente: " + cartaPilaDescendente);
         System.out.println("----------------------------------------------------------------");
         System.out.println("Tu mano:  1) " + cartasEnMano[0] + " | " + "2) " + cartasEnMano[1]);
 
