@@ -83,13 +83,6 @@ public class TheGame extends ObservableRemoto implements ITheGame {
             if(jugadores.isEmpty()) anfitrion = null;
             else anfitrion = jugadores.peek();
         }
-        if(anfitrion == null) System.out.println("[DEBUG] anfitrion nulo");
-        else{
-            System.out.println("[DEBUG] jugador anfitrion = " + anfitrion.getNombre());
-        }
-
-        System.out.println("[DEBUG] cantidad jugadores = " + jugadores.size());
-
 
         if (estadoPartida == Eventos.JUGANDO && jugadores.size() < MINIMO_JUGADORES) {
             estadoPartida = Eventos.JUGADORES_INSUFICIENTES;
