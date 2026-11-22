@@ -32,7 +32,7 @@ public class PartidaController  extends ControladorGrafico {
 
     //Botones derecha
     @FXML
-    private Button btnPasarTurno, btnSalirDelJuego, btnVerReglas;
+    private Button btnPasarTurno, btnSalirDelJuego, btnVerReglas, btnVerHistorial;
 
     @FXML
     private TextArea textAreaLogs;
@@ -51,6 +51,11 @@ public class PartidaController  extends ControladorGrafico {
     @Override
     public void setControlador(Controlador controlador){
         super.setControlador(controlador);
+    }
+
+
+    public void onVerHistorial(){
+        controlador.verHistorial();
     }
 
 

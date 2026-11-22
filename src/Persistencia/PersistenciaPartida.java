@@ -3,20 +3,19 @@ package Persistencia;
 import java.io.*;
 
 public class PersistenciaPartida {
-    public static final String ARCHIVO_POR_DEFECTO = "chat_sesion.dat";
+    public static final String ARCHIVO_POR_DEFECTO = "historialTheGame.dat";
 
-    private PersistenciaPartida() {
-    }
+    private PersistenciaPartida() {}
 
-    public static void guardar(SesionPartida sesion, String rutaArchivo) throws IOException {
+    public static void guardar(HistorialJugadores historial, String rutaArchivo) throws IOException {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
-            oos.writeObject(sesion);
+            oos.writeObject(historial);
         }
     }
 
-    public static SesionPartida recuperar(String rutaArchivo) throws IOException, ClassNotFoundException {
+    public static HistorialJugadores recuperar(String rutaArchivo) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
-            return (SesionPartida) ois.readObject();
+            return (HistorialJugadores) ois.readObject();
         }
     }
 

@@ -19,6 +19,7 @@ public class VistaGrafica implements IVista {
     MenuPrincipalController menuPrincipalController;
     PartidaController partidaController;
     MenuFinDePartidaController menuFinDePartidaController;
+    HistorialController historialController;
 
     public VistaGrafica(Stage stage, Controlador controlador){
         this.controlador = controlador;
@@ -110,6 +111,15 @@ public class VistaGrafica implements IVista {
             menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
             menuFinDePartidaController.setControlador(controlador);
             menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: Cantidad de jugadores insuficiente");
+        });
+    }
+
+    @Override
+    public void mostrarHistorial() {
+        Platform.runLater(() ->{
+            historialController = cargar("/Vista/VistaGrafica/GUI/historial.fxml");
+            historialController.setControlador(controlador);
+            historialController.mostrarHistorial(controlador.recuperarHistorialCompleto());
         });
     }
 

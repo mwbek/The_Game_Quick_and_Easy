@@ -11,4 +11,5 @@ public interface IVista {
     void actualizarListaJugadores();
     void actualizarJugadorSalio();
     void jugadoresInsuficientes();
+    void mostrarHistorial();
 }

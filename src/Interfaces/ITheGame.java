@@ -5,6 +5,7 @@ import Enumerados.Eventos;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.UUID;
 
@@ -27,4 +28,6 @@ public interface ITheGame extends IObservableRemoto {
     public void cerrar(IObservadorRemoto controlador, IJugador jugador) throws RemoteException;
     public IJugador getUltimoJugadorQueSalio() throws RemoteException;
     public void resetarPartida() throws RemoteException;
+    void guardarPartida(IJugador jugador) throws RemoteException;
+
 }

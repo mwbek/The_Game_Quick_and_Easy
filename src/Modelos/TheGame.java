@@ -3,6 +3,9 @@ package Modelos;
 import Enumerados.CartaDeIndicacion;
 import Enumerados.Eventos;
 import Interfaces.*;
+import Persistencia.EstadisticaJugador;
+import Persistencia.HistorialJugadores;
+import Persistencia.PersistenciaPartida;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import exceptions.CantidadJugadoresException;
@@ -10,7 +13,7 @@ import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 import exceptions.PartidaIniciadaException;
 
-import java.rmi.Remote;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -32,12 +35,41 @@ public class TheGame extends ObservableRemoto implements ITheGame {
 
     private int rondaActual;
 
+    private final String archivoPersistencia;
+
 
     public TheGame() {
+
+        this(PersistenciaPartida.ARCHIVO_POR_DEFECTO);
+
         pilaDescendente = new PilaDeIndicacion(CartaDeIndicacion.DESCENDENTE);
         pilaAscendente = new PilaDeIndicacion(CartaDeIndicacion.ASCENDENTE);
         jugadores = new ArrayDeque<>();
         estadoPartida = Eventos.SIN_INICIAR;
+    }
+
+    public TheGame(String archivoPersistencia) {
+        this.archivoPersistencia = archivoPersistencia;
+        if (PersistenciaPartida.existeArchivo(archivoPersistencia)) {
+            try {
+                Persistencia.HistorialJugadores historial = PersistenciaPartida.recuperar(archivoPersistencia);
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("No se pudo recuperar el historial del jugador" + e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void guardarPartida(IJugador jugador) throws RemoteException {
+        try {
+            if(jugador != null){
+                HistorialJugadores historial = PersistenciaPartida.recuperar(archivoPersistencia);
+                PersistenciaPartida.guardar(historial, archivoPersistencia);
+
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RemoteException("Error al persistir la partida" + e.getMessage(), e);
+        }
     }
 
     ///

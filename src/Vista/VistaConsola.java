@@ -138,6 +138,11 @@ public class VistaConsola implements IVista {
         mostrarMensaje("[PARTIDA FINALIZADA] - CANTIDAD INSUFICIENTE DE JUGADORES");
     }
 
+    @Override
+    public void mostrarHistorial() {
+
+    }
+
     private void mostrarMenuJugador(){
         System.out.println("1) Jugar carta  2) Pasar turno   0) Salir");
         int opcion = pedirInput("Ingresa una de las opciones: ");
