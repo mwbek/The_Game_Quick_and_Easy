@@ -147,13 +147,13 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     /// @throws MovimientoInvalidoException Se lanza cuando la partida no esta inicializada o cuando no se esta jugando.
     /// @throws MovimientoInvalidoException Se lanza cuando el jugador no puede pasar de ronda
     @Override
-    public void pasarDeRonda(IJugador jugadorVista) throws RemoteException {
+    public void pasarDeRonda(IJugador jugadorTurno) throws RemoteException {
 
         //Validaciones / programacion defensiva
         if(estadoPartida == Eventos.SIN_INICIAR) throw new MovimientoInvalidoException("La partida no inicio");
         if(estadoPartida != Eventos.JUGANDO) throw new MovimientoInvalidoException("Partida finalizada");
 
-        IJugador jugador = getJugador(jugadorVista.getId());
+        IJugador jugador = getJugador(jugadorTurno.getId());
         if(jugador == null) throw new IllegalArgumentException("Jugador no puede ser nulo");
         if(jugador != jugadorActual) throw new MovimientoInvalidoException("No puede pasar de ronda actualmente");
         if(!jugadorPuedePasarRonda(jugador)) throw new MovimientoInvalidoException("Para pasar de ronda debe jugar al menos una carta");
@@ -198,12 +198,12 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     /// @throws CartaNoExisteException Si la carta no esta en la mano
     /// @throws MovimientoInvalidoException No fue posible agregar la carta a la pila
     @Override
-    public void jugarCarta(IJugador jugadorVista, CartaDeIndicacion tipoPila, int indiceCarta) throws RemoteException{
+    public void jugarCarta(IJugador jugadorTurno, CartaDeIndicacion tipoPila, int indiceCarta) throws RemoteException{
 
         if(estadoPartida == Eventos.SIN_INICIAR) throw new PartidaIniciadaException("La partida no inicio");
         if(estadoPartida != Eventos.JUGANDO) throw new MovimientoInvalidoException("Partida finalizada");
 
-        IJugador jugador = getJugador(jugadorVista.getId());
+        IJugador jugador = getJugador(jugadorTurno.getId());
         if(!jugador.equals(jugadorActual)) throw new MovimientoInvalidoException("[Jugada invalida] - Es turno del jugador " + jugadorActual.getNombre());
 
 
