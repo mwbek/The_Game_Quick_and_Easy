@@ -51,17 +51,20 @@ public class PartidaController  extends ControladorGrafico {
     @Override
     public void setControlador(Controlador controlador){
         super.setControlador(controlador);
-        inicializar();
     }
 
 
-    private void inicializar(){
-        int cantidadJugadores = controlador.getCantidadJugadores();
-        int cartasRestantes = controlador.getCantidadRestanteMazo();
+    public void actualizarBarraSuperior()
+    {
+        if(controlador != null){
+            int cantidadJugadores = controlador.getCantidadJugadores();
+            int cartasRestantes = controlador.getCantidadRestanteMazo();
 
-        lbCantidadJugadores.setText("Jugadores: " + cantidadJugadores);
-        lbCartasRestantes.setText("Cartas restantes: " + cartasRestantes);
+            lbCantidadJugadores.setText("Jugadores: " + cantidadJugadores);
+            lbCartasRestantes.setText("Cartas restantes: " + cartasRestantes);
+        }
     }
+
 
     public void actualizarTurno() {
         boolean esMiTurno = controlador.esTurno();
@@ -86,7 +89,6 @@ public class PartidaController  extends ControladorGrafico {
                 nodo.getStyleClass().add("turnoJugador");
             }
         }
-
 
     }
 
