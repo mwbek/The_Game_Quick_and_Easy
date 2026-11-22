@@ -205,7 +205,7 @@ public class PartidaController  extends ControladorGrafico {
         nombre.getStyleClass().add("nombre-jugador");
 
         if(jugador.equals(controlador.getAnfitrion())) lbAnfitrion = new Label("ANFITRION");
-        else lbAnfitrion = new Label("Cartas: " + jugador.getCantidadCartasEnMano());
+        else lbAnfitrion = new Label("");
 
         lbAnfitrion.getStyleClass().add("cartas-jugador");
 
