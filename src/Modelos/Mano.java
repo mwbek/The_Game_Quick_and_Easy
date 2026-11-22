@@ -43,8 +43,8 @@ public class Mano implements IMano, Serializable {
         if(!cartas.remove(carta)) throw new CartaNoExisteException("La carta que se quiso remover no existe");
     }
     @Override
-    public Carta[] getMano(){
-        Carta[] mano = new Carta[cartas.size()];
+    public ICarta[] getMano(){
+        ICarta[] mano = new Carta[cartas.size()];
         mano = cartas.toArray(mano);
         return mano;
 
