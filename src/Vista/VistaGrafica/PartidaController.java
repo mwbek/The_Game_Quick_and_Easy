@@ -194,7 +194,7 @@ public class PartidaController  extends ControladorGrafico {
 
     private VBox agregarJugador(IJugador jugador) {
         VBox nuevoContenedorHijo = new VBox();
-
+        Label lbAnfitrion;
         //Le pongo un ID para poder eliminarlo despues segun el jugador que se vaya
         nuevoContenedorHijo.setId(jugador.getId().toString());
 
@@ -204,11 +204,13 @@ public class PartidaController  extends ControladorGrafico {
         Label nombre = new Label(jugador.getNombre());
         nombre.getStyleClass().add("nombre-jugador");
 
-        Label cartas = new Label("Cartas: " + jugador.getCantidadCartasEnMano());
-        cartas.getStyleClass().add("cartas-jugador");
+        if(jugador.equals(controlador.getAnfitrion())) lbAnfitrion = new Label("ANFITRION");
+        else lbAnfitrion = new Label("Cartas: " + jugador.getCantidadCartasEnMano());
+
+        lbAnfitrion.getStyleClass().add("cartas-jugador");
 
         VBox.setMargin(nuevoContenedorHijo, new Insets(2,8,2,8));
-        nuevoContenedorHijo.getChildren().addAll(nombre, cartas);
+        nuevoContenedorHijo.getChildren().addAll(nombre, lbAnfitrion);
 
         contenedorJugador.getChildren().add(nuevoContenedorHijo);
 
