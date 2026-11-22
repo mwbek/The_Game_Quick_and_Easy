@@ -95,7 +95,7 @@ public class Controlador implements IControladorRemoto {
                             vista.mostrarMensaje("- [" + jugadorQueSalio.getNombre() + "] salió de la partida");
                         }
 
-                        //Para la interfaz grafica
+
                         vista.actualizarJugadorSalio();
                         vista.actualizarListaJugadores();
 
