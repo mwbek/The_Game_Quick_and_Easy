@@ -2,10 +2,7 @@ package Modelos;
 
 import Enumerados.CartaDeIndicacion;
 import Enumerados.Eventos;
-import Interfaces.ICarta;
-import Interfaces.IJugador;
-import Interfaces.IMazo;
-import Interfaces.ITheGame;
+import Interfaces.*;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import exceptions.CantidadJugadoresException;
@@ -29,9 +26,9 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     private IJugador ultimoQueSalio;
     private final int MINIMO_JUGADORES = 2;
 
-    //Con las pilas aplico polimorfismo usando la intefaz 'PilaDeIndicacion'
-    private PilaDeIndicacion pilaDescendente;
-    private PilaDeIndicacion pilaAscendente;
+    //Con las pilas aplico polimorfismo usando la intefaz 'IPilaDeIndicacion'
+    private IPilaDeIndicacion pilaDescendente;
+    private IPilaDeIndicacion pilaAscendente;
 
     private int rondaActual;
 

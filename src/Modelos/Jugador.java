@@ -1,9 +1,6 @@
 package Modelos;
 import Enumerados.CartaDeIndicacion;
-import Interfaces.ICarta;
-import Interfaces.IJugador;
-import Interfaces.IMano;
-import Interfaces.IMazo;
+import Interfaces.*;
 import exceptions.CartaNoExisteException;
 import exceptions.MovimientoInvalidoException;
 
@@ -47,7 +44,7 @@ public class Jugador implements IJugador, Serializable {
     /// @exception CartaNoExisteException Si la carta no esta en la mano
     /// @exception MovimientoInvalidoException Si no es posible agregar la carta a la pila seleccionada
     @Override
-    public void jugarCarta(PilaDeIndicacion pila, ICarta carta) {
+    public void jugarCarta(IPilaDeIndicacion pila, ICarta carta) {
 
         if(!mano.contiene(carta)) throw new CartaNoExisteException("La carta no esta en la mano");
         if(!pila.agregarCarta((carta)))  throw new MovimientoInvalidoException("No se puede agregar la carta en la pila");
