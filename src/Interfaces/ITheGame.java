@@ -21,7 +21,6 @@ public interface ITheGame extends IObservableRemoto {
     public int getCantidadCartasMazo() throws RemoteException;
     public ICarta getUltimaCartaAscendente() throws RemoteException;
     public ICarta getUltimaCartaDescendente() throws RemoteException;
-    public void chequearEstadoPartida() throws RemoteException;
     public IJugador getJugador(UUID id) throws RemoteException;
     public IJugador getAnfitrion() throws RemoteException;
     public IJugador getUltimoJugadorAgregado() throws RemoteException;

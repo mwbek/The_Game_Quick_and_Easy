@@ -237,8 +237,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
         return pilaDescendente.getUltimaCarta();
     }
 
-    @Override
-    public void chequearEstadoPartida() throws RemoteException
+    private void chequearEstadoPartida() throws RemoteException
     {
         if(mazo.esVacio() && jugadoresNoTienenMasCartas()) {
             estadoPartida = Eventos.GANARON;
