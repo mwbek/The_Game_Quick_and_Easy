@@ -40,6 +40,7 @@ public class VistaGrafica implements IVista {
             partidaController.actualizarCartasMano();
             partidaController.actualizarCartasPila();
             partidaController.actualizarTurno();
+            partidaController.actualizarBarraSuperior();
         });
     }
 
@@ -119,6 +120,9 @@ public class VistaGrafica implements IVista {
             if(menuPrincipalController != null && !controlador.seInicioLaPartida()){
                 menuPrincipalController.actualizarListaLobby();
             }
+            if(partidaController != null && controlador.seInicioLaPartida()){
+                partidaController.actualizarTurno();
+            }
         });
     }
 
@@ -130,6 +134,7 @@ public class VistaGrafica implements IVista {
 
             if(partidaController != null  && controlador.seInicioLaPartida()){
                 partidaController.actualizarListaDeJugadores();
+                partidaController.actualizarBarraSuperior();
             }
         });
 
