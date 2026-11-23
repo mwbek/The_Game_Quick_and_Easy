@@ -23,7 +23,7 @@ public class MenuPrincipalController extends ControladorGrafico {
     @FXML
     private ListView<String> jugadoresEnSala;
 
-    String nombre;
+    private String nombre;
 
 
 
