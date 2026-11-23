@@ -13,7 +13,12 @@ public class PersistenciaPartida {
         }
     }
 
-    public static HistorialJugadores recuperar(String rutaArchivo) throws IOException, ClassNotFoundException {
+    public static HistorialJugadores recuperar(String rutaArchivo)
+            throws IOException, ClassNotFoundException {
+        if (!existeArchivo(rutaArchivo)) {
+            //Si el archivo no existe, lo creo
+            return new HistorialJugadores();
+        }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
             return (HistorialJugadores) ois.readObject();
         }

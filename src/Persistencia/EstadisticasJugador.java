@@ -1,13 +1,16 @@
 package Persistencia;
 
-public class EstadisticaJugador {
+import java.io.Serializable;
+
+/// Esta clase se encarga de representar las estadisticas del jugador
+public class EstadisticasJugador implements Serializable {
 
     private final String nombre;
     private int ganadas;
     private int perdidas;
     private int abandonos;
 
-    public EstadisticaJugador(String nombre) {
+    public EstadisticasJugador(String nombre) {
         this.nombre = nombre;
     }
 
