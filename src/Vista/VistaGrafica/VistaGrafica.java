@@ -74,16 +74,24 @@ public class VistaGrafica implements IVista {
     @Override
     public void iniciar() {
 
+        if(controlador.seInicioLaPartida()){
+            Alert alerta = new Alert(Alert.AlertType.WARNING);
+            alerta.setTitle("THE GAME");
+            alerta.setHeaderText("Partida en curso");
+            alerta.setContentText("La partida ya comenzó y no se pueden unir nuevos jugadores.");
+            alerta.showAndWait();
+            controlador.cerrarApp();
+            return;
+        }
+
         stagePrincipal.setOnCloseRequest(e -> this.salir());
         menuPrincipalController = cargar(stagePrincipal,"/Vista/VistaGrafica/GUI/menuPrincipal.fxml");
         menuPrincipalController.setControlador(controlador);
-        stagePrincipal.setTitle("THE GAME - Registro de jugador");
+        stagePrincipal.setTitle("THE GAME - LOBBY");
 
         Platform.runLater(() ->{
             menuPrincipalController.actualizarListaLobby();
         });
-
-
 
     }
 
