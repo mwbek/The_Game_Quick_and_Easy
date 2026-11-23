@@ -73,14 +73,14 @@ public class AppCliente extends Application {
 
     private Optional<String> elegir(String pregunta, List<String> opciones) {
         ChoiceDialog<String> dialogo = new ChoiceDialog<>(opciones.get(0), opciones);
-        dialogo.setTitle("Conexión al Chat");
+        dialogo.setTitle("Conexión a partida de THE GAME");
         dialogo.setHeaderText(pregunta);
         return salirSiCancela(dialogo.showAndWait());
     }
 
     private Optional<String> preguntar(String pregunta, String porDefecto) {
         TextInputDialog dialogo = new TextInputDialog(porDefecto);
-        dialogo.setTitle("Conexión al Chat");
+        dialogo.setTitle("Conexión a partida de THE GAME");
         dialogo.setHeaderText(pregunta);
         return salirSiCancela(dialogo.showAndWait());
     }
