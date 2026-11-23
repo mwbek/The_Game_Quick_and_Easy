@@ -32,6 +32,10 @@ public class VistaGrafica implements IVista {
     @Override
     public void mostrarHUDJugador() {
 
+        if(controlador.seReseteoLaPartida()){
+            partidaController = null;
+        }
+
         Platform.runLater(() -> {
             //Cargo la vista una sola vez, despues voy actualizando
             if (partidaController == null) {

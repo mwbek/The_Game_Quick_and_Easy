@@ -30,7 +30,7 @@ public class Controlador implements IControladorRemoto {
     private ITheGame juego;
     private  IJugador jugador;
     private HistorialJugadores historialJugador;
-
+    private boolean partidaReseteada = false;
     public Controlador(){
     }
 
@@ -181,8 +181,7 @@ public class Controlador implements IControladorRemoto {
     public ObservableList<IJugador> getListaJugadores(){
         try{
             List<IJugador> jugadores = Arrays.stream(juego.getJugadores()).toList();
-            ObservableList<IJugador> listaJugadores = FXCollections.observableList(jugadores);
-            return  listaJugadores;
+            return FXCollections.observableList(jugadores);
 
         } catch (RemoteException e) {
             vista.mostrarError("No se pudo obtener la lista de jugadores: " + e.getMessage());
@@ -226,8 +225,7 @@ public class Controlador implements IControladorRemoto {
 
     public boolean seInicioLaPartida(){
         try{
-            if(juego.getEstadoPartida() == SIN_INICIAR) return false;
-            return true;
+            return juego.getEstadoPartida() != SIN_INICIAR;
         }catch (RemoteException e) {
             vista.mostrarError("Error al obtener el estado de la partida: " + e.getMessage());
             return true;
@@ -235,17 +233,17 @@ public class Controlador implements IControladorRemoto {
 
     }
 
-    public boolean partidaPuedeComenzar(){
-        try{
-            if(juego.getJugadores().length > 1){
-                return true;
-            }
-            return false;
-        } catch (RemoteException e) {
-            vista.mostrarError("Error al comenzar partida: " + e.getMessage());
-            return false;
-        }
-    }
+//    public boolean partidaPuedeComenzar(){
+//        try{
+//            if(juego.getJugadores().length > 1){
+//                return true;
+//            }
+//            return false;
+//        } catch (RemoteException e) {
+//            vista.mostrarError("Error al comenzar partida: " + e.getMessage());
+//            return false;
+//        }
+//    }
 
     public int getRondaActual(){
         try{
@@ -290,7 +288,6 @@ public class Controlador implements IControladorRemoto {
 
 
     public void jugarCarta(int indiceCarta, int indicePila){
-        //TODO: Agregar programacion defensiva/Validaciones a los parametros
         try{
             indiceCarta--; //Resto uno al indice de carta porque se pasa 1 y 2
             if (indicePila == 1)juego.jugarCarta(jugador,CartaDeIndicacion.ASCENDENTE, indiceCarta);
@@ -343,9 +340,14 @@ public class Controlador implements IControladorRemoto {
     private void resetearPartida(){
         try{
             juego.resetarPartida();
+            partidaReseteada = true;
         } catch (RemoteException e) {
             vista.mostrarError("Error al conectar con el servidor: " + e.getMessage());
         }
+    }
+
+    public boolean seReseteoLaPartida(){
+        return partidaReseteada;
     }
 
     public void volverAJugar(){
@@ -362,6 +364,7 @@ public class Controlador implements IControladorRemoto {
                 IMazo mazo = new Mazo();
                 mazo.mezclarMazo();
                 juego.inicializarPartida(mazo);
+                partidaReseteada = false;
             }
             else{
                 vista.mostrarError("Solo el anfitrion (" + juego.getAnfitrion().getNombre() + ") " + "puede comenzar la partida");
