@@ -4,9 +4,8 @@ import Enumerados.CartaDeIndicacion;
 import Enumerados.Eventos;
 import Interfaces.*;
 import Modelos.*;
-import Persistencia.EstadisticaJugador;
+import Persistencia.EstadisticasJugador;
 import Persistencia.HistorialJugadores;
-import Persistencia.PersistenciaPartida;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import exceptions.CantidadJugadoresException;
@@ -17,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
@@ -99,11 +99,6 @@ public class Controlador implements IControladorRemoto {
                         if (jugadorQueSalio != null && !jugadorQueSalio.equals(jugador)) {
                             vista.mostrarMensaje("- [" + jugadorQueSalio.getNombre() + "] salió de la partida");
                         }
-
-                        historialJugador.registrarAbandono(jugadorQueSalio.getNombre());
-                        guardarPartida();
-
-
                         vista.actualizarJugadorSalio();
                         vista.actualizarListaJugadores();
 
@@ -113,13 +108,9 @@ public class Controlador implements IControladorRemoto {
                     break;
                 case GANARON:
                     vista.jugadoresGanaron();
-                    historialJugador.registrarVictoria(jugador.getNombre());
-                    guardarPartida();
                     break;
                 case PERDIERON:
                     vista.jugadoresPerdieron();
-                    historialJugador.registrarDerrota(jugador.getNombre());
-                    guardarPartida();
                     break;
 
                 case JUGADORES_INSUFICIENTES:
@@ -132,23 +123,17 @@ public class Controlador implements IControladorRemoto {
 
     }
 
-    private void guardarPartida() {
-        try{
-            if(jugador != null && juego != null){
-                juego.guardarPartida(jugador);
-            }
-        } catch (IOException e) {
-            vista.mostrarError("No se pudo guardar la partida:" + e.getMessage());
-        }
-    }
 
-    //Retorna el historial de todos los jugadores
-    public List<EstadisticaJugador> recuperarHistorialCompleto(){
-        return historialJugador.getEstadisticas();
-    }
 
     public void verHistorial(){
-        vista.mostrarHistorial();
+        try{
+            List<EstadisticasJugador> estadisticasJugadores = juego.getHistorial();
+            vista.mostrarHistorial(estadisticasJugadores);
+        }
+        catch (RemoteException e) {
+            vista.mostrarError("Error al conectar con el servidor: " + e.getMessage());
+        }
+
     }
 
 
