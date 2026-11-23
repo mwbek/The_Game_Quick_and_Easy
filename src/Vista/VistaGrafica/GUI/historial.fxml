@@ -4,15 +4,14 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="Vista.VistaGrafica.HistorialController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vista.VistaGrafica.HistorialController">
    <center>
       <TableView fx:id="tablaHistorial" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="75.0" text="Jugador" />
-          <TableColumn prefWidth="75.0" text="Ganadas" />
-            <TableColumn prefWidth="75.0" text="Perdidas" />
-            <TableColumn prefWidth="75.0" text="Abandonos" />
+          <TableColumn fx:id="CNombre" prefWidth="75.0" text="Jugador" />
+          <TableColumn fx:id="CGanadas" prefWidth="75.0" text="Ganadas" />
+            <TableColumn fx:id="CPerdidas" prefWidth="75.0" text="Perdidas" />
+            <TableColumn fx:id="CAbandonos" prefWidth="75.0" text="Abandonos" />
         </columns>
       </TableView>
    </center>
