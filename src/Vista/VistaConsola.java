@@ -15,8 +15,7 @@ import java.util.Scanner;
 
 public class VistaConsola implements IVista {
 
-    public final Controlador controlador;
-
+    private final Controlador controlador;
     private final Scanner sc;
     private boolean ejecutando;
     private boolean menuPendiente;
@@ -200,7 +199,7 @@ public class VistaConsola implements IVista {
 
 
 
-
+    @Override
     public void mostrarError(String mensajeError) {
         System.out.println(" [!] ERROR - " + mensajeError);
     }
@@ -210,7 +209,7 @@ public class VistaConsola implements IVista {
     //SOLICITUD DE DATOS
     //=======================
 
-    public int pedirInput(String mensaje) {
+    private int pedirInput(String mensaje) {
         int numero;
         while (true) {
             System.out.print(mensaje);
