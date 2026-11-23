@@ -1,10 +1,14 @@
 package Vista.VistaGrafica;
 
+import Interfaces.IJugador;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuPrincipalController extends ControladorGrafico {
 
@@ -40,7 +44,20 @@ public class MenuPrincipalController extends ControladorGrafico {
     }
 
     public void actualizarListaLobby(){
-        jugadoresEnSala.getItems().setAll(controlador.getListaJugadores().stream().map((j) -> j.getNombre()).toList());
+
+        IJugador anfitrion = controlador.getAnfitrion();
+
+        List<String> nombres = controlador.getListaJugadores().stream().map(j -> {
+                    if (j.equals(anfitrion)) {
+                        return j.getNombre() + " (Anfitrión)";
+                    } else {
+                        return j.getNombre();
+                    }
+                }).toList();
+
+        jugadoresEnSala.getItems().setAll(nombres);
+
+        //jugadoresEnSala.getItems().setAll(controlador.getListaJugadores().stream().map((j) -> j.getNombre()).toList());
     }
 
     public void actualizarMensajeAnfitrion(){
