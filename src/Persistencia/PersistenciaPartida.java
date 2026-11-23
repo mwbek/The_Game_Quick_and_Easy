@@ -24,7 +24,7 @@ public class PersistenciaPartida {
         }
     }
 
-    public static boolean existeArchivo(String rutaArchivo) {
+    private static boolean existeArchivo(String rutaArchivo) {
         if (rutaArchivo == null) {
             return false;
         }
