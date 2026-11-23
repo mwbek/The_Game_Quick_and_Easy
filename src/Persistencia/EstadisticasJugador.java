@@ -11,7 +11,7 @@ public class EstadisticasJugador implements Serializable {
     private int abandonos;
 
     public EstadisticasJugador(String nombre) {
-        this.nombre = nombre;
+        this.nombre = nombre.toUpperCase();
     }
 
     public void registrarVictoria()  { ganadas++; }
