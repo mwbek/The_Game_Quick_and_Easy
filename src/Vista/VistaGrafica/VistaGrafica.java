@@ -127,6 +127,7 @@ public class VistaGrafica implements IVista {
             stageHistorial.close();
         }
         stageHistorial = new Stage();
+        stageHistorial.setTitle("Historial de partidas");
         Platform.runLater(() ->{
             historialController = cargar(stageHistorial,"/Vista/VistaGrafica/GUI/historial.fxml");
 
