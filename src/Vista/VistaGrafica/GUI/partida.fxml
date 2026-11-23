@@ -150,10 +150,13 @@
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btnVerHistorial" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Historial" onAction="#onVerHistorial">
+            <Button fx:id="btnVerHistorial" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onVerHistorial" text="Historial">
                <font>
                   <Font size="18.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </VBox.margin>
             </Button>
             <Button fx:id="btnSalirDelJuego" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSalir" text="Salir">
                <font>
