@@ -26,6 +26,10 @@ public class MenuFinDePartidaController extends ControladorGrafico {
         controlador.cerrarApp();;
     }
 
+    public void onVerHistorial(){
+        controlador.verHistorial();
+    }
+
     public void onVolverAJugar(){
         //Puedo volver a iniciar la partida porque el reseteo del juego se hace en cada evento que finalice el juego
         controlador.volverAJugar();

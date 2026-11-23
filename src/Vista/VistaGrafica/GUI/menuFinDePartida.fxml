@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="menuFinDeJuego" stylesheets="@css/menuFinDePartida.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Vista.VistaGrafica.MenuFinDePartidaController">
    <top>
       <Label fx:id="lbFinPartida" text="PARTIDA TERMINADA: GANAN LOS JUGADORES" textAlignment="CENTER" textFill="WHITE" wrapText="true" BorderPane.alignment="CENTER">
@@ -22,7 +21,7 @@
    <center>
       <HBox alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnVolverAJugar" onAction="#onVolverAJugar" mnemonicParsing="false" text="Volver a jugar">
+            <Button fx:id="btnVolverAJugar" mnemonicParsing="false" onAction="#onVolverAJugar" text="Volver a jugar">
                <HBox.margin>
                   <Insets left="35.0" right="35.0" />
                </HBox.margin>
@@ -33,7 +32,15 @@
                   <Insets bottom="5.0" left="35.0" right="35.0" top="5.0" />
                </padding>
             </Button>
-            <Button fx:id="btnSalir" onAction="#onSalir" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Salir">
+            <Button fx:id="btnVerHistorial" mnemonicParsing="false" onAction="#onVerHistorial" text="Ver historial">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <padding>
+                  <Insets bottom="5.0" left="35.0" right="35.0" top="5.0" />
+               </padding>
+            </Button>
+            <Button fx:id="btnSalir" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onSalir" text="Salir">
                <HBox.margin>
                   <Insets left="35.0" right="35.0" />
                </HBox.margin>
