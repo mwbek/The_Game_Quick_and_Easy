@@ -4,10 +4,12 @@ import Controladores.Controlador;
 import Interfaces.IJugador;
 import Interfaces.IVista;
 
+import Persistencia.EstadisticasJugador;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import exceptions.CantidadJugadoresException;
 
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -139,9 +141,10 @@ public class VistaConsola implements IVista {
     }
 
     @Override
-    public void mostrarHistorial() {
+    public void mostrarHistorial(List<EstadisticasJugador> estadisticas) {
 
     }
+
 
     private void mostrarMenuJugador(){
         System.out.println("1) Jugar carta  2) Pasar turno   0) Salir");

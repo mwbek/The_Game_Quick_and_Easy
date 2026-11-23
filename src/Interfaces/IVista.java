@@ -1,5 +1,9 @@
 package Interfaces;
 
+import Persistencia.EstadisticasJugador;
+
+import java.util.List;
+
 public interface IVista {
     void mostrarHUDJugador();
     public void mostrarMensaje(String mensaje);
@@ -11,5 +15,5 @@ public interface IVista {
     void actualizarListaJugadores();
     void actualizarJugadorSalio();
     void jugadoresInsuficientes();
-    void mostrarHistorial();
+    void mostrarHistorial(List<EstadisticasJugador> estadisticas);
 }

@@ -2,6 +2,7 @@ package Vista.VistaGrafica;
 
 import Controladores.Controlador;
 import Interfaces.IVista;
+import Persistencia.EstadisticasJugador;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,10 +12,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.List;
 
 public class VistaGrafica implements IVista {
 
-    private final Stage stage;
+    private final Stage stagePrincipal;
+    private Stage stageHistorial;
     private final Controlador controlador;
     MenuPrincipalController menuPrincipalController;
     PartidaController partidaController;
@@ -23,7 +26,7 @@ public class VistaGrafica implements IVista {
 
     public VistaGrafica(Stage stage, Controlador controlador){
         this.controlador = controlador;
-        this.stage = stage;
+        this.stagePrincipal = stage;
     }
 
     @Override
@@ -32,9 +35,9 @@ public class VistaGrafica implements IVista {
         Platform.runLater(() -> {
             //Cargo la vista una sola vez, despues voy actualizando
             if (partidaController == null) {
-                partidaController = cargar("/Vista/VistaGrafica/GUI/partida.fxml");
+                partidaController = cargar(stagePrincipal,"/Vista/VistaGrafica/GUI/partida.fxml");
                 partidaController.setControlador(controlador);
-                stage.setTitle("THE GAME");
+                stagePrincipal.setTitle("THE GAME");
             }
 
             partidaController.actualizarListaDeJugadores();
@@ -57,7 +60,7 @@ public class VistaGrafica implements IVista {
     public void mostrarError(String mensajeError) {
         Platform.runLater(() -> {
             Alert alerta = new Alert(Alert.AlertType.ERROR);
-            alerta.initOwner(stage);      //Este metodo hace que se muestre encima de la ventana padre (stage)
+            alerta.initOwner(stagePrincipal);      //Este metodo hace que se muestre encima de la ventana padre (stage)
             alerta.setTitle("Error");
             alerta.setHeaderText(null);
             alerta.setContentText(mensajeError);
@@ -67,10 +70,10 @@ public class VistaGrafica implements IVista {
     @Override
     public void iniciar() {
 
-        stage.setOnCloseRequest(e -> this.salir());
-        menuPrincipalController = cargar("/Vista/VistaGrafica/GUI/menuPrincipal.fxml");
+        stagePrincipal.setOnCloseRequest(e -> this.salir());
+        menuPrincipalController = cargar(stagePrincipal,"/Vista/VistaGrafica/GUI/menuPrincipal.fxml");
         menuPrincipalController.setControlador(controlador);
-        stage.setTitle("THE GAME - Registro de jugador");
+        stagePrincipal.setTitle("THE GAME - Registro de jugador");
 
         Platform.runLater(() ->{
             menuPrincipalController.actualizarListaLobby();
@@ -82,13 +85,17 @@ public class VistaGrafica implements IVista {
 
     @Override
     public void salir() {
+        //Cierro la ventana del historial si quedo abierta
+        if(stageHistorial != null){
+            stageHistorial.close();
+        }
         controlador.cerrarApp();
     }
 
     @Override
     public void jugadoresGanaron() {
         Platform.runLater(() ->{
-            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
+            menuFinDePartidaController = cargar(stagePrincipal,"/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
             menuFinDePartidaController.setControlador(controlador);
             menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: LOS JUGADORES GANARON");
         });
@@ -98,7 +105,7 @@ public class VistaGrafica implements IVista {
     @Override
     public void jugadoresPerdieron() {
         Platform.runLater(() ->{
-            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
+            menuFinDePartidaController = cargar(stagePrincipal,"/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
             menuFinDePartidaController.setControlador(controlador);
             menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: LOS JUGADORES PERDIERON");
         });
@@ -108,18 +115,23 @@ public class VistaGrafica implements IVista {
     @Override
     public void jugadoresInsuficientes() {
         Platform.runLater(() ->{
-            menuFinDePartidaController = cargar("/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
+            menuFinDePartidaController = cargar(stagePrincipal,"/Vista/VistaGrafica/GUI/menuFinDePartida.fxml");
             menuFinDePartidaController.setControlador(controlador);
             menuFinDePartidaController.setMensaje("PARTIDA TERMINADA: Cantidad de jugadores insuficiente");
         });
     }
 
     @Override
-    public void mostrarHistorial() {
+    public void mostrarHistorial(List<EstadisticasJugador> estadisticas) {
+        if(stageHistorial != null){
+            stageHistorial.close();
+        }
+        stageHistorial = new Stage();
         Platform.runLater(() ->{
-            historialController = cargar("/Vista/VistaGrafica/GUI/historial.fxml");
+            historialController = cargar(stageHistorial,"/Vista/VistaGrafica/GUI/historial.fxml");
+
             historialController.setControlador(controlador);
-            historialController.mostrarHistorial(controlador.recuperarHistorialCompleto());
+            historialController.mostrarHistorial(estadisticas);
         });
     }
 
@@ -151,7 +163,7 @@ public class VistaGrafica implements IVista {
     }
 
 
-    private <T> T cargar(String rutaFxml) {
+    private <T> T cargar(Stage stage, String rutaFxml) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFxml));
             Parent root = loader.load();
