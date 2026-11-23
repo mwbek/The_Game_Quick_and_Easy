@@ -5,7 +5,7 @@ import Enumerados.Eventos;
 import Interfaces.*;
 import Modelos.*;
 import Persistencia.EstadisticasJugador;
-import Persistencia.HistorialJugadores;
+
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import exceptions.CantidadJugadoresException;
@@ -15,8 +15,6 @@ import exceptions.PartidaIniciadaException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.IOException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +27,6 @@ public class Controlador implements IControladorRemoto {
     private IVista vista;
     private ITheGame juego;
     private  IJugador jugador;
-    private HistorialJugadores historialJugador;
     private boolean partidaReseteada = false;
     public Controlador(){
     }
@@ -255,6 +252,7 @@ public class Controlador implements IControladorRemoto {
 
     }
 
+    //TODO Remover si no tiene uso
     public String[] getCartas(){
         String[] cartasTexto = {"[]", "[]"};
         // IJugador jugadorVista = juego.getJugador(jugador.getId());
