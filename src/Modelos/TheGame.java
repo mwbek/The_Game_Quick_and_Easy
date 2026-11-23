@@ -3,7 +3,7 @@ package Modelos;
 import Enumerados.CartaDeIndicacion;
 import Enumerados.Eventos;
 import Interfaces.*;
-import Persistencia.EstadisticaJugador;
+import Persistencia.EstadisticasJugador;
 import Persistencia.HistorialJugadores;
 import Persistencia.PersistenciaPartida;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
@@ -36,7 +36,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     private int rondaActual;
 
     private final String archivoPersistencia;
-
+    private HistorialJugadores historial;
 
     public TheGame() {
 
@@ -50,26 +50,43 @@ public class TheGame extends ObservableRemoto implements ITheGame {
 
     public TheGame(String archivoPersistencia) {
         this.archivoPersistencia = archivoPersistencia;
-        if (PersistenciaPartida.existeArchivo(archivoPersistencia)) {
-            try {
-                Persistencia.HistorialJugadores historial = PersistenciaPartida.recuperar(archivoPersistencia);
-            } catch (IOException | ClassNotFoundException e) {
-                System.err.println("No se pudo recuperar el historial del jugador" + e.getMessage());
-            }
+        try {
+            //el metodo recuperar devuelve un historial vacío si el archivo no existe
+            this.historial = PersistenciaPartida.recuperar(archivoPersistencia);
+        } catch (IOException | ClassNotFoundException e) {
+            //En caso de error, retorna un historial nuevo
+            System.err.println("No se pudo recuperar el historial: " + e.getMessage());
+            this.historial = new HistorialJugadores();
+        }
+
+    }
+
+
+    private void guardarHistorial() {
+        try {
+            PersistenciaPartida.guardar(historial, archivoPersistencia);
+        } catch (IOException e) {
+            System.err.println("No se pudo guardar el historial: " + e.getMessage());
         }
     }
 
-    @Override
-    public void guardarPartida(IJugador jugador) throws RemoteException {
-        try {
-            if(jugador != null){
-                HistorialJugadores historial = PersistenciaPartida.recuperar(archivoPersistencia);
-                PersistenciaPartida.guardar(historial, archivoPersistencia);
-
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RemoteException("Error al persistir la partida" + e.getMessage(), e);
+    private void registrarResultado() throws RemoteException {
+        for (IJugador j : jugadores) {
+            if (estadoPartida == Eventos.GANARON)   historial.registrarVictoria(j.getNombre());
+            if (estadoPartida == Eventos.PERDIERON) historial.registrarDerrota(j.getNombre());
         }
+        guardarHistorial();
+    }
+
+    private void registrarAbandono(IJugador jugador) {
+        if (jugador == null || estadoPartida != Eventos.JUGANDO) return;
+        historial.registrarAbandono(jugador.getNombre());
+        guardarHistorial();
+    }
+
+    @Override
+    public List<EstadisticasJugador> getHistorial() throws RemoteException{
+        return historial.getEstadisticas();
     }
 
     ///
@@ -98,6 +115,9 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     public void cerrar(IObservadorRemoto controlador, IJugador jugador) throws RemoteException {
         removerObservador(controlador);
         if (!jugadores.contains(jugador)) return;
+
+        //Actualizo su historial por abandono
+        registrarAbandono(jugador);
 
         boolean eraSuTurno = jugador.equals(jugadorActual);
         if(mazo != null){
@@ -277,6 +297,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
 
         //Si hubo un cambio de estado notifico al controlador
         if (estadoPartida != Eventos.JUGANDO){
+            registrarResultado(); //Actualizo el historial de todos los jugadores
             notificarObservadores(estadoPartida);
         }
 
