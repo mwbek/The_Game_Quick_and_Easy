@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -228,5 +229,22 @@ public class PartidaController  extends ControladorGrafico {
         textAreaLogs.appendText("\n");
     }
 
+    public void onMostrarReglas(){
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle("Reglas del juego");
+        alerta.setHeaderText("The Game Quick & Easy");
+        alerta.setContentText(
+                "Deberemos jugar en equipo las cincuenta cartas del mazo en dos pilas "
+                        + "diferentes. En una de ellas, podremos jugar una carta más alta de la que "
+                        + "haya en ese momento, y en la otra, una carta más baja. Solo existe una "
+                        + "excepción a ésta regla y es que se puede jugar cualquier carta en una de "
+                        + "las dos pilas si es del mismo color que la carta superior actual.\n\n"
+                        + "Si algún jugador no puede poner ninguna de sus dos cartas siguiendo éstas "
+                        + "sencillas reglas, el juego habrá terminado y habremos perdido. Si por el "
+                        + "contrario, conseguimos poner todas las cartas del mazo, los jugadores "
+                        + "serán los vencedores."
+        );
+        alerta.showAndWait();
+    }
 
 }
