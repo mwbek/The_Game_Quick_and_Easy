@@ -200,7 +200,7 @@ public class Controlador implements IControladorRemoto {
         }
         catch (CantidadJugadoresException | PartidaIniciadaException e){
             vista.mostrarMensaje(e.getMessage());
-            vista.mostrarMensaje("Saliendo de la partida...");
+            vista.mostrarError("Saliendo de la partida...");
             vista.salir();
         }
     }
