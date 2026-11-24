@@ -28,6 +28,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     private IJugador anfitrion;
     private IJugador ultimoQueSalio;
     private final int MINIMO_JUGADORES = 2;
+    private final int MAXIMO_JUGADORES = 5;
 
     //Con las pilas aplico polimorfismo usando la intefaz 'IPilaDeIndicacion'
     private IPilaDeIndicacion pilaDescendente;
@@ -98,7 +99,7 @@ public class TheGame extends ObservableRemoto implements ITheGame {
     public IJugador agregarJugador(String nombre) throws RemoteException {
 
         if(estadoPartida == Eventos.JUGANDO) throw new PartidaIniciadaException("No se pueden agregar jugadores cuando la partida ya comenzo");
-        if(jugadores.size() >= 5) throw new CantidadJugadoresException("No puede haber mas de 5 jugadores en la partida");
+        if(jugadores.size() >= MAXIMO_JUGADORES) throw new CantidadJugadoresException("No puede haber mas de 5 jugadores en la partida");
 
         Jugador jugador = new Jugador(nombre);
 
