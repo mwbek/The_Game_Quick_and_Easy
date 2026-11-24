@@ -19,7 +19,9 @@ public class Carta implements ICarta,Serializable {
         this.valor = valor;
     }
 
+    @Override
     public ColorCarta getColor(){ return color;}
+    @Override
     public int getNumero() {return valor;}
 
     //Sobreescribo la clase hashSet
