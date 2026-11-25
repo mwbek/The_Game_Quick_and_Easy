@@ -2,6 +2,7 @@ package Vista.VistaGrafica;
 
 import Controladores.Controlador;
 import Persistencia.EstadisticasJugador;
+import Vista.ControladorGrafico;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

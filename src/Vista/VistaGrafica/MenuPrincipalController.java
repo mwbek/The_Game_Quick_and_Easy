@@ -1,6 +1,7 @@
 package Vista.VistaGrafica;
 
 import Interfaces.IJugador;
+import Vista.ControladorGrafico;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

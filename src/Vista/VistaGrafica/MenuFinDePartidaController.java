@@ -1,6 +1,7 @@
 package Vista.VistaGrafica;
 
 import Controladores.Controlador;
+import Vista.ControladorGrafico;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

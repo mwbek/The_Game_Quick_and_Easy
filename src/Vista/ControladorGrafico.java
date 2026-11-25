@@ -1,4 +1,4 @@
-package Vista.VistaGrafica;
+package Vista;
 
 import Controladores.Controlador;
 

@@ -2,6 +2,7 @@ package Vista.VistaGrafica;
 import Controladores.Controlador;
 import Interfaces.ICarta;
 import Interfaces.IJugador;
+import Vista.ControladorGrafico;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
