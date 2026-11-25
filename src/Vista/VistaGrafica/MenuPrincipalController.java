@@ -14,7 +14,7 @@ public class MenuPrincipalController extends ControladorGrafico {
 
 
     @FXML
-    private Button btnUnirsePartida, btnIniciarPartida;
+    private Button btnUnirsePartida, btnIniciarPartida, btnVerHistorial;
     @FXML
     private Label lbMensaje;
     @FXML
@@ -76,6 +76,13 @@ public class MenuPrincipalController extends ControladorGrafico {
     private void onComenzarPartida(){
         if(controlador.esAnfitrion() && controlador.getCantidadJugadores() > 1) {
             controlador.iniciarPartida();
+        }
+    }
+
+    @FXML
+    public void onVerHistorial(){
+        if(controlador != null){
+            controlador.verHistorial();
         }
     }
 
