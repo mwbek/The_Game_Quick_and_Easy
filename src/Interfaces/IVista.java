@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IVista {
     void mostrarHUDJugador();
+    void actualizarMenuLobby();
     public void mostrarMensaje(String mensaje);
     public void mostrarError(String mensajeError);
     public void iniciar();

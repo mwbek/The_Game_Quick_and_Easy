@@ -53,6 +53,15 @@ public class VistaGrafica implements IVista {
     }
 
     @Override
+    public void actualizarMenuLobby() {
+        Platform.runLater(() -> {
+            if (menuPrincipalController != null && !controlador.seInicioLaPartida()) {
+                menuPrincipalController.actualizarMensajeAnfitrion();
+            }
+        });
+    }
+
+    @Override
     public void mostrarMensaje(String mensaje) {
         Platform.runLater(() -> {
             if(partidaController != null)  partidaController.imprimirMensaje(mensaje);
