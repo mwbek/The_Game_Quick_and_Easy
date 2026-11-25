@@ -43,8 +43,7 @@ public class Controlador implements IControladorRemoto {
 
         if (o instanceof Eventos ev && juego != null && vista != null) {
             try{
-                if(jugador == null) this.jugador = juego.getUltimoJugadorAgregado();
-                else this.jugador = juego.getJugador(jugador.getId());
+                if(jugador != null) this.jugador = juego.getJugador(jugador.getId());
             } catch (RemoteException e) {
                 vista.mostrarError("No se pudo actualizar el jugador: " + e.getMessage() );
             }
@@ -79,11 +78,12 @@ public class Controlador implements IControladorRemoto {
 
                 case NUEVO_JUGADOR:
                     try {
-                        vista.actualizarListaJugadores();
-
                         //Si el jugador no es el anfitrion
-                        if(!jugador.equals(juego.getAnfitrion())){
-                            vista.mostrarMensaje("Esperando a que el anfitrion (" + juego.getAnfitrion().getNombre() + ") inicie la partida...");
+                        if(jugador != null){
+                            vista.actualizarMenuLobby();
+                            vista.actualizarListaJugadores();
+                            vista.mostrarMensaje("[" + juego.getJugadores()[juego.getJugadores().length-1].getNombre() + "] se unio a la partida:  (" + juego.getJugadores().length + "/ 5)");
+
                         }
                     } catch (RemoteException e) {
                         vista.mostrarError("Error al agregar nuevo jugador: " + e.getMessage());
@@ -192,8 +192,7 @@ public class Controlador implements IControladorRemoto {
         try {
             if (nombre == null) throw new IllegalArgumentException("El nombre del jugador no puede ser nulo");
             this.jugador = juego.agregarJugador(nombre);
-            int cantidadJugadores = juego.getJugadores().length;
-            vista.mostrarMensaje("[" + juego.getJugadores()[cantidadJugadores-1].getNombre() + "] se unio a la partida:  (" + cantidadJugadores + "/ 5)");
+            vista.actualizarMenuLobby();
 
         } catch (RemoteException e) {
             vista.mostrarError("Error al registrar nuevo jugador: " + e.getMessage());
@@ -230,17 +229,6 @@ public class Controlador implements IControladorRemoto {
 
     }
 
-//    public boolean partidaPuedeComenzar(){
-//        try{
-//            if(juego.getJugadores().length > 1){
-//                return true;
-//            }
-//            return false;
-//        } catch (RemoteException e) {
-//            vista.mostrarError("Error al comenzar partida: " + e.getMessage());
-//            return false;
-//        }
-//    }
 
     public int getRondaActual(){
         try{
