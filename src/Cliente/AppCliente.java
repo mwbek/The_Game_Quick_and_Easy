@@ -3,7 +3,7 @@ package Cliente;
 
 import Controladores.Controlador;
 import Interfaces.IVista;
-import Vista.VistaConsola;
+import Vista.VistaConsolaGrafica.VistaConsolaGrafica;
 import Vista.VistaGrafica.VistaGrafica;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
@@ -17,13 +17,36 @@ import javafx.stage.Stage;
 
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class AppCliente extends Application {
 
+    private IVista vista;
+    private Controlador controlador;
+    //IVista vista = new VistaGrafica(stage, controlador);
+    //IVista vista = new VistaConsolaGrafica(stage, controlador);
+
     @Override
     public void start(Stage stage) {
+
+        List<String> opcionesVista = new ArrayList<>();
+        opcionesVista.add("Vista Grafica");
+        opcionesVista.add("Vista Consola");
+        Optional<String> vistaSeleccionada = elegir("¿Con que vista quiere jugar?", opcionesVista);
+
+        if(vistaSeleccionada.isPresent()){
+            controlador = new Controlador();
+            String respuesta = vistaSeleccionada.get();
+            if(respuesta.equals("Vista Grafica")){
+                vista = new VistaGrafica(stage, controlador);
+            }else{
+                vista = new VistaConsolaGrafica(stage, controlador);
+            }
+        }
+
+
         List<String> ips = Util.getIpDisponibles();
         Optional<String> ipCliente = elegir("¿En qué IP escucha este cliente?", ips);
         if (ipCliente.isEmpty()) {
@@ -46,9 +69,8 @@ public class AppCliente extends Application {
             return;
         }
 
-        Controlador controlador = new Controlador();
-        IVista vista = new VistaGrafica(stage, controlador);
-        //IVista vista = new VistaConsola(controlador);
+
+
         controlador.setVista(vista);
 
         try {
