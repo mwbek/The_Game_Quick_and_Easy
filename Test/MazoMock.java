@@ -1,11 +1,9 @@
+import Interfaces.ICarta;
 import Interfaces.IMazo;
 import Modelos.Carta;
 import exceptions.CartaDuplicadaException;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class MazoMock implements IMazo {
 
@@ -36,6 +34,11 @@ public class MazoMock implements IMazo {
     @Override
     public int getCantidad() {
         return mazo.size();
+    }
+
+    @Override
+    public void devolverCartas(List<ICarta> cartas) {
+
     }
 
     //TODO: Se uso para los Test. Revisar o eliminar
