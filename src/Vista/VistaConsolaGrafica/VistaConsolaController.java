@@ -25,10 +25,6 @@ public class VistaConsolaController extends ControladorGrafico {
     @FXML
     private Button btnEnviar;
 
-    private int indiceCarta = -1;
-    private int indicePila = -1;
-    String inputRecibido;
-
     private VistaConsolaGrafica vista;
 
     @Override
